@@ -5,7 +5,7 @@ import {Switch, Route} from "react-router-dom";
 function Routes() {
     return(
         <Switch>
-            <Route exact path='/'component={Dashboard} />
+            <Route exact path='/' component={Dashboard} />
             {/*<Route path='/project/:id' component={ProjectDetails} />
                 <Route exact path='/program/:id' component={ProgramDetails} />
                 <Route exact path='/program/:id/apply' component={Apply} />*/}
