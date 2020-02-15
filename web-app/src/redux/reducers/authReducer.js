@@ -4,14 +4,11 @@ const initState = {
 
 export const authReducer = (state = initState, action) => {
     switch (action.type) {
-        case 'TEST_SUCCESS':
-            console.log("test success")
+        case 'CREATE_USER_SUCCESS':
             return {
                 ...state
             }
-        case 'TEST_ERROR':
-            console.log("test error")
-            console.log(action.err.message)
+        case 'CREATE_USER_ERROR':
             return {
                 ...state,
                 authError: action.err.message

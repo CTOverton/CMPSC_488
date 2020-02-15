@@ -1,8 +1,8 @@
 
-export const signUp = (credentials) => {
+export const createUser = (credentials, profile) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
-        const firestore = getFirestore();
+        /*const firestore = getFirestore();
 
         firestore.collection('test')
             .add({name: 'test'})
@@ -10,6 +10,17 @@ export const signUp = (credentials) => {
                 dispatch({ type: 'TEST_SUCCESS' });
             }).catch((err) => {
                 dispatch({ type: 'TEST_ERROR', err });
+            });*/
+
+        firebase.createUser(credentials, profile)
+/*        firebase.createUser(
+            { email, password },
+            { username, email }
+        )*/
+            .then(() => {
+                dispatch({ type: 'CREATE_USER_SUCCESS' });
+            }).catch((err) => {
+                dispatch({ type: 'CREATE_USER_ERROR', err });
             });
     }
 }

@@ -1,13 +1,16 @@
 import React from "react";
 import {Container} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {signUp} from "../../redux/actions/authActions";
+import {createUser} from "../../redux/actions/authActions";
 import {connect} from "react-redux";
 
-const Signup = ({signUp}) => {
+const Signup = ({createUser}) => {
 
     const test = () => {
-        console.log(signUp({temp: 'test'}))
+        createUser(
+            { email: 'testing@test.com', password: 'password'},
+            { email: 'test@test.com', firstName: 'test', lastName: 'account' }
+        )
     }
 
     return(
@@ -19,6 +22,6 @@ const Signup = ({signUp}) => {
 }
 
 // const mapState = {}
-const mapDispatch = {signUp}
+const mapDispatch = {createUser: createUser}
 
 export default connect(undefined, mapDispatch)(Signup)
