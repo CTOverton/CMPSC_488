@@ -14,10 +14,21 @@ import rrfConfig from "./config/rrfConfig";
 import {BrowserRouter} from "react-router-dom";
 import Routes from "./components/nav/Routes";
 
+firebase.initializeApp(firebaseConfig)
+firebase.firestore()
+
 const initialState ={}
 const store = configureStore(initialState)
-
-firebase.initializeApp(firebaseConfig)
+/*
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: [...getDefaultMiddleware({
+        thunk: {
+            extraArgument: {getFirebase, getFirestore}
+        }
+    })],
+})
+*/
 
 function App() {
     return (
