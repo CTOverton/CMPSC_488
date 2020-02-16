@@ -6,7 +6,8 @@ export const authReducer = (state = initState, action) => {
     switch (action.type) {
         case 'CREATE_USER_SUCCESS':
             return {
-                ...state
+                ...state,
+                authError: null
             }
         case 'CREATE_USER_ERROR':
             return {
