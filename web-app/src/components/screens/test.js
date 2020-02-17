@@ -4,6 +4,7 @@ import TemplateFirestoreDisplay from "../FirestoreTemplates/TemplateFirestoreDis
 import TemplateFirestoreAddItem from "../FirestoreTemplates/TemplateFirestoreAddItem";
 import Divider from "@material-ui/core/Divider";
 import TheButton from "../examples/TheButton";
+import Form from "../examples/Form";
 
 function Dashboard() {
 
@@ -12,10 +13,8 @@ function Dashboard() {
             <h1>App Setup</h1>
             <Divider />
             <h2>Firestore Example</h2>
-            <TemplateFirestoreDisplay/>
-            <TemplateFirestoreAddItem/>
             <TheButton/>
-            <goatgif/>
+            <Form/>
         </Container>
     )
 }
