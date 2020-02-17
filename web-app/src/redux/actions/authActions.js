@@ -8,10 +8,10 @@ export const createUser = (credentials, profile) => {
         else {
             firebase.createUser(credentials, profile)
                 .then(() => {
-                    dispatch({ type: 'CREATE_USER_SUCCESS' });
+                    dispatch({ type: 'CREATE_USER_SUCCESS' })
                 }).catch((err) => {
-                dispatch({ type: 'CREATE_USER_ERROR', err });
-            });
+                    dispatch({ type: 'CREATE_USER_ERROR', err })
+                })
         }
     }
 }
@@ -19,17 +19,26 @@ export const createUser = (credentials, profile) => {
 export const loginUser = (credentials) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
-        const firestore = getFirestore();
 
-
+        firebase.login(credentials)
+            .then(() => {
+                dispatch({ type: 'LOGOUT_USER_SUCCESS' })
+            }).catch((err) => {
+            dispatch({ type: 'LOGOUT_USER_ERROR', err })
+        })
     }
 }
 
-export const logoutUser = (credentials) => {
-    return (dispatch, getState, {getFirebase, getFirestore}) => {
+export const logoutUser = () => {
+    return (dispatch, getState, {getFirebase}) => {
         const firebase = getFirebase();
-        const firestore = getFirestore();
 
+        firebase.logout()
+            .then(() => {
+                dispatch({ type: 'LOGOUT_USER_SUCCESS' })
+            }).catch((err) => {
+                dispatch({ type: 'LOGOUT_USER_ERROR', err })
+            })
 
     }
 }

@@ -14,6 +14,16 @@ export const authReducer = (state = initState, action) => {
                 ...state,
                 authError: action.err.message
             }
+        case 'LOGOUT_USER_SUCCESS':
+            return {
+                ...state,
+                authError: null
+            }
+        case 'LOGOUT_USER_ERROR':
+            return {
+                ...state,
+                authError: action.err.message
+            }
         default:
             return state
     }

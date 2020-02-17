@@ -13,6 +13,8 @@ import rrfConfig from "./config/rrfConfig";
 
 import {BrowserRouter} from "react-router-dom";
 import Routes from "./components/nav/Routes";
+import BottomNav from "./components/nav/BottomNav";
+import AppBarHeader from "./components/nav/AppBarHeader";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore()
@@ -40,8 +42,9 @@ function App() {
                 createFirestoreInstance={createFirestoreInstance}>
                 <BrowserRouter>
                     <div className="App">
-                        {/*<Nav />*/}
+                        <AppBarHeader />
                         <Routes />
+                        <BottomNav />
                     </div>
                 </BrowserRouter>
             </ReactReduxFirebaseProvider>
