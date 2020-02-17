@@ -6,7 +6,6 @@ import SeanTemplateComponent from "../../playground/sean/SeanTemplateComponent";
 import SignUp from "../auth/SignUp";
 import Login from "../auth/Login";
 import test from "../screens/test"
-import {Switch, Route} from "react-router-dom";
 
 function Routes() {
     return(
