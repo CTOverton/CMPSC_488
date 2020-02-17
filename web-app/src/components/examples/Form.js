@@ -1,7 +1,7 @@
-import React, {Component, useState} from "react";
+import React, {useState} from "react";
 import Button from "@material-ui/core/Button";
-import {FormGroup} from "@material-ui/core";
 import Input from "@material-ui/core/Input";
+import {FormGroup} from "@material-ui/core";
 
 function Form(){
 
@@ -16,12 +16,12 @@ function Form(){
         return changeInput(e && e.target && e.target.value)
     }
 
-    return (<container>
-        <form onSubmit={add}>
+    return (<div>
+        <FormGroup onSubmit={add}>
             <Input value = {inputval} onChange={onInputChange}/>
-            <Button type="submit"/>
-        </form>
-        </container>
+            <Button variant="contained" color = "primary" onClick={add}>CLICK ME</Button>
+        </FormGroup>
+        </div>
     )
 }
 
