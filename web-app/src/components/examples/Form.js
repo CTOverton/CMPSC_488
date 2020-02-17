@@ -1,28 +1,39 @@
-import React, {useState} from "react";
-import Button from "@material-ui/core/Button";
-import Input from "@material-ui/core/Input";
-import {FormGroup} from "@material-ui/core";
+import React, {Component} from "react";
 
-function Form(){
+class Form extends Component {
 
-    const [inputval, changeInput] = useState('')
+    state = {
+        users: [{name: 'YEETS!', age: 563}],
+        name: null,
+        age: null
+    };
 
-    function add() {
-        this.setState({value: this.state.value + inputval})
-        console.log(inputval);
+    handleChange = (e) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    };
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state.users);
+        this.state.users.push({name: this.state.name, age: this.state.age});
+    };
+
+    render(){
+        return(
+            <div>
+                <div>
+                </div>
+                <form onSubmit={this.handleSubmit}>
+                    <label htmlFor="name">Name: </label>
+                    <input type="text" id="name" onChange={this.handleChange}/>
+                    <label htmlFor="age">Age: </label>
+                    <input type="text" id="age" onChange={this.handleChange}/>
+                    <button>Submit</button>
+                </form>
+            </div>
+        )
     }
-
-    function onInputChange(e) {
-        return changeInput(e && e.target && e.target.value)
-    }
-
-    return (<div>
-        <FormGroup onSubmit={add}>
-            <Input value = {inputval} onChange={onInputChange}/>
-            <Button variant="contained" color = "primary" onClick={add}>CLICK ME</Button>
-        </FormGroup>
-        </div>
-    )
 }
 
 export default Form

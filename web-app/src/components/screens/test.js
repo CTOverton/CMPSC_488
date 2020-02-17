@@ -1,17 +1,16 @@
 import React from "react";
-import {Container} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TheButton from "../examples/TheButton";
-import Form2 from "../examples/Form2";
+import Form from "../examples/Form";
 
 function Dashboard() {
 
     return(
-        <Container maxWidth="md">
-            <Divider />
+        <div>
             <TheButton/>
-            <Form2/>
-        </Container>
+            <Divider />
+            <Form/>
+        </div>
     )
 }
 
