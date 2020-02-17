@@ -71,7 +71,7 @@ const Login = ({auth, login}) => {
                         required
                     />
                     <div>
-                        <Link to={'/signup'}><Button className={classes.margin} variant="contained" disableElevation>Sign Up</Button></Link>
+                        <Link to={'/signup'} style={{ textDecoration: 'none' }}><Button className={classes.margin} variant="contained" disableElevation>Sign Up</Button></Link>
                         <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleLogin}>Login</Button>
                     </div>
                 </form>

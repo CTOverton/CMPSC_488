@@ -1,7 +1,7 @@
 import React from "react";
 import Divider from "@material-ui/core/Divider";
-import TheButton from "../../playground/sam/TheButton";
-import Form from "../../playground/sam/Form";
+import TheButton from "./TheButton";
+import Form from "./Form";
 
 function SamPlayground() {
 

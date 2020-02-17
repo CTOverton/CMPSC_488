@@ -114,7 +114,7 @@ const SignUp = ({auth, createUser}) => {
                     required
                 />*/}
                     <div>
-                        <Link to={'/login'}><Button className={classes.margin} variant="contained" disableElevation>Login</Button></Link>
+                        <Link to={'/login'} style={{ textDecoration: 'none' }}><Button className={classes.margin} variant="contained" disableElevation>Login</Button></Link>
                         <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleSignUp}>Sign Up</Button>
                     </div>
 

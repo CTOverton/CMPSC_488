@@ -4,7 +4,7 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import SeanTemplateComponent from "../../playground/sean/SeanTemplateComponent";
 import SignUp from "../auth/SignUp";
 import Login from "../auth/Login";
-import SamPlayground from "../screens/SamPlayground"
+import SamPlayground from "../../playground/sam/SamPlayground"
 
 function Routes() {
     return(
