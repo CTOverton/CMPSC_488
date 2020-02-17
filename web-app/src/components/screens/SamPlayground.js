@@ -1,9 +1,9 @@
 import React from "react";
 import Divider from "@material-ui/core/Divider";
-import TheButton from "../examples/TheButton";
-import Form from "../examples/Form";
+import TheButton from "../../playground/sam/TheButton";
+import Form from "../../playground/sam/Form";
 
-function Dashboard() {
+function SamPlayground() {
 
     return(
         <div>
@@ -14,4 +14,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default SamPlayground
