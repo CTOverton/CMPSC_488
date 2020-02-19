@@ -38,8 +38,8 @@ const SignUp = ({auth, createUser}) => {
         username: null
     })
 
-    const handleChange = prop => event => {
-        const value = event.target.value;
+    const handleChange = prop => e => {
+        const value = e.target.value;
         setInputs({ ...inputs, [prop]: value === "" ? null : value })
     }
 

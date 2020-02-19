@@ -5,6 +5,8 @@ import EventIcon from '@material-ui/icons/Event';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -28,7 +30,7 @@ const BottomNav = () => {
             className={classes.root}
         >
             <BottomNavigationAction value="search" icon={<SearchIcon />} />
-            <BottomNavigationAction value="events" icon={<EventIcon />} />
+            <Link to={'/events'} style={{ textDecoration: 'none' }}><BottomNavigationAction value="events" icon={<EventIcon />} /></Link>
             <BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} />
         </BottomNavigation>
     )
