@@ -5,6 +5,7 @@ import SeanTemplateComponent from "../../playground/sean/SeanTemplateComponent";
 import SignUp from "../auth/SignUp";
 import Login from "../auth/Login";
 import SamPlayground from "../../playground/sam/SamPlayground"
+import ProfilePage from "../screens/profile/ProfilePage";
 
 function Routes() {
     return(
@@ -13,6 +14,8 @@ function Routes() {
 
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
+
+            <Route path='/profile' component={ProfilePage} />
 
             <Route path='/playground/sam' component={SamPlayground} />
             <Route path='/playground/sean' component={SeanTemplateComponent} />
