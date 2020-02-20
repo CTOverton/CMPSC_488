@@ -4,6 +4,7 @@ import {Container} from "@material-ui/core";
 import {createEvent, deleteEvent, updateEvent} from "../../../redux/actions/eventActions";
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
+import AttendeesList from "./attendees/AttendeesList";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -11,11 +12,12 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsPage = ({eventID}) => {
+const EventsDetailPage = ({eventID}) => {
     const classes = useStyles();
 
     useFirestoreConnect(() => [
-        { collection: 'events', doc: eventID }
+        { collection: 'events', doc: eventID },
+        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees' }] }
     ])
 
     const event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
@@ -25,10 +27,15 @@ const EventsPage = ({eventID}) => {
         return null
     }
 
+    if (!isLoaded(event.attendees)) {
+        return null
+    }
+
     return (
         <Container maxWidth="md">
             <h1>{event.title}</h1>
             <p>{event.description}</p>
+            <AttendeesList attendees={event.attendees}/>
         </Container>
     )
 }
@@ -42,4 +49,4 @@ const mapState = (state, ownProps) => {
 
 // const mapDispatch = {createEvent: createEvent, updateEvent: updateEvent, deleteEvent: deleteEvent}
 
-export default connect(mapState, undefined)(EventsPage)
+export default connect(mapState, undefined)(EventsDetailPage)

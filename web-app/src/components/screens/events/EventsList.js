@@ -1,6 +1,5 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Container} from "@material-ui/core";
 import EventsListItem from "./EventsListItem";
 import List from "@material-ui/core/List";
 

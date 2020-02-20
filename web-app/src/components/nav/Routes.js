@@ -7,7 +7,8 @@ import Login from "../auth/Login";
 import SamPlayground from "../../playground/sam/SamPlayground"
 import EventsScreen from "../screens/events/EventsScreen";
 import EventsCreateScreen from "../screens/events/EventsCreateScreen";
-import EventsPage from "../screens/events/EventsPage";
+import EventsPage from "../screens/events/EventsDetailPage";
+import AttendeesDetails from "../screens/events/attendees/AttendeesDetails";
 
 function Routes() {
     return(
@@ -20,6 +21,8 @@ function Routes() {
             <Route exact path='/events' component={EventsScreen} />
             <Route exact path='/events/create' component={EventsCreateScreen} />
             <Route exact path='/events/:id' component={EventsPage} />
+
+            <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
 
             <Route path='/playground/sam' component={SamPlayground} />
             <Route path='/playground/sean' component={SeanTemplateComponent} />
