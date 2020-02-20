@@ -1,6 +1,8 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Container} from "@material-ui/core";
+import EventsListItem from "./EventsListItem";
+import List from "@material-ui/core/List";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -8,13 +10,16 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsList = () => {
+const EventsList = ({events}) => {
     const classes = useStyles();
 
     return (
-        <Container maxWidth="md">
+        <List component="nav">
             <h1>Events List</h1>
-        </Container>
+            {events.map((event) =>
+                <EventsListItem event={event} key={event.id}/>
+            )}
+        </List>
     )
 }
 
