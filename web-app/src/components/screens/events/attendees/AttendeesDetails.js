@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect, useSelector} from "react-redux";
-import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
+import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {Container} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import EventsListItem from "../EventsListItem";
 import Chip from "@material-ui/core/Chip";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import * as firebase from "firebase";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -15,10 +18,15 @@ const useStyles = makeStyles(theme => ({
             margin: theme.spacing(0.5),
         },
     },
+    margin: {
+        margin: theme.spacing(1),
+    },
 }));
 
 const AttendeesDetails = ({eventID, attendeeID}) => {
     const classes = useStyles();
+    const [inputVal, changeInput] = useState(null)
+    const firestore = useFirestore()
 
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
@@ -31,8 +39,25 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
         return null
     }
 
-    const handleDelete = () => {
-        console.log("delete")
+
+
+    const handleAddInput = e => {
+        changeInput(e.target.value === '' ? null : e.target.value)
+    }
+
+    const handleAdd = () => {
+        if (inputVal != null) {
+            firestore
+                .collection('events')
+                .doc(eventID)
+                .collection('attendees')
+                .doc(attendeeID)
+                .update({
+                    tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
+                })
+                .then(r => console.log(r))
+                .catch(err => console.log(err))
+        }
     }
 
     return(
@@ -42,9 +67,27 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
 
             <div className={classes.chips}>
                 {attendee.tags && attendee.tags.map((tag) =>
-                    <Chip key={tag} label={tag} onDelete={handleDelete}/>
+                    <Chip key={tag} label={tag} onDelete={() => {
+                        console.log("Deleting")
+                        firestore
+                            .collection('events')
+                            .doc(eventID)
+                            .collection('attendees')
+                            .doc(attendeeID)
+                            .update({
+                                tags: firebase.firestore.FieldValue.arrayRemove(tag)
+                            })
+                            .then(r => console.log(r))
+                            .catch(err => console.log(err))
+                    }}/>
                 )}
             </div>
+            <TextField
+                id="tag-input"
+                label="Add Tag"
+                onChange={handleAddInput}
+            />
+            <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
         </Container>
     )
 }
