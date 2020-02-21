@@ -42,7 +42,9 @@ class CSVFileImport extends Component {
                     onError={this.handleOnError}
                 />
                 <Button variant="contained" color = "primary" onClick={this.handleImportOffer}>Import</Button>
-                <!--<Button variant={contained} color = "primary" onClick={createAttendees()}-->
+                <Button variant="contained" color = "primary" onClick={createAttendees(
+                [{email: "robocop72@hotmail.com", firstName: "Danny", lastName: "IDK How Spell Name Lol", isUser: false}],
+                    "epTpn3CZ9bwbDDLmLBv3")}>Click Me!</Button>
             </>
         )
     }

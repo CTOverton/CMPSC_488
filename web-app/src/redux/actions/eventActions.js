@@ -1,5 +1,9 @@
 function isApprovedAttendee(attendee) {
-    return false;
+    if (typeof attendee.email != "string") return false;
+    if (typeof attendee.firstName != "string") return false;
+    if (typeof attendee.lastName != "string") return false;
+    //Don't need a check for attendee.isUser ???
+    return true;
 }
 
 export const createAttendees = (attendees,eventID) => {
@@ -49,7 +53,7 @@ export const createAttendees = (attendees,eventID) => {
             //TODO: Notify Admin of Failed Imports
         }
     }
-}
+};
 
 
 /*export const createUser = (credentials, profile) => {
