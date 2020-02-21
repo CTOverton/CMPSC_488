@@ -41,7 +41,7 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
             <p>{attendee.email}</p>
 
             <div className={classes.chips}>
-                {attendee.tags.map((tag) =>
+                {attendee.tags && attendee.tags.map((tag) =>
                     <Chip key={tag} label={tag} onDelete={handleDelete}/>
                 )}
             </div>

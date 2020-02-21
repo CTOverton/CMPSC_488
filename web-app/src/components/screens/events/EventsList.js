@@ -12,6 +12,8 @@ const useStyles = makeStyles(theme => ({
 const EventsList = ({events}) => {
     const classes = useStyles();
 
+    console.log(events)
+
     return (
         <List component="nav">
             <h1>Events List</h1>

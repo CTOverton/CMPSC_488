@@ -35,7 +35,7 @@ const EventsDetailPage = ({eventID}) => {
         <Container maxWidth="md">
             <h1>{event.title}</h1>
             <p>{event.description}</p>
-            <AttendeesList attendees={event.attendees}/>
+            <AttendeesList attendees={Object.values(event.attendees)}/>
         </Container>
     )
 }

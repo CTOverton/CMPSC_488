@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 
 const AttendeesListItem = ({attendee}) => {
     return(
-        <Link to={'/events/' + attendee.eventID + '/attendee/' + attendee.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={'/events/' + 'BzKsxLo5cxhRgBETI0wS' + '/attendee/' + attendee.email} style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem button>
                 <ListItemText primary={attendee.firstName + ' ' + attendee.lastName} />
             </ListItem>
