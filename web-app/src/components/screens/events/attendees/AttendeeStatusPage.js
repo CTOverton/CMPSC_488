@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {makeStyles} from "@material-ui/core/styles";
 import moment from "moment";
+import * as firebase from "firebase";
 
 const useStyles = makeStyles({
     card: {
@@ -58,6 +59,32 @@ function AttendeeStatusPage() {
 
     }*/
 
+    const ready = () => {
+        firestore
+            .collection('events')
+            .doc(eventID)
+            .collection('attendees')
+            .doc(attendeeID)
+            .update({
+                tags: firebase.firestore.FieldValue.arrayUnion("AccountedFor")
+            })
+            .then(r => console.log(r))
+            .catch(err => console.log(err))
+    }
+
+    const notReady = () => {
+        firestore
+            .collection('events')
+            .doc(eventID)
+            .collection('attendees')
+            .doc(attendeeID)
+            .update({
+                tags: firebase.firestore.FieldValue.arrayRemove("AccountedFor")
+            })
+            .then(r => console.log(r))
+            .catch(err => console.log(err))
+    }
+
     return(
         <Container maxWidth="sm">
 
@@ -74,6 +101,32 @@ function AttendeeStatusPage() {
                 <Button size="small">Learn More</Button>
             </CardActions>*/}
             </Card>
+
+            {!attendee.tags &&
+            <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
+                Ready to leave
+            </Button>
+            }
+
+            {attendee.tags && !attendee.tags.includes("AccountedFor") &&
+                <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
+                    Ready to leave
+                </Button>
+            }
+
+            {attendee.tags && attendee.tags.includes("AccountedFor") &&
+            <div>
+                <Typography className={classes.mBottom} variant="h5">
+                    You're all set!
+                </Typography>
+
+                <Typography className={classes.mBottom} variant="body1" color="textSecondary">
+                    If anything changes click below, otherwise we'll be at the mountain soon!
+                </Typography>
+
+                <Button variant="contained" onClick={notReady}>Wait I'm not Ready</Button>
+            </div>
+            }
 
 {/*            {((!readyArrive && new Date().getHours() < 18) || (!readyDepart && new Date().getHours() >= 18)) &&
             <Button className={classes.mBottom} variant="contained" color="primary" onClick={onClick}>

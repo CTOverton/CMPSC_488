@@ -5,10 +5,19 @@ import {createEvent, deleteEvent, updateEvent} from "../../../redux/actions/even
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles(theme => ({
     margin: {
         margin: theme.spacing(1),
+    },
+    chips: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {
+            margin: theme.spacing(0.5),
+        },
     },
 }))
 
@@ -31,10 +40,40 @@ const EventsDetailPage = ({eventID}) => {
         return null
     }
 
+    let tags = {};
+
+    Object.values(event.attendees).forEach(attendee => {
+        if (attendee.tags) {
+            attendee.tags.forEach(tag => {
+                if (tags[tag]) {
+                    tags[tag] += 1;
+                } else {
+                    tags[tag] = 1;
+                }
+            })
+        }
+    })
+
+    let tagsArray = [];
+    for (let [key, value] of Object.entries(tags)) {
+        tagsArray = [...tagsArray, {tag: key, count: value}]
+    }
+
+    console.log(tags)
+
     return (
         <Container maxWidth="md">
             <h1>{event.title}</h1>
             <p>{event.description}</p>
+
+            <h3>Total attendees: {Object.values(event.attendees).length}</h3>
+            <div className={classes.chips}>
+                { tagsArray && tagsArray.map(item =>
+                    <Chip key={item.tag} label={item.tag + ': ' + item.count} />
+                )}
+            </div>
+
+
             <AttendeesList attendees={Object.values(event.attendees)}/>
         </Container>
     )

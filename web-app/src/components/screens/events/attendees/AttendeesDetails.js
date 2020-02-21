@@ -64,6 +64,7 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
         <Container maxWidth="md">
             <h1>{attendee.firstName + ' ' + attendee.lastName}</h1>
             <p>{attendee.email}</p>
+            <p>{attendee.phone}</p>
 
             <div className={classes.chips}>
                 {attendee.tags && attendee.tags.map((tag) =>

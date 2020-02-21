@@ -2,6 +2,8 @@ import React from "react";
 import List from "@material-ui/core/List";
 import AttendeesListItem from "./AttendeesListItem";
 import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const AttendeesList = ({attendees}) => {
     const [search, setSearch] = React.useState(null)
@@ -12,7 +14,6 @@ const AttendeesList = ({attendees}) => {
         setSearch(e.target.value === '' ? null : e.target.value.toLowerCase())
     }
 
-    console.log("test")
     return (
         <List component="nav">
             <h1>Attendees List</h1>
@@ -23,6 +24,7 @@ const AttendeesList = ({attendees}) => {
                 type="search"
                 onChange={handleSearch}
             />
+            <Link to={'/events/BzKsxLo5cxhRgBETI0wS/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
 
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName
