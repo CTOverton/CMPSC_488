@@ -9,6 +9,7 @@ import EventsScreen from "../screens/events/EventsScreen";
 import EventsCreateScreen from "../screens/events/EventsCreateScreen";
 import EventsPage from "../screens/events/EventsDetailPage";
 import AttendeesDetails from "../screens/events/attendees/AttendeesDetails";
+import ProfilePage from "../screens/profile/ProfilePage";
 
 function Routes() {
     return(
@@ -23,6 +24,8 @@ function Routes() {
             <Route exact path='/events/:id' component={EventsPage} />
 
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
+
+            <Route path='/profile' component={ProfilePage} />
 
             <Route path='/playground/sam' component={SamPlayground} />
             <Route path='/playground/sean' component={SeanTemplateComponent} />
