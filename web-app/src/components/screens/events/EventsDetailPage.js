@@ -42,7 +42,11 @@ const EventsDetailPage = ({eventID}) => {
 
     let tags = {};
 
+    console.log("Attendees")
+
     Object.values(event.attendees).forEach(attendee => {
+        console.log(attendee.firstName + ',' + attendee.lastName + ',' + attendee.email + ',' + attendee.tags)
+
         if (attendee.tags) {
             attendee.tags.forEach(tag => {
                 if (tags[tag]) {
@@ -58,8 +62,6 @@ const EventsDetailPage = ({eventID}) => {
     for (let [key, value] of Object.entries(tags)) {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
-
-    console.log(tags)
 
     return (
         <Container maxWidth="md">

@@ -17,14 +17,16 @@ const AttendeesList = ({attendees}) => {
     return (
         <List component="nav">
             <h1>Attendees List</h1>
+            <Link to={'/events/n8HFZTwo9lHtdgOPKZT8/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
 
+            <br/>
             <TextField
                 id="search-input"
                 label="Search"
                 type="search"
                 onChange={handleSearch}
             />
-            <Link to={'/events/BzKsxLo5cxhRgBETI0wS/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
+
 
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName

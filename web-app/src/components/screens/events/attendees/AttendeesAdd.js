@@ -35,7 +35,7 @@ const AttendeesAdd = () => {
     const handleAdd = () => {
         firestore
             .collection('events')
-            .doc('BzKsxLo5cxhRgBETI0wS')
+            .doc('n8HFZTwo9lHtdgOPKZT8')
             .collection('attendees')
             .doc(inputs.email)
             .set(inputs)
