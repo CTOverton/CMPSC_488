@@ -31,7 +31,7 @@ const BottomNav = () => {
         >
             <BottomNavigationAction value="search" icon={<SearchIcon />} />
             <Link to={'/events'} style={{ textDecoration: 'none' }}><BottomNavigationAction value="events" icon={<EventIcon />} /></Link>
-            <BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} />
+            <Link to={'/profile'} style={{ textDecoration: 'none' }}><BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} /></Link>
         </BottomNavigation>
     )
 }
