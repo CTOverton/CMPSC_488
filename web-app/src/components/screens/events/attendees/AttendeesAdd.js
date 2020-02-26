@@ -32,10 +32,10 @@ const AttendeesAdd = () => {
         setInputs({ ...inputs, [prop]: value === "" ? null : value })
     }
 
-    const handleAdd = () => {
+    const handleAdd = ({eventID}) => {
         firestore
             .collection('events')
-            .doc('n8HFZTwo9lHtdgOPKZT8')
+            .doc(eventID)
             .collection('attendees')
             .doc(inputs.email)
             .set(inputs)

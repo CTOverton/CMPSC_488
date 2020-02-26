@@ -20,10 +20,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AttendeesListItem = ({attendee}) => {
+const AttendeesListItem = ({attendee, eventID}) => {
     const classes = useStyles();
     return(
-        <Link to={'/events/' + 'n8HFZTwo9lHtdgOPKZT8' + '/attendee/' + attendee.email} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={'/events/' + eventID + '/attendee/' + attendee.email} style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem button>
                 <ListItemText primary={attendee.firstName + ' ' + attendee.lastName} />
                 <div className={classes.chips}>

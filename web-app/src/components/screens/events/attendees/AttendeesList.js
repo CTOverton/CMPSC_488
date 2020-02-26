@@ -4,8 +4,9 @@ import AttendeesListItem from "./AttendeesListItem";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
+import CSVFileImport from "../../CSV/CSVFileImport";
 
-const AttendeesList = ({attendees}) => {
+const AttendeesList = ({attendees, eventID}) => {
     const [search, setSearch] = React.useState(null)
 
     if (attendees === null) return <div>No Attendees</div>
@@ -17,7 +18,10 @@ const AttendeesList = ({attendees}) => {
     return (
         <List component="nav">
             <h1>Attendees List</h1>
-            <Link to={'/events/n8HFZTwo9lHtdgOPKZT8/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
+            <span>
+                <Link to={'/events/'+eventID+'/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
+                <CSVFileImport eventID={eventID}/>
+            </span>
 
             <br/>
             <TextField
@@ -31,7 +35,7 @@ const AttendeesList = ({attendees}) => {
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName
                 if (index.toLowerCase().includes(search) || search === null) {
-                    return <AttendeesListItem attendee={attendee} key={attendee.id}/>
+                    return <AttendeesListItem eventID={eventID} attendee={attendee} key={attendee.id}/>
                 }
             })}
         </List>
