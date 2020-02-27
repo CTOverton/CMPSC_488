@@ -3,12 +3,10 @@ import { CSVReader } from 'react-papaparse'
 import {Button, Table, TableHead} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import {createAttendees} from "../../../redux/actions/eventActions";
+import connect from "react-redux/lib/connect/connect";
+
 
 class CSVFileImport extends Component {
-
-    state = {
-        data: []
-    };
 
     constructor(props) {
         super(props);
@@ -16,14 +14,16 @@ class CSVFileImport extends Component {
     }
 
     handleReadCSV = (data) => {
-        //TODO: Do something with the data
-        //this.setState({data: data.data});
-        console.log(this.props.eventID);
-        console.log(data.data);
-
-        //createAttendees(data.data, this.props.eventID);
-        //this.props.event
+        this.props.dispatch(createAttendees(data.data, this.props.eventID));
     };
+
+    handleCreateAttendees = () => {
+        this.props.dispatch(
+            createAttendees(
+                [{email: "robocop72@hotmail.com", firstName: "Danny", lastName: "Denny", isUser: false}],
+                this.props.eventID))
+    };
+
 
     handleOnError = (err, file, inputElem, reason) => {
         //TODO: Return Error Message
@@ -44,18 +44,10 @@ class CSVFileImport extends Component {
                     onError={this.handleOnError}
                 />
                 <Button variant="contained" disableElevation={true} onClick={this.handleImportOffer}>Import</Button>
-                <Button variant="contained" color = "primary" onClick={createAttendees(
-                    [{email: "robocop72@hotmail.com", firstName: "Danny", lastName: "IDK How Spell Name Lol", isUser: false}],
-                    "epTpn3CZ9bwbDDLmLBv3")}>Click Me!</Button>
+                <Button variant="contained" color = "primary" onClick={this.handleCreateAttendees}>Click Me!</Button>
             </>
         )
     }
 }
 
-/*
-<Button variant="contained" color = "primary" onClick={createAttendees(
-                [{email: "robocop72@hotmail.com", firstName: "Danny", lastName: "IDK How Spell Name Lol", isUser: false}],
-                    "epTpn3CZ9bwbDDLmLBv3")}>Click Me!</Button>
- */
-
-export default CSVFileImport
+export default connect()(CSVFileImport)
