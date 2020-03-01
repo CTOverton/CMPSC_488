@@ -62,19 +62,30 @@ function isApprovedAttendee(attendee) {
 //assumption: Header Row
 export const createAttendees = (attendees,eventID) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
-        console.log(attendees);
+        // creates an array of JSON objects with field names from the header row
+        //TODO: Validate Header Row Options
+        const cleanedAttendees = [];
+        for(let int = 1; int < attendees.length; int++){
+            const partial = {};
+            for(let int1 = 0; int1 < attendees[int].length; int1++){
+                const value = attendees[0][int1].replace(' ', '');
+                partial[value] = attendees[int][int1];
+            }
+            cleanedAttendees.push(partial);
+        }
+        console.log(cleanedAttendees);
 
         const firestore = getFirestore();
 
         const validAttendees = [];
         const invalidAttendees = [];
 
-        for(let int = 0; int < attendees.length; int++) {
-            if (isApprovedAttendee(attendees[int])) {
-                validAttendees.push(attendees[int]);
+        for(let int = 0; int < cleanedAttendees.length; int++) {
+            if (isApprovedAttendee(cleanedAttendees[int])) {
+                validAttendees.push(cleanedAttendees[int]);
             }
             else{
-                invalidAttendees.push(attendees[int]);
+                invalidAttendees.push(cleanedAttendees[int]);
             }
         }
 
@@ -107,5 +118,7 @@ export const createAttendees = (attendees,eventID) => {
             })
             //TODO: Notify Admin of Failed Imports
         }
+
+        //TODO: Notify User of successful Import!
     }
 };
