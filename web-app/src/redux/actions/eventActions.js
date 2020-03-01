@@ -52,35 +52,37 @@ export const deleteEvent = (eventID) => {
 
 // SAM
 function isApprovedAttendee(attendee) {
-    if (typeof attendee.email != "string") return false;
-    if (typeof attendee.firstName != "string") return false;
-    if (typeof attendee.lastName != "string") return false;
+    //if (typeof attendee.email != "string") return false;
+    //if (typeof attendee.firstName != "string") return false;
+    //if (typeof attendee.lastName != "string") return false;
     //Don't need a check for attendee.isUser ???
     return true;
 }
 
+//assumption: Header Row
 export const createAttendees = (attendees,eventID) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
+        console.log(attendees);
+
         const firestore = getFirestore();
 
         const validAttendees = [];
         const invalidAttendees = [];
 
-        for(const attendee in attendees) {
-            if (isApprovedAttendee(attendee)) {
-                validAttendees.push(attendee);
+        for(let int = 0; int < attendees.length; int++) {
+            if (isApprovedAttendee(attendees[int])) {
+                validAttendees.push(attendees[int]);
             }
             else{
-                invalidAttendees.push(attendee);
+                invalidAttendees.push(attendees[int]);
             }
         }
 
         if(validAttendees.length > 0) {
             const batch = firestore.batch();
-
-            for(const attendee in validAttendees){
-                const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees");
-                batch.add(attendDocRef, attendee)
+            for(let int = 0; int < validAttendees.length; int++){
+                const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(validAttendees[int].email);
+                batch.set(attendDocRef, validAttendees[int])
             }
             batch.commit()
                 .then(() => {
@@ -93,9 +95,9 @@ export const createAttendees = (attendees,eventID) => {
         if(invalidAttendees > 0){
             const batch = firestore.batch();
 
-            for(const attendee in validAttendees){
-                const attendDocRef = firestore.collection("events").doc(eventID).collection("failedImports");
-                batch.add(attendDocRef, attendee)
+            for(let int = 0; int < invalidAttendees.length; int++){
+                const attendDocRef = firestore.collection("events").doc(eventID).collection("invalidattendees").doc(invalidAttendees[int].email);
+                batch.set(attendDocRef, invalidAttendees[int])
             }
             batch.commit()
                 .then(() => {
