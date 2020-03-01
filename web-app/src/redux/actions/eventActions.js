@@ -52,9 +52,9 @@ export const deleteEvent = (eventID) => {
 
 // SAM
 function isApprovedAttendee(attendee) {
-    //if (typeof attendee.email != "string") return false;
-    //if (typeof attendee.firstName != "string") return false;
-    //if (typeof attendee.lastName != "string") return false;
+    if (attendee.email != null && typeof attendee.email != "string") return false;
+    if (attendee.firstName != null && typeof attendee.firstName != "string") return false;
+    if (attendee.lastName != null && typeof attendee.lastName != "string") return false;
     //Don't need a check for attendee.isUser ???
     return true;
 }
@@ -69,7 +69,13 @@ export const createAttendees = (attendees,eventID) => {
             const partial = {};
             for(let int1 = 0; int1 < attendees[int].length; int1++){
                 const value = attendees[0][int1].replace(' ', '');
-                partial[value] = attendees[int][int1];
+                if(!value.toLowerCase().equals('tags')){
+                    partial[value] = attendees[int][int1];
+                }
+                else{
+                    const arr = attendees[int][int1].split(',');
+                    partial['tags'] = arr;
+                }
             }
             cleanedAttendees.push(partial);
         }
@@ -101,13 +107,12 @@ export const createAttendees = (attendees,eventID) => {
                 }).catch((err) => {
                 dispatch({ type: 'ADD_ATTENDEES_ERROR', err })
             })
-
         }
         if(invalidAttendees > 0){
             const batch = firestore.batch();
 
             for(let int = 0; int < invalidAttendees.length; int++){
-                const attendDocRef = firestore.collection("events").doc(eventID).collection("invalidattendees").doc(invalidAttendees[int].email);
+                const attendDocRef = firestore.collection("events").doc(eventID).collection("error_attendees").doc(invalidAttendees[int].email);
                 batch.set(attendDocRef, invalidAttendees[int])
             }
             batch.commit()
