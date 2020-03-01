@@ -12,11 +12,34 @@ import AttendeesDetails from "../screens/events/attendees/AttendeesDetails";
 import ProfilePage from "../screens/profile/ProfilePage";
 import AttendeeStatusPage from "../screens/events/attendees/AttendeeStatusPage";
 import AttendeesAdd from "../screens/events/attendees/AttendeesAdd";
+import {useSelector} from "react-redux";
+import {isEmpty, isLoaded} from "react-redux-firebase";
+
+function PrivateRoute({ children, ...rest }) {
+    const auth = useSelector(state => state.firebase.auth)
+    return (
+        <Route
+            {...rest}
+            render={({ location }) =>
+                isLoaded(auth) && !isEmpty(auth) ? (
+                    children
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                            state: { from: location }
+                        }}
+                    />
+                )
+            }
+        />
+    );
+}
 
 function Routes() {
     return(
         <Switch>
-            <Route exact path='/' component={Dashboard} />
+            <PrivateRoute exact path='/'><Dashboard /></PrivateRoute>
 
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
