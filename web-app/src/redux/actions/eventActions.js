@@ -81,9 +81,14 @@ export const createAttendees = (attendees,eventID) => {
         const cleanedAttendees = [];
         for(let int = 1; int < attendees.length; int++){
             const partial = {};
+            if(attendees[int][0] === ""){
+                break;
+                //Breaks if the next line is blank.
+                //TODO: Make more fullproof
+            }
             for(let int1 = 0; int1 < attendees[int].length; int1++){
                 const value = attendees[0][int1].replace(' ', '');
-                if(!value.toLowerCase().equals('tags')){
+                if(value.toLowerCase() !== "tags"){
                     partial[value] = attendees[int][int1];
                 }
                 else{
@@ -93,7 +98,6 @@ export const createAttendees = (attendees,eventID) => {
             }
             cleanedAttendees.push(partial);
         }
-        console.log(cleanedAttendees);
 
         const firestore = getFirestore();
 
@@ -112,6 +116,8 @@ export const createAttendees = (attendees,eventID) => {
         if(validAttendees.length > 0) {
             const batch = firestore.batch();
             for(let int = 0; int < validAttendees.length; int++){
+                console.log(eventID);
+                console.log(validAttendees[int].email);
                 const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(validAttendees[int].email);
                 batch.set(attendDocRef, validAttendees[int])
             }
@@ -137,7 +143,6 @@ export const createAttendees = (attendees,eventID) => {
             })
             //TODO: Notify Admin of Failed Imports
         }
-
         //TODO: Notify User of successful Import!
     }
 };
