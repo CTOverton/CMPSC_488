@@ -1,8 +1,22 @@
+import {isEmpty, isLoaded} from "react-redux-firebase";
+
 export const createEvent = (event) => {
-    return (dispatch, getState, {getFirestore}) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase()
         const firestore = getFirestore()
+        const state = getState()
+        const {auth} = state.firebase
+
+        if (isLoaded(auth) && isEmpty(auth)) {
+            return dispatch({ type: 'CREATE_EVENT_ERROR', err: {message: 'User Not Logged In'} })
+        }
 
         // Todo: validate event input
+        event = {
+            ...event,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: auth.uid
+        }
 
         firestore.collection('events')
             .add(event)
