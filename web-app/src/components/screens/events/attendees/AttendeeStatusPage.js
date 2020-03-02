@@ -21,6 +21,15 @@ const useStyles = makeStyles({
 });
 
 function AttendeeStatusPage() {
+    const now = new Date().getTime();
+    const date = new Date(2020,3,14, 12, 59, 5).getTime();
+    console.log(now);
+    console.log(date);
+
+    const event ={
+        timestamp: date
+    }
+
     const classes = useStyles();
 
     const { eventID, attendeeID } = useParams();
@@ -103,9 +112,9 @@ function AttendeeStatusPage() {
             </Card>
 
             {!attendee.tags &&
-            <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
-                Ready to leave
-            </Button>
+                <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
+                    Ready to leave
+                </Button>
             }
 
             {attendee.tags && !attendee.tags.includes("AccountedFor") &&
@@ -114,7 +123,7 @@ function AttendeeStatusPage() {
                 </Button>
             }
 
-            {attendee.tags && attendee.tags.includes("AccountedFor") &&
+            {attendee.tags && attendee.tags.includes("AccountedFor") && date <= now &&
             <div>
                 <Typography className={classes.mBottom} variant="h5">
                     You're all set!
@@ -128,6 +137,19 @@ function AttendeeStatusPage() {
             </div>
             }
 
+            {attendee.tags && attendee.tags.includes("AccountedFor") && date > now &&
+            <div>
+                <Typography className={classes.mBottom} variant="h5">
+                    You're too early!
+                </Typography>
+
+                <Typography className={classes.mBottom} variant="body1" color="textSecondary">
+                    Click below and wait.
+                </Typography>
+
+                <Button variant="contained" onClick={notReady}>Go back</Button>
+            </div>
+            }
 {/*            {((!readyArrive && new Date().getHours() < 18) || (!readyDepart && new Date().getHours() >= 18)) &&
             <Button className={classes.mBottom} variant="contained" color="primary" onClick={onClick}>
                 Ready to leave
