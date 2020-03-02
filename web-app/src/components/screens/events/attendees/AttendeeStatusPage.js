@@ -6,6 +6,7 @@ import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase"
 import {makeStyles} from "@material-ui/core/styles";
 import moment from "moment";
 import * as firebase from "firebase";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles({
     card: {
@@ -21,6 +22,23 @@ const useStyles = makeStyles({
 });
 
 function AttendeeStatusPage() {
+    const [late, setLate] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    console.log(late);
+
+    const handleLate = () => {
+        setLate(true);
+    };
+
+    const handleSubmitted = () => {
+        setSubmitted(true);
+    };
+
+    const handleDone = () => {
+        setLate(false);
+        setSubmitted(false);
+    }
+
     const now = new Date().getTime();
     const date = new Date(2020,3,14, 12, 59, 5).getTime();
     console.log(now);
@@ -169,6 +187,58 @@ function AttendeeStatusPage() {
                 <Button variant="contained" onClick={onClick}>Wait I'm not Ready</Button>
             </div>
             }*/}
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {!late &&
+            <div>
+                <form>
+                   <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleLate}>
+                       Running late?
+                   </Button>
+                </form>
+            </div>
+
+            }
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {late && !submitted &&
+                <div>
+                    <Typography className={classes.mBottom} variant="h5">
+                        How many minute late will you be?
+                    </Typography>
+
+                    <form className={classes.root} noValidate autoComplete="off">
+                        <TextField
+                            id="title-input"
+                            label="Title"
+                            variant="filled"
+                        />
+
+                        <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleSubmitted}>
+                            Submit
+                        </Button>
+                    </form>
+                </div>
+            }
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {late && submitted &&
+            <div>
+                <Typography className={classes.mBottom} variant="h5">
+                    Thanks!
+                </Typography>
+                <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleDone}>
+                    Done
+                </Button>
+            </div>
+            }
+
         </Container>
     )
 
