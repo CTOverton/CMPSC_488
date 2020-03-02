@@ -52,35 +52,54 @@ export const deleteEvent = (eventID) => {
 
 // SAM
 function isApprovedAttendee(attendee) {
-    if (typeof attendee.email != "string") return false;
-    if (typeof attendee.firstName != "string") return false;
-    if (typeof attendee.lastName != "string") return false;
+    if (attendee.email != null && typeof attendee.email != "string") return false;
+    if (attendee.firstName != null && typeof attendee.firstName != "string") return false;
+    if (attendee.lastName != null && typeof attendee.lastName != "string") return false;
     //Don't need a check for attendee.isUser ???
     return true;
 }
 
+//assumption: Header Row
 export const createAttendees = (attendees,eventID) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
+        // creates an array of JSON objects with field names from the header row
+        //TODO: Validate Header Row Options
+        const cleanedAttendees = [];
+        for(let int = 1; int < attendees.length; int++){
+            const partial = {};
+            for(let int1 = 0; int1 < attendees[int].length; int1++){
+                const value = attendees[0][int1].replace(' ', '');
+                if(!value.toLowerCase().equals('tags')){
+                    partial[value] = attendees[int][int1];
+                }
+                else{
+                    const arr = attendees[int][int1].split(',');
+                    partial['tags'] = arr;
+                }
+            }
+            cleanedAttendees.push(partial);
+        }
+        console.log(cleanedAttendees);
+
         const firestore = getFirestore();
 
         const validAttendees = [];
         const invalidAttendees = [];
 
-        for(const attendee in attendees) {
-            if (isApprovedAttendee(attendee)) {
-                validAttendees.push(attendee);
+        for(let int = 0; int < cleanedAttendees.length; int++) {
+            if (isApprovedAttendee(cleanedAttendees[int])) {
+                validAttendees.push(cleanedAttendees[int]);
             }
             else{
-                invalidAttendees.push(attendee);
+                invalidAttendees.push(cleanedAttendees[int]);
             }
         }
 
         if(validAttendees.length > 0) {
             const batch = firestore.batch();
-
-            for(const attendee in validAttendees){
-                const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees");
-                batch.add(attendDocRef, attendee)
+            for(let int = 0; int < validAttendees.length; int++){
+                const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(validAttendees[int].email);
+                batch.set(attendDocRef, validAttendees[int])
             }
             batch.commit()
                 .then(() => {
@@ -88,14 +107,13 @@ export const createAttendees = (attendees,eventID) => {
                 }).catch((err) => {
                 dispatch({ type: 'ADD_ATTENDEES_ERROR', err })
             })
-
         }
         if(invalidAttendees > 0){
             const batch = firestore.batch();
 
-            for(const attendee in validAttendees){
-                const attendDocRef = firestore.collection("events").doc(eventID).collection("failedImports");
-                batch.add(attendDocRef, attendee)
+            for(let int = 0; int < invalidAttendees.length; int++){
+                const attendDocRef = firestore.collection("events").doc(eventID).collection("error_attendees").doc(invalidAttendees[int].email);
+                batch.set(attendDocRef, invalidAttendees[int])
             }
             batch.commit()
                 .then(() => {
@@ -105,5 +123,7 @@ export const createAttendees = (attendees,eventID) => {
             })
             //TODO: Notify Admin of Failed Imports
         }
+
+        //TODO: Notify User of successful Import!
     }
 };

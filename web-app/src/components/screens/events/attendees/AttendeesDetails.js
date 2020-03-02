@@ -89,6 +89,7 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 onChange={handleAddInput}
             />
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
+
         </Container>
     )
 }
