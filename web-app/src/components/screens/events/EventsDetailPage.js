@@ -29,34 +29,52 @@ const EventsDetailPage = ({eventID}) => {
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees' }] }
     ])
 
-    const event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
+    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
+    const auth = useSelector(state => state.firebase.auth)
 
     // Show a message while items are loading
-    if (!isLoaded(event)) {
+    if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees)) {
         return null
     }
 
-    if (!isLoaded(event.attendees)) {
-        return null
+    if (isEmpty(auth)) {
+        // Todo redirect
+        return <h2>You do not have access to manage this event</h2>
+    }
+
+    const {uid} = auth;
+
+    if (event.createdBy !== uid) {
+        // Todo redirect
+        return <h2>You do not have access to manage this event</h2>
     }
 
     let tags = {};
 
-    console.log("Attendees")
+    console.log(event)
+    if (isLoaded(event.attendees) && isEmpty(event.attendees)) {
+        event = {
+            ...event,
+            attendees: []
+        };
+    } else {
+        console.log(event.attendees)
+        Object.values(event.attendees).forEach(attendee => {
+            console.log(attendee.firstName + ',' + attendee.lastName + ',' + attendee.email + ',' + attendee.tags)
 
-    Object.values(event.attendees).forEach(attendee => {
-        console.log(attendee.firstName + ',' + attendee.lastName + ',' + attendee.email + ',' + attendee.tags)
+            if (attendee.tags) {
+                attendee.tags.forEach(tag => {
+                    if (tags[tag]) {
+                        tags[tag] += 1;
+                    } else {
+                        tags[tag] = 1;
+                    }
+                })
+            }
+        })
+    }
 
-        if (attendee.tags) {
-            attendee.tags.forEach(tag => {
-                if (tags[tag]) {
-                    tags[tag] += 1;
-                } else {
-                    tags[tag] = 1;
-                }
-            })
-        }
-    })
+
 
     let tagsArray = [];
     for (let [key, value] of Object.entries(tags)) {

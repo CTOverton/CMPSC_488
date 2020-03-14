@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 function AttendeeStatusPage() {
     const [late, setLate] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [lateTime, setLateTime] = useState(0);
+    console.log(late);
 
     const handleLate = () => {
         setLate(true);
@@ -34,38 +34,33 @@ function AttendeeStatusPage() {
         setSubmitted(true);
     };
 
-    const handleLateTime = e => {
-        setLateTime(e.target.value());
-    };
-
     const handleDone = () => {
         setLate(false);
         setSubmitted(false);
     }
 
     const now = new Date().getTime();
-    let date = new Date(2020,3,14, 12, 59, 5).getTime();
+    const date = new Date(2020,3,14, 12, 59, 5).getTime();
+    console.log(now);
+    console.log(date);
 
+    const event ={
+        timestamp: date
+    }
 
     const classes = useStyles();
 
     const { eventID, attendeeID } = useParams();
 
-    console.log(eventID, attendeeID);
+    console.log(eventID, attendeeID)
 
-    const firestore = useFirestore();
+    const firestore = useFirestore()
 
     useFirestoreConnect(() => [
-        { collection: 'events', doc: eventID},
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
     ])
 
-    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
-    const event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
-
-     /*if(event.canStartArriving){
-        date = Date(event.canStartArriving).getTime();
-    }*
+    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
 
     if (!isLoaded(attendee)) {
         return null
@@ -221,7 +216,6 @@ function AttendeeStatusPage() {
                             id="title-input"
                             label="Title"
                             variant="filled"
-                            onChange={handleLateTime}
                         />
 
                         <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleSubmitted}>
