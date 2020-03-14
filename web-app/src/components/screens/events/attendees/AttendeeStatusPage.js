@@ -6,6 +6,7 @@ import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase"
 import {makeStyles} from "@material-ui/core/styles";
 import moment from "moment";
 import * as firebase from "firebase";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles({
     card: {
@@ -21,19 +22,50 @@ const useStyles = makeStyles({
 });
 
 function AttendeeStatusPage() {
+    const [late, setLate] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [lateTime, setLateTime] = useState(0);
+
+    const handleLate = () => {
+        setLate(true);
+    };
+
+    const handleSubmitted = () => {
+        setSubmitted(true);
+    };
+
+    const handleLateTime = e => {
+        setLateTime(e.target.value());
+    };
+
+    const handleDone = () => {
+        setLate(false);
+        setSubmitted(false);
+    }
+
+    const now = new Date().getTime();
+    let date = new Date(2020,3,14, 12, 59, 5).getTime();
+
+
     const classes = useStyles();
 
     const { eventID, attendeeID } = useParams();
 
-    console.log(eventID, attendeeID)
+    console.log(eventID, attendeeID);
 
-    const firestore = useFirestore()
+    const firestore = useFirestore();
 
     useFirestoreConnect(() => [
+        { collection: 'events', doc: eventID},
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
     ])
 
-    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
+    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
+    const event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
+
+     /*if(event.canStartArriving){
+        date = Date(event.canStartArriving).getTime();
+    }*
 
     if (!isLoaded(attendee)) {
         return null
@@ -103,9 +135,9 @@ function AttendeeStatusPage() {
             </Card>
 
             {!attendee.tags &&
-            <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
-                Ready to leave
-            </Button>
+                <Button className={classes.mBottom} variant="contained" color="primary" onClick={ready}>
+                    Ready to leave
+                </Button>
             }
 
             {attendee.tags && !attendee.tags.includes("AccountedFor") &&
@@ -114,7 +146,7 @@ function AttendeeStatusPage() {
                 </Button>
             }
 
-            {attendee.tags && attendee.tags.includes("AccountedFor") &&
+            {attendee.tags && attendee.tags.includes("AccountedFor") && date <= now &&
             <div>
                 <Typography className={classes.mBottom} variant="h5">
                     You're all set!
@@ -128,6 +160,19 @@ function AttendeeStatusPage() {
             </div>
             }
 
+            {attendee.tags && attendee.tags.includes("AccountedFor") && date > now &&
+            <div>
+                <Typography className={classes.mBottom} variant="h5">
+                    You're too early!
+                </Typography>
+
+                <Typography className={classes.mBottom} variant="body1" color="textSecondary">
+                    Click below and wait.
+                </Typography>
+
+                <Button variant="contained" onClick={notReady}>Go back</Button>
+            </div>
+            }
 {/*            {((!readyArrive && new Date().getHours() < 18) || (!readyDepart && new Date().getHours() >= 18)) &&
             <Button className={classes.mBottom} variant="contained" color="primary" onClick={onClick}>
                 Ready to leave
@@ -147,6 +192,59 @@ function AttendeeStatusPage() {
                 <Button variant="contained" onClick={onClick}>Wait I'm not Ready</Button>
             </div>
             }*/}
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {!late &&
+            <div>
+                <form>
+                   <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleLate}>
+                       Running late?
+                   </Button>
+                </form>
+            </div>
+
+            }
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {late && !submitted &&
+                <div>
+                    <Typography className={classes.mBottom} variant="h5">
+                        How many minute late will you be?
+                    </Typography>
+
+                    <form className={classes.root} noValidate autoComplete="off">
+                        <TextField
+                            id="title-input"
+                            label="Title"
+                            variant="filled"
+                            onChange={handleLateTime}
+                        />
+
+                        <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleSubmitted}>
+                            Submit
+                        </Button>
+                    </form>
+                </div>
+            }
+
+            {console.log(late)}
+            {console.log(submitted)}
+
+            {late && submitted &&
+            <div>
+                <Typography className={classes.mBottom} variant="h5">
+                    Thanks!
+                </Typography>
+                <Button className={classes.mBottom} variant="contained" color="primary" onClick={handleDone}>
+                    Done
+                </Button>
+            </div>
+            }
+
         </Container>
     )
 
