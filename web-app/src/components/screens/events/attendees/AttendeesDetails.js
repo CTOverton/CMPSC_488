@@ -8,6 +8,7 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
+import AttendeesAddGlobal from "./AttendeesAddGlobal";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -34,11 +35,13 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
 
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
-
+    const eventTags = useSelector(({firestore: {data}}) => data.events && data.events[eventID] && data.events[eventID].tags)
     if (!isLoaded(attendee)) {
         return null
     }
-
+    if (!isLoaded(eventTags)) {
+        return null
+    }
 
 
     const handleAddInput = e => {
@@ -55,9 +58,20 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 .update({
                     tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
                 })
-                .then(r => console.log(r))
-                .catch(err => console.log(err))
+                .then(updateMasterTags(inputVal))
+        .catch(err => console.log(err))
         }
+    }
+
+    function updateMasterTags(inputVal){
+        firestore
+            .collection('events')
+            .doc(eventID)
+            .update({
+                tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
+            })
+            .then(r => console.log(r))
+            .catch(err => console.log(err))
     }
 
     return(
@@ -89,7 +103,11 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 onChange={handleAddInput}
             />
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
-
+            <AttendeesAddGlobal
+            eventID={eventID}
+            attendeeID={attendeeID}
+            eventTags={eventTags}
+            attendeeTags={attendee.tags}/>
         </Container>
     )
 }

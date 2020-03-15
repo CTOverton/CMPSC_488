@@ -15,7 +15,8 @@ export const createEvent = (event) => {
         event = {
             ...event,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            createdBy: auth.uid
+            createdBy: auth.uid,
+            tags: []
         }
 
         firestore.collection('events')
