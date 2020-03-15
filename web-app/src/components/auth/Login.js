@@ -1,5 +1,5 @@
 import React from "react";
-import {createUser, loginUser} from "../../redux/actions/authActions";
+import {loginUser} from "../../redux/actions/authActions";
 import {connect, useSelector} from "react-redux";
 import {Container} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";

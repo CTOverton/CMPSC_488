@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
-import {Button, Table, TableHead} from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
+import {Button} from "@material-ui/core";
 import {createAttendees} from "../../../redux/actions/eventActions";
 import {connect} from "react-redux";
 

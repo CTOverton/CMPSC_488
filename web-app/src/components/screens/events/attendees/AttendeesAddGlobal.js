@@ -1,5 +1,4 @@
 import React from "react";
-import {connect} from "react-redux";
 import {useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from "@material-ui/core/Chip";
@@ -21,11 +20,8 @@ const useStyles = makeStyles(theme => ({
 
 const AttendeesAddAGlobal = ({eventID, attendeeID, attendeeTags, eventTags}) => {
     const classes = useStyles();
-    const firestore = useFirestore()
-    console.log(eventTags);
-    console.log(attendeeTags);
-    const diff = eventTags.filter(x => !attendeeTags.includes(x) );
-    console.log(diff);
+    const firestore = useFirestore();
+    const diff = eventTags.filter(x => !attendeeTags.includes(x));
 
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
@@ -52,15 +48,6 @@ const AttendeesAddAGlobal = ({eventID, attendeeID, attendeeTags, eventTags}) => 
             </div>
         </>
     )
-}
-
-const mapState = (state, ownProps) => {
-    const eventID = ownProps.match.params.eventID;
-    const attendeeID = ownProps.match.params.attendeeID;
-    return {
-        eventID: eventID,
-        attendeeID: attendeeID
-    }
 }
 
 // const mapDispatch = {createEvent: createEvent, updateEvent: updateEvent, deleteEvent: deleteEvent}

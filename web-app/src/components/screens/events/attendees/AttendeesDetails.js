@@ -3,7 +3,6 @@ import {connect, useSelector} from "react-redux";
 import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {Container} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import EventsListItem from "../EventsListItem";
 import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";

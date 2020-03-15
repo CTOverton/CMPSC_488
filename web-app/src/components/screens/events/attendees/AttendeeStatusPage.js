@@ -4,7 +4,6 @@ import {Container, Button, Typography, Card, CardContent} from "@material-ui/cor
 import {useSelector} from "react-redux";
 import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {makeStyles} from "@material-ui/core/styles";
-import moment from "moment";
 import * as firebase from "firebase";
 import TextField from "@material-ui/core/TextField";
 

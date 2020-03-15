@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const EventsList = ({events}) => {
-    const classes = useStyles();
+    //const classes = useStyles();
 
     console.log(events)
 

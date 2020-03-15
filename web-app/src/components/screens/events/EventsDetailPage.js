@@ -1,7 +1,6 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Container} from "@material-ui/core";
-import {createEvent, deleteEvent, updateEvent} from "../../../redux/actions/eventActions";
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
@@ -89,7 +88,7 @@ const EventsDetailPage = ({eventID}) => {
             <h3>Total attendees: {Object.values(event.attendees).length}</h3>
             <div className={classes.chips}>
                 { tagsArray && tagsArray.map(item =>
-                    <Chip key={item.tag} label={item.tag + ': ' + item.count} />
+                    <Chip key={item.tag} label={item.tag + ': ' + item.count}/>
                 )}
             </div>
 
