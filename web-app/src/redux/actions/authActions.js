@@ -57,6 +57,7 @@ export const changeUsername = (credentials, profile, newUsername) => {
                 lastName: profile.lastName
             }
 
+            // Todo: Fix
         firebase.update(credentials, newProfile)
             .then(() => {
                 dispatch({ type: 'USERNAME_UPDATE_SUCCESS' })

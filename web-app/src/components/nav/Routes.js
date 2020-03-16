@@ -53,8 +53,8 @@ function Routes() {
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
             <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
 
-            <Route path='/profile' component={ProfilePage} />
-            <Route path='/profile/settings' component={ProfileSettings} />
+            <Route exact path='/profile' component={ProfilePage} />
+            <Route exact path='/profile/settings' component={ProfileSettings} />
 
             <Route path='/playground/sam' component={SamPlayground} />
             <Route path='/playground/sean' component={SeanTemplateComponent} />
