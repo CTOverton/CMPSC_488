@@ -38,9 +38,9 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
     if (!isLoaded(attendee)) {
         return null
     }
-    if (!isLoaded(eventTags)) {
+    /*if (!isLoaded(eventTags)) {
         return null
-    }
+    }*/
 
 
     const handleAddInput = e => {
@@ -102,11 +102,6 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 onChange={handleAddInput}
             />
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
-            <AttendeesAddGlobal
-            eventID={eventID}
-            attendeeID={attendeeID}
-            eventTags={eventTags}
-            attendeeTags={attendee.tags}/>
         </Container>
     )
 }
