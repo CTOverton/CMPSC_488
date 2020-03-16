@@ -34,13 +34,14 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
 
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
-    const eventTags = useSelector(({firestore: {data}}) => data.events && data.events[eventID] && data.events[eventID].tags)
+    const eventTags = useSelector(({firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].tags)
+    console.log(eventTags);
     if (!isLoaded(attendee)) {
-        return null
+        return "Loading Attendees"
     }
-    if (!isLoaded(eventTags)) {
-        return null
-    }
+/*    if (!isLoaded(eventTags)) {
+        return "Loading Event Tags"
+    }*/
 
 
     const handleAddInput = e => {

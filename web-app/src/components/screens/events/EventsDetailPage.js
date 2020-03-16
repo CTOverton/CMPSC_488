@@ -76,6 +76,7 @@ const EventsDetailPage = ({eventID}) => {
 
 
     let tagsArray = [];
+    let filter_array = [];
     for (let [key, value] of Object.entries(tags)) {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
@@ -88,12 +89,19 @@ const EventsDetailPage = ({eventID}) => {
             <h3>Total attendees: {Object.values(event.attendees).length}</h3>
             <div className={classes.chips}>
                 { tagsArray && tagsArray.map(item =>
-                    <Chip key={item.tag} label={item.tag + ': ' + item.count}/>
+                    <Chip key={item.tag} label={item.tag + ': ' + item.count} onClick={() => {
+                        if (filter_array.includes(item.tag)){
+                            delete filter_array[filter_array.findIndex(item.tag)]
+                        }
+                        else{
+                            filter_array.push(item.tag)
+                        }
+                    }}/>
                 )}
             </div>
 
 
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
+            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} filtered_by_tags={filter_array}/>
         </Container>
     )
 }

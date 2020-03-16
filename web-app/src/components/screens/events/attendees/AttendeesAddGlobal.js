@@ -21,7 +21,10 @@ const useStyles = makeStyles(theme => ({
 const AttendeesAddAGlobal = ({eventID, attendeeID, attendeeTags, eventTags}) => {
     const classes = useStyles();
     const firestore = useFirestore();
-    const diff = eventTags.filter(x => !attendeeTags.includes(x));
+    let diff = [];
+    if(eventTags != null) {
+        diff = eventTags.filter(x => !attendeeTags.includes(x));
+    }
 
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
