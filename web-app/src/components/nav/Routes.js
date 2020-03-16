@@ -14,6 +14,7 @@ import AttendeeStatusPage from "../screens/events/attendees/AttendeeStatusPage";
 import AttendeesAdd from "../screens/events/attendees/AttendeesAdd";
 import {useSelector} from "react-redux";
 import {isEmpty, isLoaded} from "react-redux-firebase";
+import ProfileSettings from "../screens/profile/ProfileSettings";
 
 function PrivateRoute({ children, ...rest }) {
     const auth = useSelector(state => state.firebase.auth)
@@ -53,6 +54,7 @@ function Routes() {
             <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
 
             <Route path='/profile' component={ProfilePage} />
+            <Route path='/profile/settings' component={ProfileSettings} />
 
             <Route path='/playground/sam' component={SamPlayground} />
             <Route path='/playground/sean' component={SeanTemplateComponent} />

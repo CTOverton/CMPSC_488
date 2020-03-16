@@ -6,6 +6,10 @@ import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import {logoutUser} from "../../redux/actions/authActions";
 import {connect} from "react-redux";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
+import EventIcon from "@material-ui/icons/Event";
+import {Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,6 +30,10 @@ const AppBarHeader = ({logout}) => {
         logout()
     }
 
+    const handleSettings = () => {
+
+    }
+
     return(
         <div className={classes.root}>
             <AppBar position="static">
@@ -33,6 +41,7 @@ const AppBarHeader = ({logout}) => {
 {/*                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>*/}
+                    <Button color='inherit' onClick={handleSettings}>Settings</Button>
                     <Typography variant="h6" className={classes.title}>
                         Title
                     </Typography>
