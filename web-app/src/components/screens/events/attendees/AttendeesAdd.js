@@ -18,10 +18,11 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const AttendeesAdd = () => {
+const AttendeesAdd = ({attendee}) => {
+
     const classes = useStyles();
     const [inputs, setInputs] = React.useState({
-        email: null,
+        email: attendee ? attendee.email : null,
         firstName: null,
         lastName: null
     })
@@ -70,6 +71,7 @@ const AttendeesAdd = () => {
                     variant="filled"
                     onChange={handleChange('email')}
                     required
+                    defaultValue={attendee ? attendee.email : null}
                 />
                 <div>
                     <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Attendee</Button>

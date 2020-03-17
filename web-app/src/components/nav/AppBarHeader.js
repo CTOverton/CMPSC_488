@@ -8,8 +8,7 @@ import {logoutUser} from "../../redux/actions/authActions";
 import {connect} from "react-redux";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import EventIcon from "@material-ui/icons/Event";
-import {Link} from "react-router-dom";
-import {Redirect} from "react-router-dom";
+import {Link, Redirect, withRouter} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AppBarHeader = ({logout}) => {
+const AppBarHeader = ({logout, history}) => {
     const classes = useStyles();
 
     const handleLogout = () => {
@@ -31,7 +30,7 @@ const AppBarHeader = ({logout}) => {
     }
 
     const handleSettings = () => {
-
+        history.push("/profile/settings")
     }
 
     return(
@@ -55,4 +54,4 @@ const AppBarHeader = ({logout}) => {
 // const mapState = state => {return {auth: state.auth}}
 const mapDispatch = {logout: logoutUser}
 
-export default connect(undefined, mapDispatch)(AppBarHeader)
+export default connect(undefined, mapDispatch)(withRouter(AppBarHeader))

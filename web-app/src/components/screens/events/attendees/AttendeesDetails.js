@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {connect, useSelector} from "react-redux";
-import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
+import {isLoaded, isEmpty, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {Container} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from "@material-ui/core/Chip";
@@ -8,6 +8,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
 import AttendeesAddGlobal from "./AttendeesAddGlobal";
+import QRCode from "qrcode.react";
+import AttendeesAdd from "./AttendeesAdd";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -36,11 +38,21 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
     const eventTags = useSelector(({firestore: {data}}) => data.events && data.events[eventID] && data.events[eventID].tags)
     if (!isLoaded(attendee)) {
-        return null
+        return <div>Loading attendee</div>
+    }
+    if (isEmpty(attendee)) {
+        return(
+            <Container maxWidth="md">
+                <h1>Attendee {attendeeID} not found</h1>
+                <AttendeesAdd attendee={{email: attendeeID}}/>
+            </Container>
+        )
     }
     /*if (!isLoaded(eventTags)) {
         return null
     }*/
+
+    // Todo: check if event exists
 
 
     const handleAddInput = e => {
@@ -58,7 +70,7 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                     tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
                 })
                 .then(updateMasterTags(inputVal))
-        .catch(err => console.log(err))
+                .catch(err => console.log(err))
         }
     }
 
@@ -102,6 +114,10 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 onChange={handleAddInput}
             />
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
+            <QRCode value={JSON.stringify({
+                eventID: eventID,
+                attendeeID: attendeeID
+            })}/>
         </Container>
     )
 }

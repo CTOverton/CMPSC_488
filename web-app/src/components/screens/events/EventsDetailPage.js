@@ -5,6 +5,10 @@ import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
 import Chip from "@material-ui/core/Chip";
+// import QrReader from 'react-qr-reader';
+import QrReader from 'react-qr-scanner'
+import Example from "../../Example";
+import TestQR from "../../TestQR";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -80,6 +84,14 @@ const EventsDetailPage = ({eventID}) => {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
 
+    const handleScan = (data) => {
+        console.log(data)
+    }
+
+    const handleError = (err) => {
+        console.log(err)
+    }
+
     return (
         <Container maxWidth="md">
             <h1>{event.title}</h1>
@@ -94,6 +106,7 @@ const EventsDetailPage = ({eventID}) => {
 
 
             <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
+            <TestQR/>
         </Container>
     )
 }
