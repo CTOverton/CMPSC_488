@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import {Container} from "@material-ui/core";
 import {changeUsername} from "../../../redux/actions/authActions";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import UsernameDialog from "./UsernameDialog";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +50,8 @@ function ProfileSettings() {
 
     return(
         <div>
-            <form className={classes.root} noValidate autoComplete="off">
+            <h1>Settings</h1>
+            {/*<form className={classes.root} noValidate autoComplete="off">
                 <TextField
                     id="update-username-input"
                     label="New Username"
@@ -57,7 +59,8 @@ function ProfileSettings() {
                     onChange={setNewUsername}
                     />
                 <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleChangeUsername}>Change Username</Button>
-            </form>
+            </form>*/}
+            <UsernameDialog/>
         </div>
     );
 
