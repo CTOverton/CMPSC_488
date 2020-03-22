@@ -6,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
+import {checkPassword} from "../../../redux/actions/authActions";
 
 export default function UsernameDialog() {
     const [open, setOpen] = React.useState(false);
@@ -19,12 +20,26 @@ export default function UsernameDialog() {
         setSubmitted(false);
         setPwSubmitted(false);
         setPwAccepted(false);
+        setNewUsername("");
+        setPassword("");
     };
+
+    const [newUsername, setNewUsername] = React.useState("")
+
+    const handleNewUsername = (e) => {
+        setNewUsername(e);
+    }
 
     const [submitted, setSubmitted] = React.useState(false);
 
     const handleSubmit = () => {
         setSubmitted(true);
+    }
+
+    const [password, setPassword] = React.useState("")
+
+    const handlePassword = (e) => {
+        setPassword(e);
     }
 
     const [pwSubmitted, setPwSubmitted] = React.useState(false);
@@ -33,7 +48,9 @@ export default function UsernameDialog() {
 
     const handlePwSubmit = () => {
         setPwSubmitted(true);
-        setPwAccepted(true);
+        if(checkPassword(password)) {
+            setPwAccepted(true);
+        }
     }
 
     const handlePwResubmit = () => {
@@ -57,6 +74,7 @@ export default function UsernameDialog() {
                             label="New Username"
                             type="text"
                             fullWidth
+                            onChange={handleNewUsername}
                         />
                     </DialogContent>
                     <DialogActions>
@@ -81,6 +99,7 @@ export default function UsernameDialog() {
                         label="Password"
                         type="text"
                         fullWidth
+                        onChange={handlePassword}
                     />
                 </DialogContent>
                 <DialogActions>

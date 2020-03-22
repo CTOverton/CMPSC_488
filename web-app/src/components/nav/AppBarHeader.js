@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import EventIcon from "@material-ui/icons/Event";
 import {Link, Redirect, withRouter} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AppBarHeader = ({logout}) => {
+const AppBarHeader = ({logout, history}) => {
     const classes = useStyles();
 
     const handleLogout = () => {
@@ -32,8 +33,7 @@ const AppBarHeader = ({logout}) => {
     }
 
     const handleSettings = () => {
-        //history.push("/profile/settings")
-        return(<Redirect to={"/profile/settings"} />);
+        history.push("/profile/settings");
     }
 
     return(

@@ -66,3 +66,17 @@ export const changeUsername = (credentials, profile, newUsername) => {
             })
     }
 }
+
+export const checkPassword = (credentials) => {
+    return (dispatch, getState, {getFirebase}) => {
+        const firebase = getFirebase();
+
+        firebase.reauthenticateWithCredential(credentials)
+            .then(() => {
+                return true;
+            })
+            .catch(() => {
+                return false;
+            });
+    }
+}
