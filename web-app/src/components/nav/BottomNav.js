@@ -5,7 +5,7 @@ import EventIcon from '@material-ui/icons/Event';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     },
 });
 
-const BottomNav = () => {
+const BottomNav = ({history}) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -24,15 +24,26 @@ const BottomNav = () => {
             value={value}
             onChange={(event, newValue) => {
                 setValue(newValue);
+                switch (newValue) {
+                    case "search":
+                        history.push("/search")
+                        break
+                    case "events":
+                        history.push("/events")
+                        break
+                    case "profile":
+                        history.push("/profile")
+                        break
+                }
             }}
             showLabels
             className={classes.root}
         >
             <BottomNavigationAction value="search" icon={<SearchIcon />} />
-            <Link to={'/events'} style={{ textDecoration: 'none' }}><BottomNavigationAction value="events" icon={<EventIcon />} /></Link>
-            <Link to={'/profile'} style={{ textDecoration: 'none' }}><BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} /></Link>
+            <BottomNavigationAction value="events" icon={<EventIcon />} />
+            <BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} />
         </BottomNavigation>
     )
 }
 
-export default BottomNav
+export default withRouter(BottomNav)
