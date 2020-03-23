@@ -5,6 +5,7 @@ import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
 import Chip from "@material-ui/core/Chip";
+import TheButton from "../../../playground/sam/TheButton";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -97,7 +98,7 @@ const EventsDetailPage = ({eventID}) => {
             <h3>Total attendees: {Object.values(event.attendees).length}</h3>
             <div className={classes.chips}>
                 { tagsArray && tagsArray.map(item =>
-                    <Chip key={item.tag} label={item.tag + ': ' + item.count} onClick={() => {
+                    <TheButton key={item.tag} label={item.tag + ': ' + item.count} color={mTags.includes(item.tag) ? "primary" : "default"} onClick={() => {
                         console.log("SOMETHING:" + item.tag);
                         if (mTags.includes(item.tag)){
                             console.log("DELETE");
