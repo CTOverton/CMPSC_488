@@ -40,7 +40,8 @@ const Login = ({auth, login}) => {
         setInputs({ ...inputs, [prop]: value === "" ? null : value })
     }
 
-    const handleLogin = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
         login({
             email: inputs.email,
             password: inputs.password
@@ -51,7 +52,7 @@ const Login = ({auth, login}) => {
         <Authorized>
             <Container maxWidth="md">
                 <h1>Login</h1>
-                <form className={classes.root} noValidate autoComplete="on">
+                <form className={classes.root} noValidate autoComplete="on" onSubmit={handleSubmit}>
                     <TextField
                         id="email-input"
                         label="Email"
@@ -72,7 +73,7 @@ const Login = ({auth, login}) => {
                     />
                     <div>
                         <Link to={'/signup'} style={{ textDecoration: 'none' }}><Button className={classes.margin} variant="contained" disableElevation>Sign Up</Button></Link>
-                        <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleLogin}>Login</Button>
+                        <Button className={classes.margin} variant="contained" disableElevation color="primary" type="submit">Login</Button>
                     </div>
                 </form>
                 <Typography variant="subtitle1">{auth.authError}</Typography>
