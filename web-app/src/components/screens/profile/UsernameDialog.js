@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {checkPassword} from "../../../redux/actions/authActions";
+import {changeUsername, checkPassword} from "../../../redux/actions/authActions";
 
 export default function UsernameDialog() {
     const [open, setOpen] = React.useState(false);
@@ -50,6 +50,7 @@ export default function UsernameDialog() {
         setPwSubmitted(true);
         if(checkPassword(password)) {
             setPwAccepted(true);
+            changeUsername(newUsername);
         }
     }
 

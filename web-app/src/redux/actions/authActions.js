@@ -50,14 +50,7 @@ export const changeUsername = (credentials, profile, newUsername) => {
     return (dispatch, getState, {getFirebase}) => {
         const firebase = getFirebase();
 
-        const newProfile = {
-                email: profile.email,
-                username: newUsername,
-                firstName: profile.firstName,
-                lastName: profile.lastName
-            }
-
-        firebase.update(credentials, newProfile)
+        firebase.updateProfile({username: newUsername})
             .then(() => {
                 dispatch({ type: 'USERNAME_UPDATE_SUCCESS' })
             })
@@ -67,6 +60,7 @@ export const changeUsername = (credentials, profile, newUsername) => {
     }
 }
 
+//Check if below uses user-inputted password from dialog box or just current login credentials
 export const checkPassword = (credentials) => {
     return (dispatch, getState, {getFirebase}) => {
         const firebase = getFirebase();
