@@ -53,7 +53,7 @@ function Routes() {
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
             <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
 
-            <Route exact path='/profile' component={ProfilePage} />
+            <PrivateRoute exact path='/profile'><ProfilePage/></PrivateRoute>
             <Route exact path='/profile/settings' component={ProfileSettings} />
 
             <Route path='/playground/sam' component={SamPlayground} />

@@ -42,7 +42,7 @@ function App() {
                 createFirestoreInstance={createFirestoreInstance}>
                 <BrowserRouter>
                     <div className="App">
-                        <AppBarHeader />
+                        {/*<AppBarHeader />*/}
                         <Routes />
                         <BottomNav />
                     </div>
