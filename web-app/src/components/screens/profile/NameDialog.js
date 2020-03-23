@@ -6,9 +6,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {changeUsername, checkPassword} from "../../../redux/actions/authActions";
+import {changeName, checkPassword} from "../../../redux/actions/authActions";
 
-export default function UsernameDialog() {
+export default function NameDialog() {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -20,14 +20,21 @@ export default function UsernameDialog() {
         setSubmitted(false);
         setPwSubmitted(false);
         setPwAccepted(false);
-        setNewUsername("");
+        setNewFirstName("");
+        setNewLastName("");
         setPassword("");
     };
 
-    const [newUsername, setNewUsername] = React.useState("")
+    const [newFirstName, setNewFirstName] = React.useState("")
 
-    const handleNewUsername = (e) => {
-        setNewUsername(e);
+    const handleNewFirstName = (e) => {
+        setNewFirstName(e);
+    }
+
+    const [newLastName, setNewLastName] = React.useState("")
+
+    const handleNewLastName = (e) => {
+        setNewLastName(e);
     }
 
     const [submitted, setSubmitted] = React.useState(false);
@@ -50,7 +57,7 @@ export default function UsernameDialog() {
         setPwSubmitted(true);
         if(checkPassword(password)) {
             setPwAccepted(true);
-            changeUsername(newUsername);
+            changeName(newFirstName, newLastName);
         }
     }
 
@@ -61,37 +68,46 @@ export default function UsernameDialog() {
     return(
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Change Username
+                Change Name
             </Button>
 
             {!submitted &&
-                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="New Username"
-                            type="text"
-                            fullWidth
-                            onChange={handleNewUsername}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSubmit} color="primary">
-                            Change
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="New First Name"
+                        type="text"
+                        fullWidth
+                        onChange={handleNewFirstName}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="New Last Name"
+                        type="text"
+                        fullWidth
+                        onChange={handleNewLastName}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit} color="primary">
+                        Change
+                    </Button>
+                </DialogActions>
+            </Dialog>
             }
 
             {submitted && !pwSubmitted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -116,7 +132,7 @@ export default function UsernameDialog() {
 
             {submitted && pwSubmitted && !pwAccepted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Incorrect Password
@@ -135,10 +151,10 @@ export default function UsernameDialog() {
 
             {submitted && pwSubmitted && pwAccepted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Success!<br/>Your username has been changed.
+                        Success!<br/>Your name has been changed.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

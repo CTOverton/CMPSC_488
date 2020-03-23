@@ -60,12 +60,16 @@ export const changeUsername = (credentials, profile, newUsername) => {
     }
 }
 
+export const changeName = () => {
+
+}
+
 //Check if below uses user-inputted password from dialog box or just current login credentials
-export const checkPassword = (credentials) => {
+export const checkPassword = (password) => {
     return (dispatch, getState, {getFirebase}) => {
         const firebase = getFirebase();
 
-        firebase.reauthenticateWithCredential(credentials)
+        firebase.reauthenticateWithCredential(password)
             .then(() => {
                 return true;
             })

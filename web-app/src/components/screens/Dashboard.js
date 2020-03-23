@@ -7,6 +7,7 @@ import BottomNav from "../nav/BottomNav";
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, populate} from "react-redux-firebase";
 import {Redirect} from "react-router-dom";
+import UsernameDialog from "./profile/UsernameDialog";
 
 /*
 const Authorized = ({children}) => {
