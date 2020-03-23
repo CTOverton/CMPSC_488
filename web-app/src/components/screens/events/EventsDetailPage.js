@@ -32,10 +32,14 @@ const EventsDetailPage = ({eventID}) => {
     let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
     const auth = useSelector(state => state.firebase.auth)
 
+    const [mTags, filter_array] = React.useState([])
+
     // Show a message while items are loading
     if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees)) {
         return null
     }
+    console.log("TAGS");
+    console.log(event.tags);
 
     if (isEmpty(auth)) {
         // Todo redirect
@@ -76,10 +80,14 @@ const EventsDetailPage = ({eventID}) => {
 
 
     let tagsArray = [];
-    let filter_array = [];
     for (let [key, value] of Object.entries(tags)) {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
+    event.tags.forEach(tag => {
+        if(tags[tag] === null){
+            tagsArray = [...tagsArray, {tag: tag, count: 0}]
+        }
+    });
 
     return (
         <Container maxWidth="md">
@@ -91,19 +99,25 @@ const EventsDetailPage = ({eventID}) => {
                 { tagsArray && tagsArray.map(item =>
                     <Chip key={item.tag} label={item.tag + ': ' + item.count} onClick={() => {
                         console.log("SOMETHING:" + item.tag);
-                        if (filter_array.includes(item.tag)){
+                        if (mTags.includes(item.tag)){
                             console.log("DELETE");
-                            delete filter_array[filter_array.indexOf(item.tag)];
+                            let values = mTags;
+                            delete values[values.indexOf(item.tag)];
+                            filter_array(values);
                         }
                         else{
                             console.log("ADD");
-                            filter_array.push(item.tag);}
-                        console.log(filter_array)
+                            let values = mTags;
+                            values.push(item.tag);
+                            filter_array(values);
+                        }
+                        console.log(mTags)
                     }}/>
                 )}
             </div>
-
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tags={filter_array}/>
+            <div>
+                <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tags={mTags}/>
+            </div>
         </Container>
     )
 }

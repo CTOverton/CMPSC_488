@@ -23,8 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AttendeesDetails = () => {
-    const { eventID, attendeeID } = useParams();
+const AttendeesDetails = ({ eventID, attendeeID }) => {
     const classes = useStyles();
     const [inputVal, changeInput] = useState(null)
     const firestore = useFirestore();
@@ -34,7 +33,7 @@ const AttendeesDetails = () => {
         ])
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
-    let event      = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
+    const event      = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
 
     if (!isLoaded(attendee)) {
         return "Loading Attendees"
