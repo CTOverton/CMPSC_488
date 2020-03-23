@@ -7,6 +7,7 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
+import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -22,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AttendeesDetails = ({eventID, attendeeID}) => {
+const AttendeesDetails = () => {
+    const { eventID, attendeeID } = useParams();
     const classes = useStyles();
     const [inputVal, changeInput] = useState(null)
     const firestore = useFirestore();
@@ -31,8 +33,8 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]}
         ])
 
-    const attendee  = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
-    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID])
+    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
+    let event      = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
 
     if (!isLoaded(attendee)) {
         return "Loading Attendees"
@@ -40,14 +42,12 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
     if (!isLoaded(event)) {
         return "Loading Event Details"
     }
-    console.log(event);
-    let eventTags = event.tags;
-    const attendeeTags = attendee.tags;
-    let diff = [];
-    if(eventTags != null) {
-        diff = eventTags.filter(x => !attendeeTags.includes(x));
-    }
 
+    console.log(event);
+    let diff = [];
+    if(event.tags != null) {
+        diff = event.tags.filter(x => !attendee.tags.includes(x));
+    }
 
     const handleAddInput = e => {
         changeInput(e.target.value === '' ? null : e.target.value)
@@ -124,7 +124,6 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                     }/>
                 )}
             </div>
-
         </Container>
     )
 }

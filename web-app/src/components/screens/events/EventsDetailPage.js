@@ -5,6 +5,8 @@ import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
 import Chip from "@material-ui/core/Chip";
+import addFilterTag from "./attendees/AttendeesList"
+import removeFilterTag from "./attendees/AttendeesList"
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -31,6 +33,21 @@ const EventsDetailPage = ({eventID}) => {
     let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
     const auth = useSelector(state => state.firebase.auth)
 
+    let [masterTags, setTags] = React.useState([])
+
+    const addFilterTag = (e) => {
+        let value = masterTags;
+        value.push(e);
+        setTags(value);
+    }
+
+    const removeFilterTag = (e) => {
+        let value = masterTags;
+        value.splice(value.findIndex(e), 1)
+        setTags(value)
+    }
+
+
     // Show a message while items are loading
     if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees)) {
         return null
@@ -40,7 +57,6 @@ const EventsDetailPage = ({eventID}) => {
         // Todo redirect
         return <h2>You do not have access to manage this event</h2>
     }
-
     const {uid} = auth;
 
     if (event.createdBy !== uid) {
@@ -90,18 +106,22 @@ const EventsDetailPage = ({eventID}) => {
             <div className={classes.chips}>
                 { tagsArray && tagsArray.map(item =>
                     <Chip key={item.tag} label={item.tag + ': ' + item.count} onClick={() => {
+                        console.log("SOMETHING:" + item.tag);
                         if (filter_array.includes(item.tag)){
-                            delete filter_array[filter_array.findIndex(item.tag)]
+                            console.log("DELETE");
+                            addFilterTag(item.tag)
                         }
                         else{
-                            filter_array.push(item.tag)
+                            console.log("ADD");
+                            removeFilterTag(item.tag)
                         }
+                        console.log(filter_array)
                     }}/>
                 )}
             </div>
 
 
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} filtered_by_tags={filter_array}/>
+            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
         </Container>
     )
 }
