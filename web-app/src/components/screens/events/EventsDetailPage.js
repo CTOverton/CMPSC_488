@@ -121,7 +121,7 @@ const EventsDetailPage = ({eventID}) => {
             </div>
 
 
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
+            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tagFilter={masterTags}/>
         </Container>
     )
 }

@@ -5,9 +5,11 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import CSVFileImport from "../../CSV/CSVFileImport";
-import tags from "../EventsDetailPage"
 
-const AttendeesList = ({attendees, eventID}) => {
+const AttendeesList = ({attendees, eventID, tagFilter}) => {
+
+    let tags = tagFilter;
+    console.log(tags);
 
     const [search, setSearch] = React.useState(null)
 
@@ -32,7 +34,6 @@ const AttendeesList = ({attendees, eventID}) => {
                 type="search"
                 onChange={handleSearch}
             />
-
 
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName
