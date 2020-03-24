@@ -15,6 +15,7 @@ class TheButton extends React.Component {
         this.setState({
             button:!this.state.button
         })
+        this.props.onClick();
     }
     render(){
         return (
