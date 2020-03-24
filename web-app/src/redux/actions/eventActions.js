@@ -68,6 +68,28 @@ export const deleteEvent = (eventID) => {
     }
 }
 
+export const signupForEvent = (eventID, attendee) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore()
+        const firebase = getFirebase()
+
+        attendee = {
+            ...attendee,
+            signupAt: firebase.firestore.FieldValue.serverTimestamp(),
+        }
+        firestore.collection('events')
+            .doc(eventID)
+            .collection('signups')
+            .add(attendee)
+            .then(() => {
+                dispatch({ type: 'SIGNUP_SUCCESS' })
+            })
+            .catch((err) => {
+                dispatch({ type: 'SIGNUP_ERROR', err })
+            })
+    }
+}
+
 
 // SAM
 function isApprovedAttendee(attendee) {

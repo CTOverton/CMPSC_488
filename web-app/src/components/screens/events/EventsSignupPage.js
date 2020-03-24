@@ -1,0 +1,97 @@
+import React from "react";
+import {Container} from "@material-ui/core";
+import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
+import {connect, useSelector} from "react-redux";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import {signupForEvent} from "../../../redux/actions/eventActions";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: 300,
+        },
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+}))
+
+const EventsSignupPage = ({eventID, signup}) => {
+    const classes = useStyles();
+    const [inputs, setInputs] = React.useState({
+        email: null,
+        firstName: null,
+        lastName: null
+    })
+
+    useFirestoreConnect(() => [
+        { collection: 'events', doc: eventID },
+        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees' }] }
+    ])
+
+    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
+
+    if (!isLoaded(event)) {
+        return null
+    }
+
+    const handleChange = prop => event => {
+        const value = event.target.value;
+        setInputs({ ...inputs, [prop]: value === "" ? null : value })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        signup(eventID, inputs)
+    }
+
+    return (
+        <Container maxWidth="md">
+            <h1>Signup For {event.title}</h1>
+            <h3>{event.description}</h3>
+            <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+                <div>
+                    <TextField
+                        id="firstName-input"
+                        label="First Name"
+                        autoComplete="given-name"
+                        variant="filled"
+                        onChange={handleChange('firstName')}
+                    />
+                    <TextField
+                        id="lastName-input"
+                        label="Last Name"
+                        autoComplete="family-name"
+                        variant="filled"
+                        onChange={handleChange('lastName')}
+                    />
+                    <TextField
+                        id="email-input"
+                        label="Email"
+                        type="email"
+                        autoComplete="email"
+                        variant="filled"
+                        onChange={handleChange('email')}
+                        required
+                    />
+                </div>
+
+                <Button className={classes.margin} variant="contained" disableElevation color="primary" type="submit">Signup</Button>
+            </form>
+        </Container>
+    )
+}
+
+const mapState = (state, ownProps) => {
+    const id = ownProps.match.params.id;
+    return {
+        eventID: id
+    }
+}
+
+const mapDispatch = {signup: signupForEvent}
+
+export default connect(mapState, mapDispatch)(EventsSignupPage)

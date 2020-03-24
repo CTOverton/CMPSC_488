@@ -5,6 +5,11 @@ import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
 import Chip from "@material-ui/core/Chip";
+// import QrReader from 'react-qr-reader';
+import QrReader from 'react-qr-scanner'
+import Example from "../../Example";
+import TestQR from "../../TestQR";
+import EventsDetailPageHeader from "./EventsDetailPageHeader";
 import TheButton from "../../../playground/sam/TheButton";
 
 const useStyles = makeStyles(theme => ({
@@ -20,7 +25,6 @@ const useStyles = makeStyles(theme => ({
         },
     },
 }))
-
 
 const EventsDetailPage = ({eventID}) => {
     const classes = useStyles();
@@ -46,6 +50,7 @@ const EventsDetailPage = ({eventID}) => {
         // Todo redirect
         return <h2>You do not have access to manage this event</h2>
     }
+
     const {uid} = auth;
 
     if (event.createdBy !== uid) {
@@ -90,10 +95,20 @@ const EventsDetailPage = ({eventID}) => {
         }
     });
 
+    const handleScan = (data) => {
+        console.log(data)
+    }
+
+    const handleError = (err) => {
+        console.log(err)
+    }
+
     return (
-        <Container maxWidth="md">
-            <h1>{event.title}</h1>
-            <p>{event.description}</p>
+        <div>
+            <EventsDetailPageHeader eventID={eventID}/>
+            <Container maxWidth="md">
+                <h1>{event.title}</h1>
+                <p>{event.description}</p>
 
             <h3>Total attendees: {Object.values(event.attendees).length}</h3>
             <div className={classes.chips}>
@@ -116,10 +131,10 @@ const EventsDetailPage = ({eventID}) => {
                     }}/>
                 )}
             </div>
-            <div>
                 <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tags={mTags}/>
-            </div>
-        </Container>
+            <TestQR/>
+            </Container>
+        </div>
     )
 }
 

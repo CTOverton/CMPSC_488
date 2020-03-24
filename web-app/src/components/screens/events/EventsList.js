@@ -13,7 +13,7 @@ const EventsList = ({events}) => {
     //const classes = useStyles();
     return (
         <List component="nav">
-            <h1>Events List</h1>
+            {/*<h1>Events List</h1>*/}
             {events.map((event) =>
                 <EventsListItem event={event} key={event.id}/>
             )}

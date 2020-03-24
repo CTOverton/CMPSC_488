@@ -1,12 +1,15 @@
 import React, {useState} from "react";
 import {connect, useSelector} from "react-redux";
-import {isLoaded, useFirestore, useFirestoreConnect} from "react-redux-firebase";
+import {isLoaded, isEmpty, useFirestore, useFirestoreConnect} from "react-redux-firebase";
 import {Container} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
+import AttendeesAddGlobal from "./AttendeesAddGlobal";
+import QRCode from "qrcode.react";
+import AttendeesAdd from "./AttendeesAdd";
 import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +43,15 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
     }
     if (!isLoaded(event)) {
         return "Loading Event Details"
+        return <div>Loading attendee</div>
+    }
+    if (isEmpty(attendee)) {
+        return(
+            <Container maxWidth="md">
+                <h1>Attendee {attendeeID} not found</h1>
+                <AttendeesAdd attendee={{email: attendeeID}}/>
+            </Container>
+        )
     }
 
     console.log(event);
@@ -123,6 +135,10 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
                     }/>
                 )}
             </div>
+            <QRCode value={JSON.stringify({
+                eventID: eventID,
+                attendeeID: attendeeID
+            })}/>
         </Container>
     )
 }

@@ -5,6 +5,8 @@ import UserEventList from "./UserEventList";
 import eventIcon from "../../../assets/snowy_mountain.jpg" ;
 import {useSelector} from "react-redux";
 import {isEmpty, isLoaded} from "react-redux-firebase";
+import ProfileHeader from "./ProfileHeader";
+import {Container} from "@material-ui/core";
 
 function ProfilePage() {
 
@@ -34,6 +36,7 @@ function ProfilePage() {
 
     return (
       <div>
+          <ProfileHeader/>
           <UserDetails user={profile}/>
           <UserEventList events={events}/>
       </div>

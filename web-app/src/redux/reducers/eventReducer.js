@@ -56,6 +56,16 @@ export const eventReducer = (state = initState, action) => {
                 ...state,
                 eventError: action.err.message
             }
+        case 'SIGNUP_SUCCESS':
+            return {
+                ...state,
+                signupError: null
+            }
+        case 'SIGNUP_ERROR':
+            return {
+                ...state,
+                signupError: action.err.message
+            }
         default:
             return state
     }
