@@ -15,6 +15,8 @@ import AttendeesAdd from "../screens/events/attendees/AttendeesAdd";
 import {useSelector} from "react-redux";
 import {isEmpty, isLoaded} from "react-redux-firebase";
 import ProfileSettings from "../screens/profile/ProfileSettings";
+import EventsSettingsPage from "../screens/events/EventsSettingsPage";
+import EventsSignupPage from "../screens/events/EventsSignupPage";
 
 function PrivateRoute({ children, ...rest }) {
     const auth = useSelector(state => state.firebase.auth)
@@ -48,6 +50,8 @@ function Routes() {
             <Route exact path='/events' component={EventsScreen} />
             <Route exact path='/events/create' component={EventsCreateScreen} />
             <Route exact path='/events/:id' component={EventsPage} />
+            <Route exact path='/events/:id/settings' component={EventsSettingsPage} />
+            <Route exact path='/events/:id/signup' component={EventsSignupPage} />
 
             <Route exact path='/events/:eventID/attendee/add' component={AttendeesAdd} />
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />

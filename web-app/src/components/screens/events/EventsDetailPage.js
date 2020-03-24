@@ -9,6 +9,7 @@ import Chip from "@material-ui/core/Chip";
 import QrReader from 'react-qr-scanner'
 import Example from "../../Example";
 import TestQR from "../../TestQR";
+import EventsDetailPageHeader from "./EventsDetailPageHeader";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -93,21 +94,24 @@ const EventsDetailPage = ({eventID}) => {
     }
 
     return (
-        <Container maxWidth="md">
-            <h1>{event.title}</h1>
-            <p>{event.description}</p>
+        <div>
+            <EventsDetailPageHeader eventID={eventID}/>
+            <Container maxWidth="md">
+                <h1>{event.title}</h1>
+                <p>{event.description}</p>
 
-            <h3>Total attendees: {Object.values(event.attendees).length}</h3>
-            <div className={classes.chips}>
-                { tagsArray && tagsArray.map(item =>
-                    <Chip key={item.tag} label={item.tag + ': ' + item.count}/>
-                )}
-            </div>
+                <h3>Total attendees: {Object.values(event.attendees).length}</h3>
+                <div className={classes.chips}>
+                    { tagsArray && tagsArray.map(item =>
+                        <Chip key={item.tag} label={item.tag + ': ' + item.count}/>
+                    )}
+                </div>
 
 
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
-            <TestQR/>
-        </Container>
+                <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
+                <TestQR/>
+            </Container>
+        </div>
     )
 }
 

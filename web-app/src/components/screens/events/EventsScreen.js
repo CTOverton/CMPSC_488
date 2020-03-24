@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import EventsList from "./EventsList";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import {useSelector} from "react-redux";
+import EventsHeader from "./EventsHeader";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -32,10 +33,13 @@ const EventsScreen = () => {
     }
 
     return (
-        <Container maxWidth="md">
-            <Link to={'/events/create'} style={{ textDecoration: 'none' }}><Button className={classes.margin} variant="contained" disableElevation color="primary">Create Event</Button></Link>
-            <EventsList events={events}/>
-        </Container>
+        <div>
+            {/*<Link to={'/events/create'} style={{ textDecoration: 'none' }}><Button className={classes.margin} variant="contained" disableElevation color="primary">Create Event</Button></Link>*/}
+            <EventsHeader />
+            <Container maxWidth="md">
+                <EventsList events={events}/>
+            </Container>
+        </div>
     )
 }
 

@@ -9,6 +9,7 @@ import {Link, withRouter} from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
+        // Todo: fix overtop
         width: "100%",
         position: 'fixed',
         bottom: 0
