@@ -1,26 +1,30 @@
-import React, {Component} from "react";
-import Button from "@material-ui/core/Button";
+import * as React from "react";
+import Chip from "@material-ui/core/Chip";
 
-class TheButton extends Component {
-
-    state = {
-        value: 0,
-    };
-
-    incrementX = () => {
-        this.setState({value: this.state.value + 1})
-    };
-    decrementX = () => {
-        this.setState({value: this.state.value - 1})
-    };
-
-    render(){
-        return <container>
-            <div><Button variant="contained" color = "primary" onClick={this.incrementX}>Forwards</Button>
-                <Button variant="contained" color = "primary" onClick={this.decrementX}>Backwards</Button></div>
-            <div><h2>CLICKS: {this.state.value}</h2></div>
-        </container>
+class TheButton extends React.Component {
+    constructor(props){
+        super(props)
+        this.state ={
+            button: true,
+            key: this.props.key,
+            label: this.props.label
+        }
+        this.handleClick = this.handleClick.bind(this);
     }
+    handleClick(){
+        this.setState({
+            button:!this.state.button
+        })
+        this.props.onClick();
+    }
+    render(){
+        return (
+            <div className="container">
+                <Chip key = {this.state.key} label = {this.state.label} color ={this.state.button ? "default": "primary"} onClick={this.handleClick}>Click Me!</Chip>
+            </div>
+        )
+    }
+
 }
 
 export default TheButton

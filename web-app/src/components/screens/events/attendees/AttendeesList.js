@@ -6,7 +6,8 @@ import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import CSVFileImport from "../../CSV/CSVFileImport";
 
-const AttendeesList = ({attendees, eventID}) => {
+const AttendeesList = ({attendees, eventID, tags}) => {
+
     const [search, setSearch] = React.useState(null)
 
     if (attendees === null) return <div>No Attendees</div>
@@ -31,15 +32,13 @@ const AttendeesList = ({attendees, eventID}) => {
                 onChange={handleSearch}
             />
 
-
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName
-                if (index.toLowerCase().includes(search) || search === null) {
+                if ((index.toLowerCase().includes(search) || search === null) && (tags === [] || tags === null|| tags.every(v => attendee.tags.includes(v)))) {
                     return <AttendeesListItem eventID={eventID} attendee={attendee} key={attendee.id}/>
                 }
             })}
         </List>
     )
 }
-
-export default AttendeesList
+export default (AttendeesList)

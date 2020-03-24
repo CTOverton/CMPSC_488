@@ -7,7 +7,7 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
-import AttendeesAddGlobal from "./AttendeesAddGlobal";
+import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -23,25 +23,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const AttendeesDetails = ({eventID, attendeeID}) => {
+const AttendeesDetails = ({ eventID, attendeeID }) => {
     const classes = useStyles();
     const [inputVal, changeInput] = useState(null)
-    const firestore = useFirestore()
+    const firestore = useFirestore();
 
     useFirestoreConnect(() => [
-        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }] }
-    ])
+        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]}
+        ])
 
+    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
+    const event      = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
 
-    const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID])
-    const eventTags = useSelector(({firestore: {data}}) => data.events && data.events[eventID] && data.events[eventID].tags)
     if (!isLoaded(attendee)) {
-        return null
+        return "Loading Attendees"
     }
-    /*if (!isLoaded(eventTags)) {
-        return null
-    }*/
+    if (!isLoaded(event)) {
+        return "Loading Event Details"
+    }
 
+    console.log(event);
+    let diff = [];
+    if(event.tags != null) {
+        diff = event.tags.filter(x => !attendee.tags.includes(x));
+    }
 
     const handleAddInput = e => {
         changeInput(e.target.value === '' ? null : e.target.value)
@@ -57,20 +62,18 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 .update({
                     tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
                 })
-                .then(updateMasterTags(inputVal))
+                .then((inputVal) => {
+                    firestore
+                        .collection('events')
+                        .doc(eventID)
+                        .update({
+                            tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
+                        })
+                        .then(r => console.log(r))
+                        .catch(err => console.log(err))
+                })
         .catch(err => console.log(err))
         }
-    }
-
-    function updateMasterTags(inputVal){
-        firestore
-            .collection('events')
-            .doc(eventID)
-            .update({
-                tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
-            })
-            .then(r => console.log(r))
-            .catch(err => console.log(err))
     }
 
     return(
@@ -102,6 +105,24 @@ const AttendeesDetails = ({eventID, attendeeID}) => {
                 onChange={handleAddInput}
             />
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
+
+            <div className={classes.chips}>
+                {diff && diff.map((tag) =>
+                    <Chip key={tag} label={tag} onClick={() => {
+                        firestore
+                            .collection('events')
+                            .doc(eventID)
+                            .collection('attendees')
+                            .doc(attendeeID)
+                            .update({
+                                tags: firebase.firestore.FieldValue.arrayUnion(tag)
+                            })
+                            .then(r => console.log(r))
+                            .catch(err => console.log(err))
+                    }
+                    }/>
+                )}
+            </div>
         </Container>
     )
 }

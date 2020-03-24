@@ -1,4 +1,8 @@
 import {isEmpty, isLoaded} from "react-redux-firebase";
+import setTags from "../../components/screens/events/attendees/AttendeesList"
+import tags from "../../components/screens/events/attendees/AttendeesList"
+import React from "react";
+
 
 export const createEvent = (event) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {

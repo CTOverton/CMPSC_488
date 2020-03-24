@@ -5,6 +5,7 @@ import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
 import Chip from "@material-ui/core/Chip";
+import TheButton from "../../../playground/sam/TheButton";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
+
 const EventsDetailPage = ({eventID}) => {
     const classes = useStyles();
 
@@ -31,16 +33,19 @@ const EventsDetailPage = ({eventID}) => {
     let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
     const auth = useSelector(state => state.firebase.auth)
 
+    const [mTags, filter_array] = React.useState([])
+
     // Show a message while items are loading
     if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees)) {
         return null
     }
+    console.log("TAGS");
+    console.log(event.tags);
 
     if (isEmpty(auth)) {
         // Todo redirect
         return <h2>You do not have access to manage this event</h2>
     }
-
     const {uid} = auth;
 
     if (event.createdBy !== uid) {
@@ -79,6 +84,11 @@ const EventsDetailPage = ({eventID}) => {
     for (let [key, value] of Object.entries(tags)) {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
+    event.tags.forEach(tag => {
+        if(tags[tag] === null){
+            tagsArray = [...tagsArray, {tag: tag, count: 0}]
+        }
+    });
 
     return (
         <Container maxWidth="md">
@@ -88,12 +98,27 @@ const EventsDetailPage = ({eventID}) => {
             <h3>Total attendees: {Object.values(event.attendees).length}</h3>
             <div className={classes.chips}>
                 { tagsArray && tagsArray.map(item =>
-                    <Chip key={item.tag} label={item.tag + ': ' + item.count}/>
+                    <TheButton key={item.tag} label={item.tag + ': ' + item.count} color={mTags.includes(item.tag) ? "primary" : "default"} onClick={() => {
+                        console.log("SOMETHING:" + item.tag);
+                        if (mTags.includes(item.tag)){
+                            console.log("DELETE");
+                            let values = mTags;
+                            delete values[values.indexOf(item.tag)];
+                            filter_array(values);
+                        }
+                        else{
+                            console.log("ADD");
+                            let values = mTags;
+                            values.push(item.tag);
+                            filter_array(values);
+                        }
+                        console.log(mTags)
+                    }}/>
                 )}
             </div>
-
-
-            <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}/>
+            <div>
+                <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tags={mTags}/>
+            </div>
         </Container>
     )
 }
