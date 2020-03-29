@@ -11,6 +11,7 @@ import Example from "../../Example";
 import TestQR from "../../TestQR";
 import EventsDetailPageHeader from "./EventsDetailPageHeader";
 import TheButton from "../../../playground/sam/TheButton";
+import {removeTags} from "../../../redux/actions/eventActions";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -128,6 +129,9 @@ const EventsDetailPage = ({eventID}) => {
                             filter_array(values);
                         }
                         console.log(mTags)
+                    }}
+                    onDelete={()=>{
+                        console.log("TODO: Make this delete");
                     }}/>
                 )}
             </div>

@@ -1,28 +1,48 @@
 import * as React from "react";
 import Chip from "@material-ui/core/Chip";
+import {connect} from "react-redux";
 
 class TheButton extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state ={
+        this.state = {
             button: true,
             key: this.props.key,
-            label: this.props.label
+            label: this.props.label,
         }
         this.handleClick = this.handleClick.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
-    handleClick(){
+
+    handleDelete() {
+        this.props.onDelete();
+    };
+
+    handleClick() {
+        console.log(this.props);
         this.setState({
-            button:!this.state.button
+            button: !this.state.button
         })
         this.props.onClick();
     }
-    render(){
-        return (
-            <div className="container">
-                <Chip key = {this.state.key} label = {this.state.label} color ={this.state.button ? "default": "primary"} onClick={this.handleClick}>Click Me!</Chip>
-            </div>
-        )
+
+    render() {
+        if (this.props.onDelete != null){
+            return (
+                <div className="container">
+                    <Chip key={this.state.key} label={this.state.label} color={this.state.button ? "default" : "primary"}
+                          onClick={this.handleClick} onDelete={this.handleDelete}>Click Me!</Chip>
+                </div>
+            )
+        }
+        else{
+            return (
+                <div className="container">
+                    <Chip key={this.state.key} label={this.state.label} color={this.state.button ? "default" : "primary"}
+                          onClick={this.handleClick}>Click Me!</Chip>
+                </div>
+            )
+        }
     }
 
 }

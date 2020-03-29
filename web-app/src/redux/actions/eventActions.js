@@ -173,3 +173,7 @@ export const createAttendees = (attendees,eventID) => {
         //TODO: Notify User of successful Import!
     }
 };
+
+export const removeTags = (eventID) => {
+    return 1
+}
