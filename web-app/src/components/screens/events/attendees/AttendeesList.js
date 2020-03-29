@@ -23,8 +23,8 @@ const AttendeesList = ({attendees, eventID, tags}) => {
                 <Link to={'/events/'+eventID+'/attendee/add'} style={{ textDecoration: 'none' }}><Button variant="contained" disableElevation>Add New</Button></Link>
                 <CSVFileImport eventID={eventID}/>
             </span>
-
             <br/>
+
             <TextField
                 id="search-input"
                 label="Search"

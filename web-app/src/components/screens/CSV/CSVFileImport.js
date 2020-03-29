@@ -16,15 +16,6 @@ class CSVFileImport extends Component {
         this.props.dispatch(createAttendees(data.data, this.props.eventID));
     };
 
-    handleCreateAttendees = () => {
-        this.props.dispatch(
-            createAttendees(
-                [{email: "robocop72@hotmail.com", firstName: "Danny", lastName: "Denny", isUser: false},
-                    {email: "jjb4@psu.edu", firstName: "Jeremy", lastName: "Blum", isUser: false}],
-                this.props.eventID))
-        console.log("COMPLETED");
-    };
-
 
     handleOnError = (err, file, inputElem, reason) => {
         //TODO: Return Error Message
@@ -50,6 +41,4 @@ class CSVFileImport extends Component {
     }
 }
 
-
-//                <Button variant="contained" color = "primary" onClick={this.handleCreateAttendees}>Click Me!</Button>
 export default connect()(CSVFileImport)

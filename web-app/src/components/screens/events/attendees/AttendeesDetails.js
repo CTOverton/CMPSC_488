@@ -7,10 +7,8 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";
-import AttendeesAddGlobal from "./AttendeesAddGlobal";
 import QRCode from "qrcode.react";
 import AttendeesAdd from "./AttendeesAdd";
-import {useParams} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     chips: {
@@ -32,18 +30,18 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
     const firestore = useFirestore();
 
     useFirestoreConnect(() => [
+        { collection: 'events', doc: eventID },
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]}
         ])
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
-    const event      = useSelector(({ firestore: { data } }) => data.events && data.events[eventID]);
+    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
 
     if (!isLoaded(attendee)) {
         return "Loading Attendees"
     }
     if (!isLoaded(event)) {
         return "Loading Event Details"
-        return <div>Loading attendee</div>
     }
     if (isEmpty(attendee)) {
         return(

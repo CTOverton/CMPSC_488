@@ -6,7 +6,7 @@ function SamPlayground() {
 
     return(
         <div>
-            <TheButton/>
+            <CSVFileImport/>
         </div>
     )
 }
