@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsDetailPage = ({eventID}) => {
+const EventsDetailPage = ({eventID, removeTags}) => {
     const classes = useStyles();
     const [tab, setTab] = React.useState(0);
 
@@ -139,6 +139,7 @@ const EventsDetailPage = ({eventID}) => {
                         }}
                                    onDelete={() => {
                                        console.log("TODO: Make this delete: EVENT DETAILS PAGE LINE 141");
+                                       removeTags(eventID, item.tag);
                                    }}/>
                     )}
                 </div>
@@ -179,4 +180,4 @@ const mapState = (state, ownProps) => {
 
 // const mapDispatch = {createEvent: createEvent, updateEvent: updateEvent, deleteEvent: deleteEvent}
 
-export default connect(mapState, undefined)(EventsDetailPage)
+export default connect(mapState, {removeTags: removeTags})(EventsDetailPage)
