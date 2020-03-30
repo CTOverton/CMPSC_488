@@ -138,7 +138,7 @@ const EventsDetailPage = ({eventID}) => {
                             console.log(mTags)
                         }}
                                    onDelete={() => {
-                                       console.log("TODO: Make this delete");
+                                       console.log("TODO: Make this delete: EVENT DETAILS PAGE LINE 141");
                                    }}/>
                     )}
                 </div>
@@ -159,7 +159,7 @@ const EventsDetailPage = ({eventID}) => {
                 {tab === 0 && <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}
                                              tags={mTags}/>}
                 {tab === 1 && <div><h1>Signups List</h1><AttendeesList eventID={eventID} attendees={Object.values({'c@ctoverton.com': {email: "c@ctoverton.com", firstName: "Christian", lastName: "Overton"},
-                    'sam@sam.com': {email: "sam@sam.com", firstName: "Samuel", lastName: "Synder"}})}
+                    'sam@sam.com': {email: "sam@sam.com", firstName: "Samuel", lastName: "Snyder"}})}
                                                   tags={mTags}/></div> }
                 {tab === 2 && <div><h1>Waitlist</h1><AttendeesList eventID={eventID} attendees={Object.values({'sean@McNally.com': {email: "sean@McNally.com", firstName: "Sean", lastName: "McNally"}})}
                     tags={mTags}/></div>}

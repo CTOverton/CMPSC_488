@@ -12,7 +12,7 @@ export const createEvent = (event) => {
         const {auth} = state.firebase
 
         if (isLoaded(auth) && isEmpty(auth)) {
-            return dispatch({ type: 'CREATE_EVENT_ERROR', err: {message: 'User Not Logged In'} })
+            return dispatch({type: 'CREATE_EVENT_ERROR', err: {message: 'User Not Logged In'}})
         }
 
         // Todo: validate event input
@@ -26,10 +26,10 @@ export const createEvent = (event) => {
         firestore.collection('events')
             .add(event)
             .then((docRef) => {
-                dispatch({ type: 'CREATE_EVENT_SUCCESS', docRef })
+                dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
             })
             .catch((err) => {
-                dispatch({ type: 'CREATE_EVENT_ERROR', err })
+                dispatch({type: 'CREATE_EVENT_ERROR', err})
             })
     }
 }
@@ -44,10 +44,10 @@ export const updateEvent = (eventID, event) => {
             .doc(eventID)
             .update(event)
             .then(() => {
-                dispatch({ type: 'UPDATE_EVENT_SUCCESS' })
+                dispatch({type: 'UPDATE_EVENT_SUCCESS'})
             })
             .catch((err) => {
-                dispatch({ type: 'UPDATE_EVENT_ERROR', err })
+                dispatch({type: 'UPDATE_EVENT_ERROR', err})
             })
     }
 }
@@ -60,10 +60,10 @@ export const deleteEvent = (eventID) => {
             .doc(eventID)
             .delete()
             .then(() => {
-                dispatch({ type: 'DELETE_EVENT_SUCCESS' })
+                dispatch({type: 'DELETE_EVENT_SUCCESS'})
             })
             .catch((err) => {
-                dispatch({ type: 'DELETE_EVENT_ERROR', err })
+                dispatch({type: 'DELETE_EVENT_ERROR', err})
             })
     }
 }
@@ -83,10 +83,10 @@ export const signupForEvent = (eventID, attendee, type) => {
             .collection(type)
             .add(attendee)
             .then(() => {
-                dispatch({ type: 'SIGNUP_SUCCESS' })
+                dispatch({type: 'SIGNUP_SUCCESS'})
             })
             .catch((err) => {
-                dispatch({ type: 'SIGNUP_ERROR', err })
+                dispatch({type: 'SIGNUP_ERROR', err})
             })
     }
 }
@@ -102,24 +102,23 @@ function isApprovedAttendee(attendee) {
 }
 
 //assumption: Header Row
-export const createAttendees = (attendees,eventID) => {
+export const createAttendees = (attendees, eventID) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         // creates an array of JSON objects with field names from the header row
         //TODO: Validate Header Row Options
         const cleanedAttendees = [];
-        for(let int = 1; int < attendees.length; int++){
+        for (let int = 1; int < attendees.length; int++) {
             const partial = {};
-            if(attendees[int][0] === ""){
+            if (attendees[int][0] === "") {
                 break;
                 //Breaks if the next line is blank.
                 //TODO: Make more fullproof
             }
-            for(let int1 = 0; int1 < attendees[int].length; int1++){
+            for (let int1 = 0; int1 < attendees[int].length; int1++) {
                 const value = attendees[0][int1].replace(' ', '');
-                if(value.toLowerCase() !== "tags"){
+                if (value.toLowerCase() !== "tags") {
                     partial[value] = attendees[int][int1];
-                }
-                else{
+                } else {
                     const arr = attendees[int][int1].split(',');
                     partial['tags'] = arr;
                 }
@@ -132,18 +131,17 @@ export const createAttendees = (attendees,eventID) => {
         const validAttendees = [];
         const invalidAttendees = [];
 
-        for(let int = 0; int < cleanedAttendees.length; int++) {
+        for (let int = 0; int < cleanedAttendees.length; int++) {
             if (isApprovedAttendee(cleanedAttendees[int])) {
                 validAttendees.push(cleanedAttendees[int]);
-            }
-            else{
+            } else {
                 invalidAttendees.push(cleanedAttendees[int]);
             }
         }
 
-        if(validAttendees.length > 0) {
+        if (validAttendees.length > 0) {
             const batch = firestore.batch();
-            for(let int = 0; int < validAttendees.length; int++){
+            for (let int = 0; int < validAttendees.length; int++) {
                 console.log(eventID);
                 console.log(validAttendees[int].email);
                 const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(validAttendees[int].email);
@@ -151,23 +149,23 @@ export const createAttendees = (attendees,eventID) => {
             }
             batch.commit()
                 .then(() => {
-                    dispatch({ type: 'ADD_ATTENDEES_SUCCESS' })
+                    dispatch({type: 'ADD_ATTENDEES_SUCCESS'})
                 }).catch((err) => {
-                dispatch({ type: 'ADD_ATTENDEES_ERROR', err })
+                dispatch({type: 'ADD_ATTENDEES_ERROR', err})
             })
         }
-        if(invalidAttendees > 0){
+        if (invalidAttendees > 0) {
             const batch = firestore.batch();
 
-            for(let int = 0; int < invalidAttendees.length; int++){
+            for (let int = 0; int < invalidAttendees.length; int++) {
                 const attendDocRef = firestore.collection("events").doc(eventID).collection("error_attendees").doc(invalidAttendees[int].email);
                 batch.set(attendDocRef, invalidAttendees[int])
             }
             batch.commit()
                 .then(() => {
-                    dispatch({ type: 'ADD_FAILED_IMPORTS_SUCCESS' })
+                    dispatch({type: 'ADD_FAILED_IMPORTS_SUCCESS'})
                 }).catch((err) => {
-                dispatch({ type: 'ADD_FAILED_IMPORTS_ERROR', err })
+                dispatch({type: 'ADD_FAILED_IMPORTS_ERROR', err})
             })
             //TODO: Notify Admin of Failed Imports
         }
@@ -175,6 +173,33 @@ export const createAttendees = (attendees,eventID) => {
     }
 };
 
-export const removeTags = (eventID) => {
-    return 1
+export const ddddremoveTags = (eventID, tag) => {
+    console.log("YEETS");
+    return (dispatch, getState, {getFirestore}) => {
+        const firestore = getFirestore()
+        firestore.collection('events')
+            .doc(eventID)
+            /*.update({
+                tags: firestore.FieldValue.arrayRemove(tag)
+            })*/
+            .then(() => {
+                //removeTagsFromUsers(eventID, tag)
+            })
+            .catch((err) => {
+                console.log("FAILURE 2")
+                console.log(err);
+                dispatch({type: 'DELETE_TAGS_ERROR_1', err})
+            });
+    }
+};
+
+export const removeTags = (eventID, tag) => {
+    return (dispatch, getState, {getFirestore}) => {
+        const firestore = getFirestore;
+        firestore.collection('events')
+            .doc(eventID)
+            .collection('attendees')
+            .get();
+        console.log(firestore);
+    }
 }
