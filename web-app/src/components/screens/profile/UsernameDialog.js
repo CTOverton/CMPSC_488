@@ -6,10 +6,18 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {changeUsername, checkPassword} from "../../../redux/actions/authActions";
+import {changeUsername, reauthenticate, loginUser} from "../../../redux/actions/authActions";
+import {useSelector} from "react-redux";
 
 export default function UsernameDialog() {
+    const profile = useSelector(state => state.firebase.profile);
+    const credentials = {
+        email: profile.email,
+        password: profile.password
+    }
+
     const [open, setOpen] = React.useState(false);
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -34,6 +42,10 @@ export default function UsernameDialog() {
 
     const handleSubmit = () => {
         setSubmitted(true);
+        if(reauthenticate(credentials)){
+            setPwAccepted(true);
+            changeUsername(newUsername);
+        }
     }
 
     const [password, setPassword] = React.useState("")
@@ -48,10 +60,10 @@ export default function UsernameDialog() {
 
     const handlePwSubmit = () => {
         setPwSubmitted(true);
-        if(checkPassword(password)) {
-            setPwAccepted(true);
-            changeUsername(newUsername);
-        }
+        loginUser({
+            email: credentials.email,
+            password: password
+        })
     }
 
     const handlePwResubmit = () => {
