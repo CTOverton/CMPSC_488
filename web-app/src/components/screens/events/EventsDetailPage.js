@@ -12,6 +12,9 @@ import TestQR from "../../TestQR";
 import EventsDetailPageHeader from "./EventsDetailPageHeader";
 import TheButton from "../../../playground/sam/TheButton";
 import {removeTags} from "../../../redux/actions/eventActions";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -29,13 +32,14 @@ const useStyles = makeStyles(theme => ({
 
 const EventsDetailPage = ({eventID}) => {
     const classes = useStyles();
+    const [tab, setTab] = React.useState(0);
 
     useFirestoreConnect(() => [
-        { collection: 'events', doc: eventID },
-        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees' }] }
+        {collection: 'events', doc: eventID},
+        {collection: 'events', doc: eventID, subcollections: [{collection: 'attendees'}]}
     ])
 
-    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
+    let event = useSelector(({firestore: {data}}) => data.events && data.events[eventID])
     const auth = useSelector(state => state.firebase.auth)
 
     const [mTags, filter_array] = React.useState([])
@@ -85,13 +89,12 @@ const EventsDetailPage = ({eventID}) => {
     }
 
 
-
     let tagsArray = [];
     for (let [key, value] of Object.entries(tags)) {
         tagsArray = [...tagsArray, {tag: key, count: value}]
     }
     event.tags.forEach(tag => {
-        if(tags[tag] === null){
+        if (tags[tag] === null) {
             tagsArray = [...tagsArray, {tag: tag, count: 0}]
         }
     });
@@ -104,6 +107,10 @@ const EventsDetailPage = ({eventID}) => {
         console.log(err)
     }
 
+    const handleChange = (event, newValue) => {
+        setTab(newValue);
+    };
+
     return (
         <div>
             <EventsDetailPageHeader eventID={eventID}/>
@@ -111,32 +118,53 @@ const EventsDetailPage = ({eventID}) => {
                 <h1>{event.title}</h1>
                 <p>{event.description}</p>
 
-            <h3>Total attendees: {Object.values(event.attendees).length}</h3>
-            <div className={classes.chips}>
-                { tagsArray && tagsArray.map(item =>
-                    <TheButton key={item.tag} label={item.tag + ': ' + item.count} color={mTags.includes(item.tag) ? "primary" : "default"} onClick={() => {
-                        console.log("SOMETHING:" + item.tag);
-                        if (mTags.includes(item.tag)){
-                            console.log("DELETE");
-                            let values = mTags;
-                            delete values[values.indexOf(item.tag)];
-                            filter_array(values);
-                        }
-                        else{
-                            console.log("ADD");
-                            let values = mTags;
-                            values.push(item.tag);
-                            filter_array(values);
-                        }
-                        console.log(mTags)
-                    }}
-                    onDelete={()=>{
-                        console.log("TODO: Make this delete");
-                    }}/>
-                )}
-            </div>
-                <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)} tags={mTags}/>
-            <TestQR/>
+                <h3>Total attendees: {Object.values(event.attendees).length}</h3>
+                <div className={classes.chips}>
+                    {tagsArray && tagsArray.map(item =>
+                        <TheButton key={item.tag} label={item.tag + ': ' + item.count}
+                                   color={mTags.includes(item.tag) ? "primary" : "default"} onClick={() => {
+                            console.log("SOMETHING:" + item.tag);
+                            if (mTags.includes(item.tag)) {
+                                console.log("DELETE");
+                                let values = mTags;
+                                delete values[values.indexOf(item.tag)];
+                                filter_array(values);
+                            } else {
+                                console.log("ADD");
+                                let values = mTags;
+                                values.push(item.tag);
+                                filter_array(values);
+                            }
+                            console.log(mTags)
+                        }}
+                                   onDelete={() => {
+                                       console.log("TODO: Make this delete");
+                                   }}/>
+                    )}
+                </div>
+                <Paper square>
+                    <Tabs
+                        value={tab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        onChange={handleChange}
+                        aria-label="disabled tabs example"
+                    >
+                        <Tab label="Active" />
+                        <Tab label="Signups" />
+                        <Tab label="Waitlist" />
+                        <Tab label="Scan QR" />
+                    </Tabs>
+                </Paper>
+                {tab === 0 && <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}
+                                             tags={mTags}/>}
+                {tab === 1 && <div><h1>Signups List</h1><AttendeesList eventID={eventID} attendees={Object.values({'c@ctoverton.com': {email: "c@ctoverton.com", firstName: "Christian", lastName: "Overton"},
+                    'sam@sam.com': {email: "sam@sam.com", firstName: "Samuel", lastName: "Synder"}})}
+                                                  tags={mTags}/></div> }
+                {tab === 2 && <div><h1>Waitlist</h1><AttendeesList eventID={eventID} attendees={Object.values({'sean@McNally.com': {email: "sean@McNally.com", firstName: "Sean", lastName: "McNally"}})}
+                    tags={mTags}/></div>}
+                {tab === 3 && <TestQR/>}
+
             </Container>
         </div>
     )
