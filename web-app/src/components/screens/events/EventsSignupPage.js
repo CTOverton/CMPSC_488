@@ -6,6 +6,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import {signupForEvent} from "../../../redux/actions/eventActions";
+import {withRouter} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsSignupPage = ({eventID, signup}) => {
+const EventsSignupPage = ({eventID, signup, history}) => {
     const classes = useStyles();
     const [inputs, setInputs] = React.useState({
         email: null,
@@ -53,6 +54,7 @@ const EventsSignupPage = ({eventID, signup}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         signup(eventID, inputs, signedupCount >= event.attendeeLimit ? 'waitlist':'signups')
+        history.push("/events/" + eventID + "/signup/thanks")
     }
 
     return (
@@ -108,4 +110,4 @@ const mapState = (state, ownProps) => {
 
 const mapDispatch = {signup: signupForEvent}
 
-export default connect(mapState, mapDispatch)(EventsSignupPage)
+export default connect(mapState, mapDispatch)(withRouter(EventsSignupPage))
