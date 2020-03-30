@@ -68,7 +68,7 @@ export const deleteEvent = (eventID) => {
     }
 }
 
-export const signupForEvent = (eventID, attendee) => {
+export const signupForEvent = (eventID, attendee, type) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firestore = getFirestore()
         const firebase = getFirebase()
@@ -77,9 +77,10 @@ export const signupForEvent = (eventID, attendee) => {
             ...attendee,
             signupAt: firebase.firestore.FieldValue.serverTimestamp(),
         }
+
         firestore.collection('events')
             .doc(eventID)
-            .collection('signups')
+            .collection(type)
             .add(attendee)
             .then(() => {
                 dispatch({ type: 'SIGNUP_SUCCESS' })

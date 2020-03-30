@@ -29,14 +29,21 @@ const EventsSignupPage = ({eventID, signup}) => {
 
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID },
-        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees' }] }
+        { collection: 'events', doc: eventID, subcollections: [{ collection: 'signups' }] }
     ])
 
     let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
 
+    console.log(event)
     if (!isLoaded(event)) {
         return null
     }
+    // Todo: fix when event is updated but signups is not so page doesn't load
+    if (!isLoaded(event.signups)) {
+        return <p>Loading signups</p>
+    }
+
+    const signedupCount = Object.keys(event.signups).length
 
     const handleChange = prop => event => {
         const value = event.target.value;
@@ -45,13 +52,20 @@ const EventsSignupPage = ({eventID, signup}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        signup(eventID, inputs)
+        signup(eventID, inputs, signedupCount >= event.attendeeLimit ? 'waitlist':'signups')
     }
 
     return (
         <Container maxWidth="md">
             <h1>Signup For {event.title}</h1>
             <h3>{event.description}</h3>
+            {!(signedupCount >= event.attendeeLimit) &&
+            <h2>Currently {signedupCount} / {event.attendeeLimit}</h2>
+            }
+            {signedupCount >= event.attendeeLimit &&
+            <p>Unfortunately all spots have been filled, but if you signup now you will be on the waitlist!</p>
+            }
+
             <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <div>
                     <TextField
