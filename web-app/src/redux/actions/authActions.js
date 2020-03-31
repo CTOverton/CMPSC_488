@@ -46,38 +46,30 @@ export const logoutUser = () => {
     }
 }
 
-export const changeUsername = (credentials, profile, newUsername) => {
-    return (dispatch, getState, {getFirebase}) => {
+export const changeUsername = (newUsername, credentials) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const state = getState();
         const firebase = getFirebase();
+        const firestore = getFirestore();
 
-        const newProfile = {
-                email: profile.email,
-                username: newUsername,
-                firstName: profile.firstName,
-                lastName: profile.lastName
-            }
+        const userID = state.firebase.auth.uid
 
-            // Todo: Fix
-        firebase.update(credentials, newProfile)
+        firebase.reauthenticate(credentials)
             .then(() => {
-                dispatch({ type: 'USERNAME_UPDATE_SUCCESS' })
-            })
-            .catch((err) => {
-                dispatch({ type: 'USERNAME_UPDATE_ERROR', err })
-            })
-    }
-}
-
-export const checkPassword = (credentials) => {
-    return (dispatch, getState, {getFirebase}) => {
-        const firebase = getFirebase();
-
-        firebase.reauthenticateWithCredential(credentials)
-            .then(() => {
-                return true;
+                firebase.collection("users")
+                    .doc(userID)
+                    .update({
+                        username: newUsername
+                    })
+                    .then(() => {
+                        dispatch({ type: 'USERNAME_UPDATE_SUCCESS' })
+                    })
+                    .catch((err) => {
+                        dispatch({ type: 'USERNAME_UPDATE_ERROR', err })
+                    })
             })
             .catch(() => {
-                return false;
+                dispatch({type: 'REAUTHENTICATION_ERROR'})
             });
     }
 }

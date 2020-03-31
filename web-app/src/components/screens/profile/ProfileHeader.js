@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import {logoutUser} from "../../../redux/actions/authActions";
 import {connect} from "react-redux";
+import {useHistory} from "react-redux";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,18 +22,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ProfileHeader = ({logout}) => {
+const ProfileHeader = ({logout, history}) => {
     const classes = useStyles();
 
     const handleLogout = () => {
         logout()
     }
 
+    const handleSettings = () => {
+        history.push("/profile/settings")
+    }
+
     return(
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleSettings}>
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
@@ -44,6 +49,6 @@ const ProfileHeader = ({logout}) => {
         </div>
     )
 }
-const mapDispatch = {logout: logoutUser}
+const mapDispatch = {logout: logoutUser, history: useHistory}
 
-export default connect(undefined, mapDispatch)(ProfileHeader)
+export default connect(undefined, mapDispatch)(withRouter(ProfileHeader))

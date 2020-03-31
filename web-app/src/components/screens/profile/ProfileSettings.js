@@ -24,10 +24,10 @@ const useStyles = makeStyles(theme => ({
 function ProfileSettings() {
     const classes = useStyles();
 
-    const [newUsername, setNewUsername] = React.useState(null)
+    //const [newUsername, setNewUsername] = React.useState(null)
 
     const profile = useSelector(state => state.firebase.profile);
-
+/*
     const credentials = {
         email: profile.email,
         password: profile.password
@@ -36,7 +36,7 @@ function ProfileSettings() {
     const handleChangeUsername = () => {
         changeUsername(credentials, profile, newUsername);
     }
-
+*/
     console.log(profile);
 
     if (!isLoaded(profile)) {

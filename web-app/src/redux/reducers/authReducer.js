@@ -1,5 +1,6 @@
 const initState = {
-    authError: null
+    authError: null,
+    pwAccepted: null
 }
 
 export const authReducer = (state = initState, action) => {
@@ -23,6 +24,26 @@ export const authReducer = (state = initState, action) => {
             return {
                 ...state,
                 authError: action.err.message
+            }
+        case 'USERNAME_UPDATE_SUCCESS':
+            return {
+                ...state,
+                authError: null
+            }
+        case 'USERNAME_UPDATE_ERROR':
+            return {
+                ...state,
+                authError: action.err.message
+            }
+        case 'REAUTHENTICATION_RESET':
+            return {
+                ...state,
+                pwAccpeted: null
+            }
+        case 'REAUTHENTICATION_ERROR':
+            return {
+                ...state,
+                pwAccpeted: action.err.message
             }
         default:
             return state
