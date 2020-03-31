@@ -173,33 +173,42 @@ export const createAttendees = (attendees, eventID) => {
     }
 };
 
-export const ddddremoveTags = (eventID, tag) => {
-    console.log("YEETS");
-    return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
-        firestore.collection('events')
-            .doc(eventID)
-            /*.update({
-                tags: firestore.FieldValue.arrayRemove(tag)
-            })*/
-            .then(() => {
-                //removeTagsFromUsers(eventID, tag)
-            })
-            .catch((err) => {
-                console.log("FAILURE 2")
-                console.log(err);
-                dispatch({type: 'DELETE_TAGS_ERROR_1', err})
-            });
-    }
-};
-
 export const removeTags = (eventID, tag) => {
     return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore;
+        const firestore = getFirestore()
+        const batch = firestore.batch();
         firestore.collection('events')
             .doc(eventID)
             .collection('attendees')
-            .get();
-        console.log(firestore);
+            .where("tags", "array-contains", tag)
+            .get()
+            .then(function (data) {
+                data.forEach(function (doc) {
+                    const temp = doc.data();
+                    let new_tags = [];
+                    for (let count = 0; count < temp.tags.length; count++) {
+                        if (temp.tags[count] !== tag) {
+                            new_tags.push(temp.tags[count]);
+                        }
+                    }
+                    temp.tags = new_tags;
+                    const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(temp.email);
+                    batch.set(attendDocRef, temp);
+                })
+                batch.commit().catch(r => dispatch({type: 'DELETE_TAGS_ERROR_1', r}));
+            })
+        firestore
+            .collection('events')
+            .doc(eventID)
+            .update({
+                    tags: firestore.FieldValue.arrayRemove(tag)
+                }
+            )
+            .then(() => {
+                dispatch({type: 'DELETE_TAGS_SUCCESS'})
+            })
+            .catch((err) => {
+                dispatch('DELETE_TAGS_ERROR_2', err)
+            })
     }
-}
+};
