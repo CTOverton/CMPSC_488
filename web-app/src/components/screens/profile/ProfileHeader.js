@@ -8,7 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import {logoutUser} from "../../../redux/actions/authActions";
 import {connect} from "react-redux";
-import {useHistory} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,6 +49,6 @@ const ProfileHeader = ({logout, history}) => {
         </div>
     )
 }
-const mapDispatch = {logout: logoutUser, history: useHistory}
+const mapDispatch = {logout: logoutUser}
 
 export default connect(undefined, mapDispatch)(withRouter(ProfileHeader))
