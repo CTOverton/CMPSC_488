@@ -6,11 +6,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {changeUsername} from "../../../redux/actions/authActions";
-import {connect, useSelector} from "react-redux";
+import {changeName, loginUser, reauthenticate} from "../../../../redux/actions/authActions";
+import {useSelector} from "react-redux";
 
-function UsernameDialog({auth, changeUsername}, dispatch) {
+export default function NameDialog() {
     const profile = useSelector(state => state.firebase.profile);
+    const credentials = {
+        email: profile.email,
+        password: profile.password
+    }
 
     const [open, setOpen] = React.useState(false);
 
@@ -23,15 +27,21 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
         setSubmitted(false);
         setPwSubmitted(false);
         setPwAccepted(false);
-        setNewUsername("");
+        setNewFirstName("");
+        setNewLastName("");
         setPassword("");
-        dispatch({type: 'REAUTHENTICATION_RESET'})
     };
 
-    const [newUsername, setNewUsername] = React.useState("")
+    const [newFirstName, setNewFirstName] = React.useState("")
 
-    const handleNewUsername = (e) => {
-        setNewUsername(e);
+    const handleNewFirstName = (e) => {
+        setNewFirstName(e);
+    }
+
+    const [newLastName, setNewLastName] = React.useState("")
+
+    const handleNewLastName = (e) => {
+        setNewLastName(e);
     }
 
     const [submitted, setSubmitted] = React.useState(false);
@@ -40,7 +50,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
         setSubmitted(true);
     }
 
-    const [password, setPassword] = React.useState("");
+    const [password, setPassword] = React.useState("")
 
     const handlePassword = (e) => {
         setPassword(e);
@@ -52,7 +62,10 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
 
     const handlePwSubmit = () => {
         setPwSubmitted(true);
-        changeUsername(newUsername, {email: profile.email, password: password})
+        loginUser({
+            email: credentials.email,
+            password: password
+        })
     }
 
     const handlePwResubmit = () => {
@@ -62,36 +75,46 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
     return(
         <div>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Change Username
+                Change Name
             </Button>
+
             {!submitted &&
-                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="New Username"
-                            type="text"
-                            fullWidth
-                            onChange={handleNewUsername}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSubmit} color="primary">
-                            Change
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="New First Name"
+                        type="text"
+                        fullWidth
+                        onChange={handleNewFirstName}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="New Last Name"
+                        type="text"
+                        fullWidth
+                        onChange={handleNewLastName}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit} color="primary">
+                        Change
+                    </Button>
+                </DialogActions>
+            </Dialog>
             }
 
             {submitted && !pwSubmitted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -114,9 +137,9 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
             </Dialog>
             }
 
-            {submitted && pwSubmitted && auth.pwAccpted != null  &&
+            {submitted && pwSubmitted && !pwAccepted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Incorrect Password
@@ -133,12 +156,12 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
             </Dialog>
             }
 
-            {submitted && pwSubmitted && auth.pwAccpted == null &&
+            {submitted && pwSubmitted && pwAccepted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Name</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Success!<br/>Your username has been changed.
+                        Success!<br/>Your name has been changed.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -151,8 +174,3 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
         </div>
     )
 }
-
-const mapState = state => {return {auth: state.auth}}
-const mapDispatch = {changeUsername: changeUsername}
-
-export default connect(mapState, mapDispatch)(UsernameDialog)
