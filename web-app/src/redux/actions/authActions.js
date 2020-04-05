@@ -52,9 +52,9 @@ export const changeUsername = (newUsername, credentials) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
 
-        const userID = state.firebase.auth.uid;
+        const userID = state.firebase.auth.uid; //working
 
-        firebase.reauthenticate(credentials)
+        firebase.reauthenticate(credentials) //not working
             .then(() => {
                 firestore.collection("users")
                     .doc(userID)

@@ -22,7 +22,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
         setOpen(false);
         setSubmitted(false);
         setPwSubmitted(false);
-        setPwAccepted(false);
+        //setPwAccepted(false);
         setNewUsername("");
         setPassword("");
         dispatch({type: 'REAUTHENTICATION_RESET'})
@@ -32,7 +32,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
     const [newUsername, setNewUsername] = React.useState("")
 
     const handleNewUsername = (e) => {
-        setNewUsername(e);
+        setNewUsername(e.target.value);
     }
 
     const [submitted, setSubmitted] = React.useState(false);
@@ -44,14 +44,15 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
     const [password, setPassword] = React.useState("");
 
     const handlePassword = (e) => {
-        setPassword(e);
+        setPassword(e.target.value);
     }
 
     const [pwSubmitted, setPwSubmitted] = React.useState(false);
 
-    const [pwAccepted, setPwAccepted] = React.useState(false);
+    //const [pwAccepted, setPwAccepted] = React.useState(false);
 
     const handlePwSubmit = () => {
+        console.log(password);
         setPwSubmitted(true);
         changeUsername(newUsername, {email: profile.email, password: password})
     }
@@ -92,7 +93,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
 
             {submitted && !pwSubmitted &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Input Password</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
