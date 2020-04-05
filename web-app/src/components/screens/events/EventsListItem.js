@@ -1,16 +1,16 @@
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Link} from "react-router-dom";
+import {withRouter} from "react-router-dom";
+import moment from "moment";
 
-const EventsListItem = ({event}) => {
+const EventsListItem = ({event, history}) => {
+
     return(
-        <Link to={'/events/' + event.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <ListItem button>
-                <ListItemText primary={event.title} />
-            </ListItem>
-        </Link>
+        <ListItem button onClick={() => {return history.push('/events/' + event.id)}}>
+            <ListItemText primary={event.title} secondary={moment(event.createdAt.toDate()).calendar()} />
+        </ListItem>
     )
 }
 
-export default EventsListItem
+export default withRouter(EventsListItem)
