@@ -54,6 +54,7 @@ const dbSchema = {
   users: { // Collection
     userID: { // Doc
       email: "example@domain.com", // Field
+      username: "Full Name",
       details: { // Field
         fName: "", // Value
         lName: "" // Value
@@ -61,4 +62,4 @@ const dbSchema = {
       role: "admin" // Field
     }
   }
-}
+};
