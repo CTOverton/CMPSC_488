@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {changeName, loginUser, reauthenticate} from "../../../redux/actions/authActions";
+import {changeName, loginUser, reauthenticate} from "../../../../redux/actions/authActions";
 import {useSelector} from "react-redux";
 
 export default function NameDialog() {

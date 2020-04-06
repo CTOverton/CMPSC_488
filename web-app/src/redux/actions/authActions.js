@@ -53,13 +53,13 @@ export const changeUsername = (newUsername, credentials) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const state = getState();
         const firebase = getFirebase();
-        // const firestore = getFirestore();
+        const firestore = getFirestore();
 
         const userID = state.firebase.auth.uid;
 
-        firebase.reauthenticate(credentials)
+        firebase.login(credentials) //not working
             .then(() => {
-                firebase.collection("users")
+                firestore.collection("users")
                     .doc(userID)
                     .update({
                         username: newUsername

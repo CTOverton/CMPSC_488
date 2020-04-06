@@ -51,12 +51,12 @@ export const authReducer = (state = initState, action) => {
         case 'REAUTHENTICATION_RESET':
             return {
                 ...state,
-                pwAccpeted: null
+                pwAccepted: null
             };
         case 'REAUTHENTICATION_ERROR':
             return {
                 ...state,
-                pwAccpeted: action.err.message
+                pwAccepted: action.err.message
             };
         //    ----------------------------------------
         default:

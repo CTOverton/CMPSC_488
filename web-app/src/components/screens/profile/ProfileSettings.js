@@ -6,8 +6,8 @@ import Button from "@material-ui/core/Button";
 import {Container} from "@material-ui/core";
 import {changeUsername} from "../../../redux/actions/authActions";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import UsernameDialog from "./UsernameDialog";
-import NameDialog from "./NameDialog";
+import UsernameDialog from "./Dialogs/UsernameDialog";
+import NameDialog from "./Dialogs/NameDialog";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -66,7 +66,6 @@ function ProfileSettings() {
             <NameDialog/>
         </div>
     );
-
 }
 
 export default ProfileSettings;
