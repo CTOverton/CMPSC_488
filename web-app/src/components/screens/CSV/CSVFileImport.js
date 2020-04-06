@@ -3,6 +3,7 @@ import { CSVReader } from 'react-papaparse'
 import {Button} from "@material-ui/core";
 import {createAttendees} from "../../../redux/actions/eventActions";
 import {connect} from "react-redux";
+import ModelBlade from "./ModelBlade";
 
 
 class CSVFileImport extends Component {
@@ -29,13 +30,20 @@ class CSVFileImport extends Component {
     render() {
         return (
             <>
-                <CSVReader
-                    onFileLoaded={this.handleReadCSV}
-                    inputRef={this.fileInput}
-                    style={{display: 'none'}}
-                    onError={this.handleOnError}
+                <ModelBlade
+                title={"CSV Import"}
+                content={
+                    <CSVReader
+                        onFileLoaded={this.handleReadCSV}
+                        inputRef={this.fileInput}
+                        inputStyle={{}}
+                        onError={this.handleOnError}
+                    />
+                }
+                actions={
+                    <Button variant="contained" disableElevation={true} onClick={this.handleImportOffer}>Import</Button>
+                }
                 />
-                <Button variant="contained" disableElevation={true} onClick={this.handleImportOffer}>Import</Button>
             </>
         )
     }
