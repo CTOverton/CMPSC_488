@@ -1,5 +1,4 @@
 import React from "react";
-import {Container} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import EventsList from "./EventsList";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
@@ -51,9 +50,7 @@ const EventsScreen = ({history}) => {
                     </IconButton>
                 }
             />
-            <Container maxWidth="md">
-                <EventsList events={events}/>
-            </Container>
+            <EventsList events={events}/>
         </div>
     )
 };

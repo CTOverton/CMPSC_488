@@ -16,13 +16,15 @@ const useStyles = makeStyles({
     },
 });
 
-const BottomNav = ({history}) => {
+const BottomNav = ({history, location, match}) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
+    const {pathname} = location;
 
-    const location = window.location.pathname;
-    if (location === "/login" || location === "/signup") {return null}
+    if (pathname === "/login" || pathname === "/signup") {return null}
+
+    // Todo: After direct link (ex: after login) make the correct corresponding navigation icon highlight
 
     return(
         <BottomNavigation
@@ -30,23 +32,23 @@ const BottomNav = ({history}) => {
             onChange={(event, newValue) => {
                 setValue(newValue);
                 switch (newValue) {
-                    case "search":
-                        history.push("/search")
-                        break
                     case "events":
-                        history.push("/events")
-                        break
+                        history.push("/events");
+                        break;
+                    case "search":
+                        history.push("/search");
+                        break;
                     case "profile":
-                        history.push("/profile")
-                        break
+                        history.push("/profile");
+                        break;
                 }
             }}
             showLabels
             className={classes.root}
         >
-            <BottomNavigationAction value="search" icon={<SearchIcon />} />
             <BottomNavigationAction value="events" icon={<EventIcon />} />
-            <BottomNavigationAction  value="profile" icon={<AccountCircleIcon />} />
+            <BottomNavigationAction value="search" icon={<SearchIcon />} />
+            <BottomNavigationAction value="profile" icon={<AccountCircleIcon />} />
         </BottomNavigation>
     )
 }

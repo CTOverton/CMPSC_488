@@ -1,5 +1,4 @@
 import React from "react";
-import Dashboard from "../screens/Dashboard";
 import {Switch, Route, Redirect} from "react-router-dom";
 import SeanTemplateComponent from "../../playground/sean/SeanTemplateComponent";
 import SignUp from "../auth/SignUp";
@@ -20,7 +19,7 @@ import EventsSignupPage from "../screens/events/EventsSignupPage";
 import EventsSignupThanks from "../screens/events/EventsSignupThanks";
 
 function PrivateRoute({ children, ...rest }) {
-    const auth = useSelector(state => state.firebase.auth)
+    const auth = useSelector(state => state.firebase.auth);
     return (
         <Route
             {...rest}
@@ -43,7 +42,7 @@ function PrivateRoute({ children, ...rest }) {
 function Routes() {
     return(
         <Switch>
-            <PrivateRoute exact path='/'><Dashboard /></PrivateRoute>
+            <PrivateRoute exact path='/'><EventsScreen /></PrivateRoute>
 
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
@@ -59,7 +58,7 @@ function Routes() {
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
             <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
 
-            <PrivateRoute exact path='/profile'><ProfilePage/></PrivateRoute>
+            <PrivateRoute exact path='/profile'><ProfilePage /></PrivateRoute>
             <Route exact path='/profile/settings' component={ProfileSettings} />
 
             <Route path='/playground/sam' component={SamPlayground} />

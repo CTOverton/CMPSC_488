@@ -4,17 +4,20 @@ import {Container} from "@material-ui/core";
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import AttendeesList from "./attendees/AttendeesList";
+import SettingsIcon from '@material-ui/icons/Settings';
 import Chip from "@material-ui/core/Chip";
 // import QrReader from 'react-qr-reader';
 import QrReader from 'react-qr-scanner'
 import Example from "../../Example";
 import TestQR from "../../TestQR";
-import EventsDetailPageHeader from "./EventsDetailPageHeader";
 import TheButton from "../../../playground/sam/TheButton";
 import {removeTags} from "../../../redux/actions/eventActions";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import IconButton from "@material-ui/core/IconButton";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import AppBarHeader from "../../nav/AppBarHeader";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -30,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsDetailPage = ({eventID, removeTags}) => {
+const EventsDetailPage = ({eventID, removeTags, history}) => {
     const classes = useStyles();
     const [tab, setTab] = React.useState(0);
 
@@ -113,7 +116,22 @@ const EventsDetailPage = ({eventID, removeTags}) => {
 
     return (
         <div>
-            <EventsDetailPageHeader eventID={eventID}/>
+            <AppBarHeader
+                title="Event Details"
+                end={
+                    <IconButton
+                        edge="end"
+                        onClick={() => {
+                            history.push("/events/" + eventID + "/settings")
+                        }}
+                        className={classes.margin}
+                        color="inherit"
+                        aria-label="settings"
+                    >
+                        <SettingsIcon />
+                    </IconButton>
+                }
+            />
             <Container maxWidth="md">
                 <h1>{event.title}</h1>
                 <p>{event.description}</p>
