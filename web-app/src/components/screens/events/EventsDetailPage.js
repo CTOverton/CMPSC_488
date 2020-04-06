@@ -10,7 +10,7 @@ import Chip from "@material-ui/core/Chip";
 import QrReader from 'react-qr-scanner'
 import Example from "../../Example";
 import TestQR from "../../TestQR";
-import TheButton from "../../../playground/sam/TheButton";
+import TheButton from "../../blades/TheButton";
 import {removeTags} from "../../../redux/actions/eventActions";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";

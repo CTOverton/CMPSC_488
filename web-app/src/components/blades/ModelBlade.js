@@ -11,7 +11,6 @@ function ModelBlade({title, content, actions}) {
         handleOpen(false);
     };
     const handleDialogOpen = () => {
-        console.log(this);
         handleOpen(true);
     }
 
