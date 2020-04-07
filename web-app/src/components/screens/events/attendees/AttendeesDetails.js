@@ -31,17 +31,23 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
 
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID },
-        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]}
+        { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]},
+        {collection: 'eventTags', doc:eventID}
         ])
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
-    let event = useSelector(({ firestore: { data } }) => data.events && data.events[eventID])
+    let event = useSelector(({ firestore: { data } }) => data.eventTags && data.eventTags[eventID])
 
     if (!isLoaded(attendee)) {
         return "Loading Attendees"
     }
     if (!isLoaded(event)) {
         return "Loading Event Details"
+    }
+    if (isEmpty(event)){ //TODO: MAKE MORE STABLE
+        event = {
+            tags: []
+        }
     }
     if (isEmpty(attendee)) {
         return(
@@ -51,11 +57,18 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             </Container>
         )
     }
-
     console.log(event);
-    let diff = [];
-    if(event.tags != null) {
-        diff = event.tags.filter(x => !attendee.tags.includes(x));
+    const keys = Object.keys(event.tags);
+    console.log(keys);
+    let has = [];
+    let has_not = [];
+    for(let counter = 0; counter < keys.length; counter++){
+        if(event.tags[keys[counter]].includes(attendeeID)){
+            has.push(keys[counter]);
+        }
+        else{
+            has_not.push(keys[counter]);
+        }
     }
 
     const handleAddInput = e => {
@@ -64,23 +77,15 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
 
     const handleAdd = () => {
         if (inputVal != null) {
+            console.log(eventID);
+            console.log(inputVal);
             firestore
-                .collection('events')
+                .collection('eventTags')
                 .doc(eventID)
-                .collection('attendees')
-                .doc(attendeeID)
                 .update({
-                    tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
-                })
-                .then((inputVal) => {
-                    firestore
-                        .collection('events')
-                        .doc(eventID)
-                        .update({
-                            tags: firebase.firestore.FieldValue.arrayUnion(inputVal)
-                        })
-                        .then(r => console.log(r))
-                        .catch(err => console.log(err))
+                    tags: {
+                        [inputVal]: [...event.tags[inputVal], attendeeID]
+                    }
                 })
         .catch(err => console.log(err))
         }
@@ -93,16 +98,16 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             <p>{attendee.phone}</p>
 
             <div className={classes.chips}>
-                {attendee.tags && attendee.tags.map((tag) =>
+                {has && has.map((tag) =>
                     <Chip key={tag} label={tag} onDelete={() => {
                         console.log("Deleting")
                         firestore
-                            .collection('events')
+                            .collection('eventsTags')
                             .doc(eventID)
-                            .collection('attendees')
-                            .doc(attendeeID)
                             .update({
-                                tags: firebase.firestore.FieldValue.arrayRemove(tag)
+                                tags: {
+                                    [tag] : [...event.tags[tag] - attendeeID] //TODO FIX THIS
+                                }
                             })
                             .then(r => console.log(r))
                             .catch(err => console.log(err))
@@ -117,15 +122,15 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
 
             <div className={classes.chips}>
-                {diff && diff.map((tag) =>
+                {has_not && has_not.map((tag) =>
                     <Chip key={tag} label={tag} onClick={() => {
                         firestore
-                            .collection('events')
+                            .collection('eventTags')
                             .doc(eventID)
-                            .collection('attendees')
-                            .doc(attendeeID)
                             .update({
-                                tags: firebase.firestore.FieldValue.arrayUnion(tag)
+                                tags: {
+                                    [tag]: [...event.tags[tag], attendeeID]
+                                }
                             })
                             .then(r => console.log(r))
                             .catch(err => console.log(err))

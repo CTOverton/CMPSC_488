@@ -39,20 +39,22 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
-        {collection: 'events', doc: eventID, subcollections: [{collection: 'attendees'}]}
+        {collection: 'events', doc: eventID, subcollections: [{collection: 'attendees'}]},
+        {collection: 'eventTags', doc:eventID}
     ])
 
     let event = useSelector(({firestore: {data}}) => data.events && data.events[eventID])
+    let eventTags = useSelector(({firestore: {data}}) => data.eventTags && data.eventTags[eventID]);
     const auth = useSelector(state => state.firebase.auth)
 
     const [mTags, filter_array] = React.useState([])
 
     // Show a message while items are loading
-    if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees)) {
+    if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees) || !isLoaded(eventTags)) {
         return null
     }
     console.log("TAGS");
-    console.log(event.tags);
+    console.log(eventTags);
 
     if (isEmpty(auth)) {
         // Todo redirect
@@ -66,41 +68,25 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
         return <h2>You do not have access to manage this event</h2>
     }
 
-    let tags = {};
+    let tags = [];
+    let attendeeTags = {};
 
-    console.log(event)
     if (isLoaded(event.attendees) && isEmpty(event.attendees)) {
         event = {
             ...event,
             attendees: []
         };
     } else {
-        console.log(event.attendees)
-        Object.values(event.attendees).forEach(attendee => {
-            console.log(attendee.firstName + ',' + attendee.lastName + ',' + attendee.email + ',' + attendee.tags)
-
-            if (attendee.tags) {
-                attendee.tags.forEach(tag => {
-                    if (tags[tag]) {
-                        tags[tag] += 1;
-                    } else {
-                        tags[tag] = 1;
-                    }
-                })
-            }
-        })
-    }
-
-
-    let tagsArray = [];
-    for (let [key, value] of Object.entries(tags)) {
-        tagsArray = [...tagsArray, {tag: key, count: value}]
-    }
-    event.tags.forEach(tag => {
-        if (tags[tag] === null) {
-            tagsArray = [...tagsArray, {tag: tag, count: 0}]
+        const keys = Object.keys(eventTags.tags);
+        for(let counter = 0; counter < keys.length; counter++){
+            tags = [...tags, {tag: keys[counter], count: eventTags.tags[keys[counter]].length}]
+            /*for(let count = 0; count < eventTags.tags[keys[counter]].length; count++){
+                console.log(eventTags.tags[keys[counter]][count])
+                let attID = eventTags.tags[keys[counter]][count]
+                attendeeTags[attID] = [...attendeeTags[attID], keys[counter]]
+            }*/
         }
-    });
+    }
 
     const handleScan = (data) => {
         console.log(data)
@@ -138,7 +124,7 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
 
                 <h3>Total attendees: {Object.values(event.attendees).length}</h3>
                 <div className={classes.chips}>
-                    {tagsArray && tagsArray.map(item =>
+                    {tags && tags.map(item =>
                         <TheButton key={item.tag} label={item.tag + ': ' + item.count}
                                    color={mTags.includes(item.tag) ? "primary" : "default"} onClick={() => {
                             console.log("SOMETHING:" + item.tag);
@@ -175,13 +161,16 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
                         <Tab label="Scan QR" />
                     </Tabs>
                 </Paper>
-                {tab === 0 && <AttendeesList eventID={eventID} attendees={Object.values(event.attendees)}
-                                             tags={mTags}/>}
-                {tab === 1 && <div><h1>Signups List</h1><AttendeesList eventID={eventID} attendees={Object.values({'c@ctoverton.com': {email: "c@ctoverton.com", firstName: "Christian", lastName: "Overton"},
+                {tab === 0 && <AttendeesList eventID={eventID}
+                                             attendees={Object.values(event.attendees)}
+                                             tags={mTags} attendeeTags={attendeeTags}/>}
+                {tab === 1 && <div><h1>Signups List</h1><AttendeesList eventID={eventID}
+                                                                       attendees={Object.values({'c@ctoverton.com': {email: "c@ctoverton.com", firstName: "Christian", lastName: "Overton"},
                     'sam@sam.com': {email: "sam@sam.com", firstName: "Samuel", lastName: "Snyder"}})}
-                                                  tags={mTags}/></div> }
+                                                  tags={mTags}
+                attendeeTags={attendeeTags}/></div> }
                 {tab === 2 && <div><h1>Waitlist</h1><AttendeesList eventID={eventID} attendees={Object.values({'sean@McNally.com': {email: "sean@McNally.com", firstName: "Sean", lastName: "McNally"}})}
-                    tags={mTags}/></div>}
+                    tags={mTags} attendeeTags={attendeeTags}/></div>}
                 {tab === 3 && <TestQR/>}
 
             </Container>
