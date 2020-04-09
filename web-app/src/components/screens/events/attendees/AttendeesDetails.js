@@ -32,11 +32,13 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
     useFirestoreConnect(() => [
         { collection: 'events', doc: eventID },
         { collection: 'events', doc: eventID, subcollections: [{ collection: 'attendees', doc: attendeeID }]},
-        {collection: 'eventTags', doc:eventID}
+        {collection: 'eventTags', doc:eventID},
+        {collection: 'tags'}
         ])
 
     const attendee = useSelector(({ firestore: { data } }) => data.events && data.events[eventID] && data.events[eventID].attendees && data.events[eventID].attendees[attendeeID]);
     let event = useSelector(({ firestore: { data } }) => data.eventTags && data.eventTags[eventID])
+    let allTags = useSelector(({firestore: {data} }) => data.tags);
 
     if (!isLoaded(attendee)) {
         return "Loading Attendees"
@@ -44,11 +46,28 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
     if (!isLoaded(event)) {
         return "Loading Event Details"
     }
+    if (!isLoaded(allTags)) {
+        return "Loading Tags"
+    }
     if (isEmpty(event)){ //TODO: MAKE MORE STABLE
         event = {
             tags: []
         }
     }
+    let keys = Object.keys(event.tags);
+    let has = []
+    let has_not = []
+    for (let counter = 0; counter < keys.length; counter++){
+        if(allTags[event.tags[keys[counter]]].attendees[attendeeID] !== undefined){
+            has.push({tag: keys[counter], id: event.tags[keys[counter]]})
+        }
+        else{
+            has_not.push({tag: keys[counter], id: event.tags[keys[counter]]})
+        }
+    }
+    console.log(has);
+    console.log(has_not);
+
     if (isEmpty(attendee)) {
         return(
             <Container maxWidth="md">
@@ -56,19 +75,6 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
                 <AttendeesAdd attendee={{email: attendeeID}}/>
             </Container>
         )
-    }
-    console.log(event);
-    const keys = Object.keys(event.tags);
-    console.log(keys);
-    let has = [];
-    let has_not = [];
-    for(let counter = 0; counter < keys.length; counter++){
-        if(event.tags[keys[counter]].includes(attendeeID)){
-            has.push(keys[counter]);
-        }
-        else{
-            has_not.push(keys[counter]);
-        }
     }
 
     const handleAddInput = e => {
@@ -80,12 +86,25 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             console.log(eventID);
             console.log(inputVal);
             firestore
-                .collection('eventTags')
-                .doc(eventID)
-                .update({
-                    tags: {
-                        [inputVal]: [...event.tags[inputVal], attendeeID]
+                .collection('tags')
+                .add({
+                    tag: inputVal,
+                    attendees: {
+                        [attendeeID]: true
                     }
+                })
+                .then(r => {
+                    console.log(r);
+                    console.log(r.im.path.segments[1])
+                    firestore
+                        .collection('eventTags')
+                        .doc(eventID)
+                        .update({
+                            tags: {
+                                ...event.tags,
+                                [inputVal]: r.im.path.segments[1].toString()
+                            }
+                        })
                 })
         .catch(err => console.log(err))
         }
@@ -98,18 +117,26 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             <p>{attendee.phone}</p>
 
             <div className={classes.chips}>
-                {has && has.map((tag) =>
-                    <Chip key={tag} label={tag} onDelete={() => {
-                        console.log("Deleting")
+                {has && has.map((item) =>
+                    <Chip key={item.tag} label={item.tag} onDelete={() => {
+                        let temp = [];
+                        let tkeys = Object.keys(allTags[item.id].attendees);
+                        for(let c = 0; c < tkeys.length; c++){
+                            if(tkeys[c] !== attendeeID){
+                                temp.push({[tkeys[c]]: true})
+                            }
+                        }
                         firestore
-                            .collection('eventsTags')
-                            .doc(eventID)
+                            .collection('tags')
+                            .doc(item.id)
                             .update({
-                                tags: {
-                                    [tag] : [...event.tags[tag] - attendeeID] //TODO FIX THIS
-                                }
+                                attendees: temp
                             })
-                            .then(r => console.log(r))
+                            .then(() => {
+                                console.log(item);
+                                console.log(temp);
+                                console.log(allTags[item.id].attendees);
+                            })
                             .catch(err => console.log(err))
                     }}/>
                 )}
@@ -122,14 +149,15 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
             <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleAdd}>Add Tag</Button>
 
             <div className={classes.chips}>
-                {has_not && has_not.map((tag) =>
-                    <Chip key={tag} label={tag} onClick={() => {
+                {has_not && has_not.map((item) =>
+                    <Chip key={item.tag} label={item.tag} onClick={() => {
                         firestore
-                            .collection('eventTags')
-                            .doc(eventID)
-                            .update({
-                                tags: {
-                                    [tag]: [...event.tags[tag], attendeeID]
+                            .collection('tags')
+                            .doc(item.id)
+                            .set({
+                                attendees: {
+                                    ...allTags[item.id].attendees,
+                                    [attendeeID] : true
                                 }
                             })
                             .then(r => console.log(r))

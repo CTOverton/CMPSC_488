@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 const AttendeesListItem = ({attendee, eventID, tags}) => {
     const classes = useStyles();
+    console.log(tags);
     return(
         <Link to={'/events/' + eventID + '/attendee/' + attendee.email} style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem button>

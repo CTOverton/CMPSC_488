@@ -66,6 +66,16 @@ export const eventReducer = (state = initState, action) => {
                 ...state,
                 signupError: action.err.message
             }
+        case 'DELETE_TAGS_SUCCESS':
+            return {
+                ...state,
+                eventError: null
+            }
+        case 'DELETE_TAGS_ERROR':
+            return {
+                ...state,
+                eventError: action.err.message
+            }
         default:
             return state
     }

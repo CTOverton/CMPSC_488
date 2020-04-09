@@ -35,7 +35,7 @@ const AttendeesList = ({attendees, eventID, tags, attendeeTags}) => {
             {attendees.map((attendee) => {
                 const index = attendee.email + attendee.firstName + attendee.lastName
                 if ((index.toLowerCase().includes(search) || search === null) && (tags === [] || tags === null|| tags.every(v => attendee.tags.includes(v)))) {
-                    return <AttendeesListItem eventID={eventID} attendee={attendee} key={attendee.id} tags={attendeeTags[attendee.id]}/>
+                    return <AttendeesListItem eventID={eventID} attendee={attendee} key={attendee.id} tags={attendeeTags[attendee.email]}/>
                 }
             })}
         </List>
