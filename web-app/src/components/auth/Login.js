@@ -38,7 +38,7 @@ const Authorized = ({children}) => {
 const Login = ({auth, login, history}) => {
     const classes = useStyles();
     const [inputs, setInputs] = React.useState({
-        email: null,
+        email: null, // TODO: Use '' instead of null
         password: null
     });
 

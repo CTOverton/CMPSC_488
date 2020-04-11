@@ -9,6 +9,6 @@ const rootReducer = combineReducers({
     firestore: firestoreReducer,
     auth: authReducer,
     events: eventReducer
-})
+});
 
 export default rootReducer

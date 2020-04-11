@@ -109,7 +109,6 @@ const ProfilePage = ({logout, history}) => {
                   <IconButton
                       edge="end"
                       onClick={toggleDrawer('right', true)}
-                      className={classes.margin}
                       color="inherit"
                       aria-label="settings"
                   >
