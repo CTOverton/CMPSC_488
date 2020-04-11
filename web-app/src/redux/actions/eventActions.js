@@ -214,42 +214,26 @@ export const createAttendees = (attendees, eventID) => {
     }
 };
 
-export const removeTags = (eventID, tag) => {
+export const removeTags = (eventID, tag, updatedTags) => {
     return (dispatch, getState, {getFirestore}) => {
         const firestore = getFirestore()
-        const batch = firestore.batch();
-        firestore.collection('events')
-            .doc(eventID)
-            .collection('attendees')
-            .where("tags", "array-contains", tag)
+        console.log(tag);
+        firestore.collection('tags')
+            .doc(tag.id)
             .get()
-            .then(function (data) {
-                data.forEach(function (doc) {
-                    const temp = doc.data();
-                    let new_tags = [];
-                    for (let count = 0; count < temp.tags.length; count++) {
-                        if (temp.tags[count] !== tag) {
-                            new_tags.push(temp.tags[count]);
-                        }
-                    }
-                    temp.tags = new_tags;
-                    const attendDocRef = firestore.collection("events").doc(eventID).collection("attendees").doc(temp.email);
-                    batch.set(attendDocRef, temp);
-                })
-                batch.commit().catch(r => dispatch({type: 'DELETE_TAGS_ERROR_1', r}));
-            })
-        firestore
-            .collection('events')
-            .doc(eventID)
-            .update({
-                    tags: firestore.FieldValue.arrayRemove(tag)
-                }
+            .then(
+                firestore
+                    .collection('eventTags')
+                    .doc(eventID)
+                    .set({
+                        tags : updatedTags
+                    })
             )
             .then(() => {
                 dispatch({type: 'DELETE_TAGS_SUCCESS'})
             })
             .catch((err) => {
-                dispatch('DELETE_TAGS_ERROR_2', err)
+                dispatch('DELETE_TAGS_ERROR', err)
             })
     }
 };
