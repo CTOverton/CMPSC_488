@@ -1,38 +1,79 @@
 import {isEmpty, isLoaded} from "react-redux-firebase";
-import setTags from "../../components/screens/events/attendees/AttendeesList"
-import tags from "../../components/screens/events/attendees/AttendeesList"
 import React from "react";
 
 
-export const createEvent = (event) => {
+export const createEvent = (event, lists, tags) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
-        const firebase = getFirebase()
-        const firestore = getFirestore()
-        const state = getState()
-        const {auth} = state.firebase
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const state = getState();
+        const {auth} = state.firebase;
 
         if (isLoaded(auth) && isEmpty(auth)) {
             return dispatch({type: 'CREATE_EVENT_ERROR', err: {message: 'User Not Logged In'}})
         }
 
-        // Todo: validate event input
-        event = {
-            ...event,
+        const signature = {
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            createdBy: auth.uid,
-            tags: []
-        }
+            createdBy: auth.uid
+        };
 
-        firestore.collection('events')
-            .add(event)
-            .then((docRef) => {
-                dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
+        // Todo: validate event input
+
+        let promises = [
+            firestore
+            .collection('events')
+            .add({...event, ...signature})
+        ];
+
+        lists.map((list, index) => {
+            promises.push(
+                firestore
+                    .collection('tags')
+                    .add({name: list.label, type: 'list', ...signature})
+            )
+
+        });
+
+        tags.map((tag, index) => {
+            promises.push(
+                firestore
+                    .collection('tags')
+                    .add({name: tag.label, type: 'default', ...signature})
+            )
+        });
+
+        Promise.all(promises)
+            .then(values => {
+                const eventRef = values[0].id;
+                let tagValues = {};
+                values.slice(1).map(tag => {
+                    tagValues[tag.id] = true
+                });
+
+                Promise.all([
+                    firestore
+                        .collection('eventTags')
+                        .doc(eventRef)
+                        .set({tags: tagValues}),
+                    firestore
+                        .collection('eventMembers')
+                        .doc(eventRef)
+                        .set({members: {}}),
+                    firestore
+                        .collection('eventSettings')
+                        .doc(eventRef)
+                        .set({settings: {}}),
+                    ])
+                    .then(() => {
+                        dispatch({type: 'CREATE_EVENT_SUCCESS', eventRef})
+                    })
             })
             .catch((err) => {
                 dispatch({type: 'CREATE_EVENT_ERROR', err})
-            })
+            });
     }
-}
+};
 
 export const updateEvent = (eventID, event) => {
     return (dispatch, getState, {getFirestore}) => {

@@ -12,6 +12,7 @@
     "moment": "^2.24.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.12.0",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.12.0",
     "react-papaparse": "^2.0.2",
     "react-qr-reader": "^2.2.1",
@@ -22,7 +23,8 @@
     "react-scripts": "3.4.0",
     "redux": "^4.0.5",
     "redux-firestore": "^0.12.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "uniqid": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
