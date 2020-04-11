@@ -28,8 +28,10 @@ const dbSchema = {
 
   eventSettings: { // Collection
     eventID: { // Doc
-      setting1: true, // Field
-      setting2: false // Field
+      settings: { // Field
+        setting1: true, // Value
+        setting2: true, // Value
+      }
     }
   },
 
@@ -46,8 +48,14 @@ const dbSchema = {
 
   tags: { // Collection
     tagID: { // Doc
+      createdAt: "Timestamp", // Field | System timestamp for when event was created
+      createdBy: "uid", // Field | User id of user who created the event
       name: "", // Field
       type: "default", // Field | default: shows as tags on members, list: shows as lists of members
+      members: { // Field
+        memberID1: true, // Value
+        memberID2: true // Value
+      }
     }
   },
 
@@ -59,7 +67,10 @@ const dbSchema = {
         fName: "", // Value
         lName: "" // Value
       },
-      role: "admin" // Field
+      role: "admin", // Field
+      events: {
+        eventID: true
+      }
     }
   }
 };
