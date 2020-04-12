@@ -49,7 +49,7 @@ const ProfilePage = ({logout, history}) => {
     console.log(profile);
 
     if(!isLoaded(profile)){
-        return null;
+        return null
     }
 
     if(isEmpty(profile)){

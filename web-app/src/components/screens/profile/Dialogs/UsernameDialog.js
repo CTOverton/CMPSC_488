@@ -25,8 +25,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
         //setPwAccepted(false);
         setNewUsername("");
         setPassword("");
-        dispatch({type: 'REAUTHENTICATION_RESET'})
-        console.log()
+        //resetReauthentication();
     };
 
     const [newUsername, setNewUsername] = React.useState("")
@@ -52,13 +51,14 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
     //const [pwAccepted, setPwAccepted] = React.useState(false);
 
     const handlePwSubmit = () => {
-        console.log(password);
-        setPwSubmitted(true);
         changeUsername(newUsername, {email: profile.email, password: password})
+        setPwSubmitted(true);
     }
 
     const handlePwResubmit = () => {
         setPwSubmitted(false);
+        //setPassword("");
+        //resetReauthentication();
     }
 
     return(
@@ -118,14 +118,14 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
 
             {submitted && pwSubmitted && auth.pwAccepted != null  &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Error</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Incorrect Password
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                        <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={handlePwResubmit} color="primary">
@@ -137,10 +137,10 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
 
             {submitted && pwSubmitted && auth.pwAccepted == null &&
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Username</DialogTitle>
+                <DialogTitle id="form-dialog-title">Success</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Success!<br/>Your username has been changed.
+                        Your username has been changed.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

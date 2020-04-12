@@ -40,19 +40,19 @@ export const authReducer = (state = initState, action) => {
         //    ----------------------------------------
         case 'USERNAME_UPDATE_SUCCESS':
             return {
-                ...state,
-                authError: null
+                authError: null,
+                pwAccepted: null
             };
         case 'USERNAME_UPDATE_ERROR':
             return {
                 ...state,
                 authError: action.err.message
             };
-        case 'REAUTHENTICATION_RESET':
+        /*case 'REAUTHENTICATION_RESET':
             return {
                 ...state,
                 pwAccepted: null
-            };
+            };*/
         case 'REAUTHENTICATION_ERROR':
             return {
                 ...state,

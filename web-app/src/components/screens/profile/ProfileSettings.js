@@ -8,6 +8,7 @@ import {changeUsername} from "../../../redux/actions/authActions";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import UsernameDialog from "./Dialogs/UsernameDialog";
 import NameDialog from "./Dialogs/NameDialog";
+import AppBarHeader from "../../nav/AppBarHeader";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +52,7 @@ function ProfileSettings() {
 
     return(
         <div>
-            <h1>Settings</h1>
+            <AppBarHeader title="Settings" />
             {/*<form className={classes.root} noValidate autoComplete="off">
                 <TextField
                     id="update-username-input"
