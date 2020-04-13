@@ -17,6 +17,7 @@ import ProfileSettings from "../screens/profile/ProfileSettings";
 import EventsSettingsPage from "../screens/events/EventsSettingsPage";
 import EventsSignupPage from "../screens/events/EventsSignupPage";
 import EventsSignupThanks from "../screens/events/EventsSignupThanks";
+import OLDEventsDetailPage from "../screens/events/OLDEventsDetailPage";
 
 function PrivateRoute({ children, ...rest }) {
     const auth = useSelector(state => state.firebase.auth);
@@ -57,6 +58,8 @@ function Routes() {
             <Route exact path='/events/:eventID/attendee/add' component={AttendeesAdd} />
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
             <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
+
+            <Route exact path ='/events/:eventID/old' component={OLDEventsDetailPage}/>
 
             <PrivateRoute exact path='/profile'><ProfilePage /></PrivateRoute>
             <Route exact path='/profile/settings' component={ProfileSettings} />

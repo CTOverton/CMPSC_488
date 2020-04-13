@@ -34,12 +34,13 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
-        {collection: 'events', doc: eventID, subcollections: [{collection: 'attendees'}]},
         {collection: 'eventTags', doc: eventID},
+        {collection: 'eventMembers', doc:eventID},
         {collection: 'tags'}
     ])
 
     let event = useSelector(({firestore: {data}}) => data.events && data.events[eventID])
+    let attendees = useSelector(({firestore: {data}}) => data.eventMembers && data.eventMembers[eventID])
     let eventTags = useSelector(({firestore: {data}}) => data.eventTags && data.eventTags[eventID]);
     let allTags = useSelector(({firestore: {data}}) => data.tags);
     const auth = useSelector(state => state.firebase.auth)
@@ -47,8 +48,8 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
     const [mTags, filter_array] = React.useState([])
 
     // Show a message while items are loading
-    if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(event.attendees) || !isLoaded(eventTags) || !isLoaded(allTags)) {
-        return null
+    if (!isLoaded(event) || !isLoaded(auth) || !isLoaded(eventTags) || !isLoaded(allTags) || !isLoaded(attendees)) {
+        return "loading"
     }
     console.log("TAGS");
     console.log(eventTags);
@@ -68,12 +69,16 @@ const EventsDetailPage = ({eventID, removeTags, history}) => {
     let tags = [];
     let attendeeTags = {};
 
-    if (isLoaded(event.attendees) && isEmpty(event.attendees)) {
+    if (isLoaded(attendees) && isEmpty(attendees)) {
         event = {
             ...event,
-            attendees: []
+            attendees: {}
         };
     } else {
+        event = {
+            ...event,
+            attendees: attendees[eventID]
+        }
         const keys = Object.keys(eventTags.tags);
         for (let counter = 0; counter < keys.length; counter++) {
             let attendeeIDs = Object.keys(allTags[eventTags.tags[keys[counter]]].attendees);
