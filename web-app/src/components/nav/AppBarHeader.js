@@ -19,12 +19,16 @@ const useStyles = makeStyles(theme => ({
 const AppBarHeader = ({start, title, end}) => {
     const classes = useStyles();
 
+    const centeredValue = false;
+
     return(
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
                     {start}
-                    <Typography variant="h6" className={classes.title}>{title}</Typography>
+                    {centeredValue === true ?
+                        <Typography variant="h6" className={classes.title}>{title}</Typography>:
+                        <Typography variant="h6" className={classes.title} align={"left"}>{title}</Typography>}
                     {end}
                 </Toolbar>
             </AppBar>

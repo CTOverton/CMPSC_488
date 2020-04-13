@@ -12,7 +12,7 @@ const useStyles = makeStyles({
         // Todo: fix overtop
         width: "100%",
         position: 'fixed',
-        bottom: 0
+        bottom: 0,
     },
 });
 
