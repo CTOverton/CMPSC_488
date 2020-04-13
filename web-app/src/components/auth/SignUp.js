@@ -5,6 +5,7 @@ import {createUser} from "../../redux/actions/authActions";
 import {connect, useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Alert from "@material-ui/lab/Alert"
 import Typography from "@material-ui/core/Typography";
 import {isEmpty, isLoaded} from "react-redux-firebase";
 import {Redirect} from "react-router-dom";
@@ -49,6 +50,8 @@ const SignUp = ({auth, createUser, history}) => {
         setInputs({ ...inputs, [prop]: value === "" ? null : value })
     };
 
+    const [passwordMismatch, setPasswordMismatch] = React.useState(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const credentials = {
@@ -61,7 +64,13 @@ const SignUp = ({auth, createUser, history}) => {
             username: inputs.username
         };
 
-        createUser(credentials, profile)
+        if(inputs.password===inputs.passwordConfirm){
+            setPasswordMismatch(false);
+            createUser(credentials, profile)
+        }else{
+            setPasswordMismatch(true);
+        }
+
     };
 
     return(
@@ -88,8 +97,6 @@ const SignUp = ({auth, createUser, history}) => {
                             onChange={handleChange('password')}
                             required
                         />
-                        {/* TODO: Confirm password */}
-                        {/*
                         <TextField
                             id="confirm-password-input"
                             label="Confirm Password"
@@ -99,7 +106,6 @@ const SignUp = ({auth, createUser, history}) => {
                             onChange={handleChange('passwordConfirm')}
                             required
                         />
-                        */}
                         <TextField
                             id="username-input"
                             label="What should we call you?"
@@ -108,6 +114,9 @@ const SignUp = ({auth, createUser, history}) => {
                             onChange={handleChange('username')}
                             required
                         />
+                        {passwordMismatch &&
+                            <Alert severity="error">Passwords do not match</Alert>
+                        }
                     </div>
 
                     <Button className={classes.button} variant="contained" disableElevation color="primary" type="submit">Sign Up</Button>

@@ -57,8 +57,6 @@ export const changeUsername = (newUsername, credentials) => {
 
         const userID = state.firebase.auth.uid;
 
-        console.log(credentials);
-
         firebase.login(credentials) //not working
             .then(() => {
                 firestore.collection("users")
@@ -76,6 +74,7 @@ export const changeUsername = (newUsername, credentials) => {
                     })
             })
             .catch((err) => {
+                console.log(credentials);
                 dispatch({type: 'REAUTHENTICATION_ERROR', err})
             });
     }
