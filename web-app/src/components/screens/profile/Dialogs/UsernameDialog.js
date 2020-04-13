@@ -63,7 +63,7 @@ function UsernameDialog({auth, changeUsername}, dispatch) {
 
     return(
         <div>
-            <Button style={{marginTop: "20px"}} variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 Change Username
             </Button>
             {!submitted &&

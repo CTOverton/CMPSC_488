@@ -7,7 +7,6 @@ import {Container} from "@material-ui/core";
 import {changeUsername} from "../../../redux/actions/authActions";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import UsernameDialog from "./Dialogs/UsernameDialog";
-import NameDialog from "./Dialogs/NameDialog";
 import AppBarHeader from "../../nav/AppBarHeader";
 
 const useStyles = makeStyles(theme => ({
@@ -62,9 +61,8 @@ function ProfileSettings() {
                     />
                 <Button className={classes.margin} variant="contained" disableElevation color="primary" onClick={handleChangeUsername}>Change Username</Button>
             </form>*/}
-            <UsernameDialog/>
             <br/>
-            <NameDialog/>
+            <UsernameDialog/>
         </div>
     );
 }
