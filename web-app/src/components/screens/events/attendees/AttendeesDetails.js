@@ -46,23 +46,24 @@ const AttendeesDetails = ({ eventID, attendeeID }) => {
     if (!isLoaded(event)) {
         return "Loading Event Details"
     }
+
+    let has = []
+    let has_not = []
+
     if (!isLoaded(allTags)) {
         return "Loading Tags"
     }
-    if (isEmpty(event)){ //TODO: MAKE MORE STABLE
-        event = {
-            tags: []
-        }
-    }
-    let keys = Object.keys(event.tags);
-    let has = []
-    let has_not = []
-    for (let counter = 0; counter < keys.length; counter++){
-        if(allTags[event.tags[keys[counter]]].attendees[attendeeID] !== undefined){
-            has.push({tag: keys[counter], id: event.tags[keys[counter]]})
-        }
-        else{
-            has_not.push({tag: keys[counter], id: event.tags[keys[counter]]})
+    else{
+        let keys = Object.keys(event.tags);
+        console.log(keys);
+        console.log(event);
+        for (let counter = 0; counter < keys.length; counter++){
+            if(allTags[event.tags[keys[counter]]].attendees[attendeeID] !== undefined){
+                has.push({tag: keys[counter], id: event.tags[keys[counter]]})
+            }
+            else{
+                has_not.push({tag: keys[counter], id: event.tags[keys[counter]]})
+            }
         }
     }
     console.log(has);
