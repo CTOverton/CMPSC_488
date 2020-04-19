@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const graphqlHTTP = require('express-graphql');
 
 // Set up express app
 const main = express();
@@ -14,6 +15,11 @@ main.use(cors({ origin: true }));
 
 // For parsing application/json
 main.use(bodyParser.json());
+
+// For graphql
+main.use('/graphql', graphqlHTTP({
+
+}));
 
 // Init api routes
 webhooks.use(require('./routes/webhooks'));
