@@ -35,6 +35,14 @@ const dbSchema = {
     }
   },
 
+  eventComments: { // Collection
+    eventID: { // Doc
+      comments: { // Field
+        commentID: true, // Value
+      }
+    }
+  },
+
   members: { // Collection
     memberID: { // Doc
       email: "example@domain.com", // Field
@@ -56,6 +64,14 @@ const dbSchema = {
         memberID1: true, // Value
         memberID2: true // Value
       }
+    }
+  },
+
+  comments: { // Collection
+    commentID: { // Doc
+      createdAt: "Timestamp", // Field | System timestamp for when event was created
+      createdBy: "uid", // Field | User id of user who created the event
+      content: "Comment Body" // Field
     }
   },
 
