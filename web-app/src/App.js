@@ -15,6 +15,7 @@ import {BrowserRouter} from "react-router-dom";
 import Routes from "./components/nav/Routes";
 import BottomNav from "./components/nav/BottomNav";
 import AppBarHeader from "./components/nav/AppBarHeader";
+import BottomNavigation from "@material-ui/core/BottomNavigation";
 
 firebase.initializeApp(firebaseConfig)
 firebase.firestore()
@@ -44,6 +45,7 @@ function App() {
                     <div className="App">
                         {/*<AppBarHeader />*/}
                         <Routes />
+                        <BottomNavigation />
                         <BottomNav />
                     </div>
                 </BrowserRouter>

@@ -23,7 +23,7 @@ const AppBarHeader = ({start, title, end}) => {
 
     return(
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar>
                     {start}
                     {centeredValue === true ?
@@ -32,6 +32,7 @@ const AppBarHeader = ({start, title, end}) => {
                     {end}
                 </Toolbar>
             </AppBar>
+            <Toolbar />
         </div>
     )
 };

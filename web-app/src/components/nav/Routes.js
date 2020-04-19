@@ -49,10 +49,10 @@ function Routes() {
 
             <Route exact path='/events' component={EventsScreen} />
             <Route exact path='/events/create' component={EventsCreateScreen} />
-            <Route exact path='/events/:id' component={EventsPage} />
-            <Route exact path='/events/:id/settings' component={EventsSettingsPage} />
-            <Route exact path='/events/:id/signup' component={EventsSignupPage} />
-            <Route exact path='/events/:id/signup/thanks' component={EventsSignupThanks} />
+            <Route exact path='/events/:eventID' component={EventsPage} />
+            <Route exact path='/events/:eventID/settings' component={EventsSettingsPage} />
+            <Route exact path='/events/:eventID/signup' component={EventsSignupPage} />
+            <Route exact path='/events/:eventID/signup/thanks' component={EventsSignupThanks} />
 
             <Route exact path='/events/:eventID/attendee/add' component={AttendeesAdd} />
             <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
