@@ -7,7 +7,6 @@ function UserDetails ({user}) {
     return (
         <Container style={{textAlign: "center", marginTop: "10px"}}>
             <Avatar style={{display: "inline-block", lineHeight: "40px"}} alt={user.username}>{user.username.charAt(0)}</Avatar>
-            {/*<h1>{user.firstName} {user.lastName}</h1>*/}
             <h1>{user.username}</h1>
             <p>{user.email}</p>
         </Container>
