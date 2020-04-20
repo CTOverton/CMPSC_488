@@ -16,6 +16,12 @@ export const eventReducer = (state = initState, action) => {
                 ...state,
                 eventError: action.err.message
             }
+        case 'CLEAR_DOCREF':
+            return {
+                ...state,
+                docRef: null,
+                eventError: null
+            }
         case 'UPDATE_EVENT_SUCCESS':
             return {
                 ...state,

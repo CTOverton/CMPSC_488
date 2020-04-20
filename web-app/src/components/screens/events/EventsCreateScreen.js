@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Container} from "@material-ui/core";
-import {createEvent} from "../../../redux/actions/eventActions";
-import {connect} from "react-redux";
+import {clearDocRef, createEvent} from "../../../redux/actions/eventActions";
+import {connect, useSelector} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import CheckIcon from '@material-ui/icons/Check';
@@ -15,6 +15,9 @@ import TagBoard from "./tags/TagBoard";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import AddIcon from "@material-ui/icons/Add";
 import ListItem from "@material-ui/core/ListItem";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {isLoaded} from "react-redux-firebase";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -35,13 +38,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const EventsCreateScreen = ({eventState, createEvent, history}) => {
+const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => {
     const classes = useStyles();
     const [inputs, setInputs] = React.useState({
         title: '',
         description: '',
         newTag: '',
     });
+
+    const [loading, setLoading] = React.useState(false)
 
     const [lists, setList] = React.useState([
         // Defaults
@@ -55,6 +60,15 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
         {key: uniqid(), label: 'VIP'}
     ]);
 
+    const docRef = useSelector(({events}) => events.docRef);
+
+    useEffect(() => {
+        if (docRef !== null) {
+            history.push(`/events/${docRef.id}`);
+            clearDocRef()
+        }
+    });
+
     const handleChange = prop => e => {
         const value = e.target.value;
         setInputs({ ...inputs, [prop]: value })
@@ -63,14 +77,13 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        setLoading(true);
         createEvent({
             title: inputs.title,
             description: inputs.description,
         }, lists, tags.map((tag) => {
             return tag.label
         }));
-        history.push("/events")
-        // TODO: push to real event: history.push("/events/:eventID")
     };
 
     const handleTagAdd = (e) => {
@@ -99,16 +112,20 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
                 }
                 title="Create Event"
                 end={
-                    <IconButton
-                        edge="end"
-                        onClick={handleSubmit}
-                        color="inherit"
-                        aria-label="add"
-                    >
-                        <CheckIcon />
-                    </IconButton>
+                    loading ?
+                        <CircularProgress color="inherit" size={30}/>
+                        :
+                        <IconButton
+                            edge="end"
+                            onClick={handleSubmit}
+                            color="inherit"
+                            aria-label="add"
+                        >
+                            <CheckIcon />
+                        </IconButton>
                 }
             />
+            {/*<LinearProgress />*/}
             <Container maxWidth="md">
                 <h2>Event Details</h2>
                 <form className={classes.form} noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -152,6 +169,6 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
 };
 
 const mapState = state => {return {eventState: state.events}};
-const mapDispatch = {createEvent: createEvent};
+const mapDispatch = {createEvent: createEvent, clearDocRef: clearDocRef};
 
 export default connect(mapState, mapDispatch)(EventsCreateScreen)

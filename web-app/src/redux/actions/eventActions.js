@@ -40,6 +40,12 @@ export const createEvent = (event, lists, tags) => {
     }
 };
 
+export const clearDocRef = () => {
+    return (dispatch) => {
+        dispatch({type: 'CLEAR_DOCREF'})
+    }
+}
+
 export const updateEvent = (eventID, event) => {
     return (dispatch, getState, {getFirestore}) => {
         const firestore = getFirestore()
