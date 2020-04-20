@@ -88,6 +88,7 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
                         }}
                         color="inherit"
                         aria-label="add"
+                        className={classes.menuButton}
                     >
                         <ArrowBackIosIcon />
                     </IconButton>

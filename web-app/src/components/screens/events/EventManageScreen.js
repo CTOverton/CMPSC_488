@@ -53,8 +53,7 @@ const EventManageScreen = ({history, match}) => {
                 }
             />
             <Container>
-
-
+                yeet
             </Container>
         </div>
     );
