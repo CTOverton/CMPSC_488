@@ -6,9 +6,10 @@ const dbSchema = {
             author: "username", // Field
             description: "Event Description", // Field
             title: "Event Title", // Field
-            tags: [], // Field
+            tags: ["Tag 1", "Tag 2"], // Field
             lists: { // Collection
                 listID: { // Doc
+                    name: "List Name", //Field
                     members: { // Collection
                         memberID: { // Doc
                             email: "example@domain.com", // Field
@@ -17,7 +18,7 @@ const dbSchema = {
                                 fName: "",
                                 lName: ""
                             },
-                            tags: [], // Field
+                            tags: ["Tag 1"], // Field
                         }
                     },
                 }
@@ -35,14 +36,16 @@ const dbSchema = {
     users: { // Collection
         userID: { // Doc
             email: "example@domain.com", // Field
-            username: "Full Name",
+            displayName: "Full Name",
             details: { // Field
                 fName: "", // Value
                 lName: "" // Value
             },
             role: "admin", // Field
-            events: {
-                eventID: true
+            attending: { // Collection
+                eventID: { // Doc
+                    eventID: "eventID"
+                }
             }
         }
     }

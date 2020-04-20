@@ -62,11 +62,15 @@ const EventsCreateScreen = ({eventState, createEvent, history}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         createEvent({
             title: inputs.title,
             description: inputs.description,
-        }, lists, tags);
+        }, lists, tags.map((tag) => {
+            return tag.label
+        }));
         history.push("/events")
+        // TODO: push to real event: history.push("/events/:eventID")
     };
 
     const handleTagAdd = (e) => {
