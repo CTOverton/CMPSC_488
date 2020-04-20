@@ -44,7 +44,7 @@ export const clearDocRef = () => {
     return (dispatch) => {
         dispatch({type: 'CLEAR_DOCREF'})
     }
-}
+};
 
 export const updateEvent = (eventID, event) => {
     return (dispatch, getState, {getFirestore}) => {

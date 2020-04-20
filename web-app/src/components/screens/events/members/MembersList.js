@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MembersList = ({eventID, listID}) => {
+const MembersList = ({eventID, listID, filter, tagFilter}) => {
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID, subcollections: [{collection: 'lists', doc: listID, subcollections: [{collection: 'members'}]}], storeAs: "members"}
@@ -44,9 +44,24 @@ const MembersList = ({eventID, listID}) => {
 
     return (
         <List>
-            {members.map(member =>
-                <MembersListItem key={member.id} member={member}/>
-            )}
+            {members.map(member => {
+                console.log('here')
+                const item = <MembersListItem key={member.id} member={member}/>
+                if (filter === '' && tagFilter.length === 0) return item;
+
+                if (filter === '' && tagFilter.length > 0) {
+                    if (tagFilter.every(tag => member.tags.includes(tag))) return item;
+                }
+
+                const searchText = (member.displayName + member.email).toUpperCase().replace(/\s/g, '');
+                const filterText = filter.toUpperCase().replace(/\s/g, '');
+
+                if (filter !== '' && tagFilter.length === 0) {
+                    if (searchText.includes(filterText)) return item;
+                }
+
+                if (searchText.includes(filterText) && tagFilter.every(tag => member.tags.includes(tag))) return item;
+            })}
         </List>
     );
 };

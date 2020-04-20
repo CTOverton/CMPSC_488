@@ -9,7 +9,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import defaultImg from "../../../assets/Default Image.png"
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import SettingsIcon from '@material-ui/icons/Settings';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppBarHeader from "../../nav/AppBarHeader";
 
 const useStyles = makeStyles(theme => ({
@@ -69,7 +69,7 @@ const EventsDetailPage = ({history, match}) => {
                         color="inherit"
                         aria-label="manage"
                     >
-                        <SettingsIcon />
+                        <MoreVertIcon />
                     </IconButton>
                 }
             />

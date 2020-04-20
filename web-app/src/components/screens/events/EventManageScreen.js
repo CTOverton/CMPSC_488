@@ -2,7 +2,7 @@ import React from 'react'
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import AppBarHeader from "../../nav/AppBarHeader";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SettingsIcon from '@material-ui/icons/Settings';
 import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import {useSelector} from "react-redux";
 import Tabs from "@material-ui/core/Tabs";
@@ -24,6 +24,7 @@ import {fade} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Chip from "@material-ui/core/Chip";
+import CropFreeIcon from '@material-ui/icons/CropFree';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -90,6 +91,8 @@ const EventManageScreen = ({history, match}) => {
     const eventID = match.params.eventID;
     const [tab, setTab] = React.useState(0);
     const [AddMenu_anchorEl, AddMenu_setAnchorEl] = React.useState(null);
+    const [search, setSearch] = React.useState('');
+    const [tagFilter, setTagFilter] = React.useState([]);
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
@@ -116,6 +119,9 @@ const EventManageScreen = ({history, match}) => {
         AddMenu_setAnchorEl(null);
     };
 
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+    };
 
     return (
         <div>
@@ -137,17 +143,16 @@ const EventManageScreen = ({history, match}) => {
                     <IconButton
                         edge="end"
                         onClick={() => {
-                            console.log("Change Event settings")
+                            history.push(`/events/${eventID}/settings`);
                         }}
                         color="inherit"
                         aria-label="settings"
                     >
-                        <MoreVertIcon />
+                        <SettingsIcon />
                     </IconButton>
                 }
             />
 
-            {/* TODO: Fix this stupid search bar*/}
             {/* Search */}
             <div className={classes.search}>
                 <IconButton className={classes.searchIcon}>
@@ -160,6 +165,7 @@ const EventManageScreen = ({history, match}) => {
                         input: classes.inputInput,
                     }}
                     inputProps={{ 'aria-label': 'search' }}
+                    onChange={handleSearch}
                 />
                 <IconButton className={classes.searchDrop}>
                     <ArrowDropDownIcon />
@@ -175,6 +181,14 @@ const EventManageScreen = ({history, match}) => {
                         index={index}
                         // onDelete={() => handleDelete(tag.key)}
                         className={classes.chip}
+                        color={tagFilter.includes(tag) ? "primary" : "default"}
+                        onClick={() => {
+                            if (tagFilter.includes(tag)) {
+                                setTagFilter(tagFilter.filter(oldTag => oldTag !== tag))
+                            } else {
+                                setTagFilter([...tagFilter, tag])
+                            }
+                        }}
                     />
                 )}
             </div>
@@ -186,7 +200,7 @@ const EventManageScreen = ({history, match}) => {
                     <ArrowDropDownIcon />
                 </IconButton>
                 <Divider orientation="vertical" flexItem />
-                <IconButton aria-controls="add-menu" aria-haspopup="true" onClick={AddMenu_handleClick}>
+                <IconButton aria-controls="add-menu" aria-haspopup="true" aria-label="Add" onClick={AddMenu_handleClick}>
                     <PersonAddIcon />
                 </IconButton>
                 <Menu
@@ -199,16 +213,17 @@ const EventManageScreen = ({history, match}) => {
                     <MenuItem onClick={AddMenu_handleClose}>Add Member</MenuItem>
                     <MenuItem onClick={AddMenu_handleClose}>Import List</MenuItem>
                 </Menu>
-
-
-                <IconButton>
+                <IconButton aria-label="Scan QR Code">
+                    <CropFreeIcon />
+                </IconButton>
+                <IconButton aria-label="Remove">
                     <DeleteIcon />
                 </IconButton>
                 <Divider orientation="vertical" flexItem />
-                <IconButton>
+                <IconButton aria-label="Tag">
                     <LabelIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton aria-label="List">
                     <FormatListBulletedIcon />
                 </IconButton>
             </Grid>
@@ -229,7 +244,7 @@ const EventManageScreen = ({history, match}) => {
             </Paper>
 
             {/* List of members */}
-            <MembersList eventID={eventID} listID={lists[0].id}/>
+            <MembersList eventID={eventID} listID={lists[tab].id} filter={search} tagFilter={tagFilter}/>
         </div>
     );
 };
