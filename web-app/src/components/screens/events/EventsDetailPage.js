@@ -53,7 +53,7 @@ const EventsDetailPage = ({history, match}) => {
                             history.goBack()
                         }}
                         color="inherit"
-                        aria-label="add"
+                        aria-label="back"
                     >
                         <ArrowBackIosIcon />
                     </IconButton>
@@ -64,10 +64,10 @@ const EventsDetailPage = ({history, match}) => {
                     <IconButton
                         edge="end"
                         onClick={() => {
-                            console.log("Go to event manage")
+                            history.push('/events/'+ eventID +'/manage')
                         }}
                         color="inherit"
-                        aria-label="add"
+                        aria-label="manage"
                     >
                         <SettingsIcon />
                     </IconButton>
