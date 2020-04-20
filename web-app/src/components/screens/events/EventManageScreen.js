@@ -2,7 +2,6 @@ import React from 'react'
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import AppBarHeader from "../../nav/AppBarHeader";
-import Container from "@material-ui/core/Container";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import {useSelector} from "react-redux";
@@ -19,13 +18,12 @@ import Grid from "@material-ui/core/Grid";
 import LabelIcon from '@material-ui/icons/Label';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from "@material-ui/core/InputBase";
 import {fade} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,43 +43,45 @@ const useStyles = makeStyles((theme) => ({
 
 
     search: {
-        margin: theme.spacing(1),
+        margin: '14px auto',
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.black, 0.15),
         '&:hover': {
             backgroundColor: fade(theme.palette.common.black, 0.25),
         },
-        width: '100%',
-        /*[theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },*/
+        width: '300px',
     },
     searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
         position: 'absolute',
+        left: 0,
+        top: '50%',
+        transform: 'translateY(-50%)',
         pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     inputRoot: {
         color: 'inherit',
     },
     inputInput: {
-        // padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        // transition: theme.transitions.create('width'),
+        margin: theme.spacing(1, 5),
         width: '100%',
-        /*[theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },*/
+    },
+    searchDrop: {
+        position: 'absolute',
+        right: 0,
+        top: '50%',
+        transform: 'translateY(-50%)'
+    },
+
+
+    chips: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        padding: theme.spacing(0.5),
+    },
+    chip: {
+        margin: theme.spacing(0.5),
     },
 }));
 
@@ -102,6 +102,7 @@ const EventManageScreen = ({history, match}) => {
     if (!isLoaded(event) || !isLoaded(lists)) {return null}
 
     console.log(event, lists);
+    const {tags} = event;
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
@@ -147,10 +148,11 @@ const EventManageScreen = ({history, match}) => {
             />
 
             {/* TODO: Fix this stupid search bar*/}
-            {/*<div className={classes.search}>
-                <div className={classes.searchIcon}>
+            {/* Search */}
+            <div className={classes.search}>
+                <IconButton className={classes.searchIcon}>
                     <SearchIcon />
-                </div>
+                </IconButton>
                 <InputBase
                     placeholder="Search…"
                     classes={{
@@ -159,8 +161,25 @@ const EventManageScreen = ({history, match}) => {
                     }}
                     inputProps={{ 'aria-label': 'search' }}
                 />
-            </div>*/}
+                <IconButton className={classes.searchDrop}>
+                    <ArrowDropDownIcon />
+                </IconButton>
+            </div>
 
+            {/* Tags */}
+            <div className={classes.chips}>
+                {tags.map((tag, index) =>
+                    <Chip
+                        key={index}
+                        label={tag}
+                        index={index}
+                        // onDelete={() => handleDelete(tag.key)}
+                        className={classes.chip}
+                    />
+                )}
+            </div>
+
+            {/* Toolbar */}
             <Grid container alignItems="center" className={classes.root}>
                 <Checkbox />
                 <IconButton className={classes.arrowDropDown}>
@@ -193,6 +212,8 @@ const EventManageScreen = ({history, match}) => {
                     <FormatListBulletedIcon />
                 </IconButton>
             </Grid>
+
+            {/* List Tabs */}
             <Paper square>
                 <Tabs
                     value={tab}
@@ -206,6 +227,8 @@ const EventManageScreen = ({history, match}) => {
                     })}
                 </Tabs>
             </Paper>
+
+            {/* List of members */}
             <MembersList eventID={eventID} listID={lists[0].id}/>
         </div>
     );
