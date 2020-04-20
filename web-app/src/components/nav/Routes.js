@@ -41,7 +41,7 @@ function PrivateRoute({ children, ...rest }) {
 
 function Routes() {
     return(
-        <Switch>
+        <Switch >
             <PrivateRoute exact path='/'><EventsScreen /></PrivateRoute>
 
             <Route path='/signup' component={SignUp} />

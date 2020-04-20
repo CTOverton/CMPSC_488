@@ -40,7 +40,7 @@ function App() {
                 config={rrfConfig}
                 dispatch={store.dispatch}
                 createFirestoreInstance={createFirestoreInstance}>
-                <BrowserRouter>
+                <BrowserRouter >
                     <div className="App">
                         {/*<AppBarHeader />*/}
                         <Routes />
