@@ -1,7 +1,6 @@
 import {isEmpty, isLoaded} from "react-redux-firebase";
-import React from "react";
 
-
+/* EVENTS */
 export const createEvent = (event, lists, tags) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
@@ -40,15 +39,9 @@ export const createEvent = (event, lists, tags) => {
     }
 };
 
-export const clearDocRef = () => {
-    return (dispatch) => {
-        dispatch({type: 'CLEAR_DOCREF'})
-    }
-};
-
 export const updateEvent = (eventID, event) => {
     return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
+        const firestore = getFirestore();
 
         // Todo: validate event input
 
@@ -62,11 +55,11 @@ export const updateEvent = (eventID, event) => {
                 dispatch({type: 'UPDATE_EVENT_ERROR', err})
             })
     }
-}
+};
 
 export const deleteEvent = (eventID) => {
     return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
+        const firestore = getFirestore();
 
         firestore.collection('events')
             .doc(eventID)
@@ -78,17 +71,25 @@ export const deleteEvent = (eventID) => {
                 dispatch({type: 'DELETE_EVENT_ERROR', err})
             })
     }
-}
+};
+
+export const clearDocRef = () => {
+    return (dispatch) => {
+        dispatch({type: 'CLEAR_DOCREF'})
+    }
+};
+
+
 
 export const signupForEvent = (eventID, attendee, type) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
-        const firestore = getFirestore()
-        const firebase = getFirebase()
+        const firestore = getFirestore();
+        const firebase = getFirebase();
 
         attendee = {
             ...attendee,
             signupAt: firebase.firestore.FieldValue.serverTimestamp(),
-        }
+        };
 
         firestore.collection('events')
             .doc(eventID)
@@ -101,7 +102,10 @@ export const signupForEvent = (eventID, attendee, type) => {
                 dispatch({type: 'SIGNUP_ERROR', err})
             })
     }
-}
+};
+
+
+
 
 
 // SAM
@@ -187,7 +191,7 @@ export const createAttendees = (attendees, eventID) => {
 
 export const removeTags = (eventID, tag, updatedTags) => {
     return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore()
+        const firestore = getFirestore();
         console.log(tag);
         firestore.collection('tags')
             .doc(tag.id)

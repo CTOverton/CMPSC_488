@@ -4,7 +4,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import AppBarHeader from "../../nav/AppBarHeader";
 import SettingsIcon from '@material-ui/icons/Settings';
 import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
@@ -25,6 +25,17 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Chip from "@material-ui/core/Chip";
 import CropFreeIcon from '@material-ui/icons/CropFree';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import AddIcon from "@material-ui/icons/Add";
+import ListItem from "@material-ui/core/ListItem";
+import {addMembers} from "../../../redux/actions/memberActions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,13 +97,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EventManageScreen = ({history, match}) => {
+const EventManageScreen = ({history, match, addMembers}) => {
     const classes = useStyles();
     const eventID = match.params.eventID;
     const [tab, setTab] = React.useState(0);
     const [AddMenu_anchorEl, AddMenu_setAnchorEl] = React.useState(null);
     const [search, setSearch] = React.useState('');
     const [tagFilter, setTagFilter] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [memberTags, setMemberTags] = React.useState([]);
+    const [memberInfo, setMemberInfo] = React.useState({
+        email: '',
+        displayName: ''
+    });
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
@@ -121,6 +146,24 @@ const EventManageScreen = ({history, match}) => {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
+    };
+
+    const handleAddMemberChange = prop => event => {
+        const value = event.target.value;
+        if (value !== '') setMemberInfo({ ...memberInfo, [prop]: value })
+    };
+
+    const handleAddMember = () => {
+        const member = {
+            ...memberInfo,
+            tags: memberTags
+        };
+        addMembers(eventID, lists[tab].id, [member]);
+        setMemberInfo({
+            email: '',
+            displayName: ''
+        });
+        setMemberTags([]);
     };
 
     return (
@@ -210,9 +253,68 @@ const EventManageScreen = ({history, match}) => {
                     open={Boolean(AddMenu_anchorEl)}
                     onClose={AddMenu_handleClose}
                 >
-                    <MenuItem onClick={AddMenu_handleClose}>Add Member</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClickOpen();
+                        AddMenu_handleClose();
+                    }}>Add Member</MenuItem>
                     <MenuItem onClick={AddMenu_handleClose}>Import List</MenuItem>
                 </Menu>
+
+                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Subscribe to {lists[tab].name}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Enter member info and select tags to subscribe them to this list.
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="email"
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            required
+                            value={memberInfo.email}
+                            onChange={handleAddMemberChange('email')}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="displayName"
+                            label="Full Name"
+                            type="name"
+                            fullWidth
+                            value={memberInfo.displayName}
+                            onChange={handleAddMemberChange('displayName')}
+                        />
+                        <div className={classes.chips}>
+                            {tags.map((tag, index) =>
+                                <Chip
+                                    key={index}
+                                    label={tag}
+                                    index={index}
+                                    className={classes.chip}
+                                    color={memberTags.includes(tag) ? "primary" : "default"}
+                                    onClick={() => {
+                                        if (memberTags.includes(tag)) {
+                                            setMemberTags(memberTags.filter(oldTag => oldTag !== tag))
+                                        } else {
+                                            setMemberTags([...memberTags, tag])
+                                        }
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleAddMember} color="primary">
+                            Add Member
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
                 <IconButton aria-label="Scan QR Code">
                     <CropFreeIcon />
                 </IconButton>
@@ -249,4 +351,6 @@ const EventManageScreen = ({history, match}) => {
     );
 };
 
-export default EventManageScreen
+const mapDispatch = {addMembers: addMembers};
+
+export default connect(undefined, mapDispatch)(EventManageScreen)

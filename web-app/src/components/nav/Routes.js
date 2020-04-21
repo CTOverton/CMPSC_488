@@ -43,6 +43,7 @@ function PrivateRoute({ children, ...rest }) {
 function Routes() {
     return(
         <Switch>
+            {/* TODO: Fix private routes messing up history push*/}
             <PrivateRoute exact path='/'><EventsScreen /></PrivateRoute>
 
             <Route path='/signup' component={SignUp} />
@@ -52,6 +53,7 @@ function Routes() {
             <Route exact path='/events/create' component={EventsCreateScreen} />
             <Route exact path='/events/:eventID' component={EventsDetailPage} />
             <Route exact path='/events/:eventID/manage' component={EventManageScreen} />
+
             <Route exact path='/events/:eventID/settings' component={EventsSettingsPage} />
             <Route exact path='/events/:eventID/signup' component={EventsSignupPage} />
             <Route exact path='/events/:eventID/signup/thanks' component={EventsSignupThanks} />
