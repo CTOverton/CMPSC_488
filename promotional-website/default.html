@@ -6,49 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <title>Team CSS!</title>
 </head>
-<div>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand">Team CSS</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="default.html">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="documentation.html">Documentation</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="download.html">Download</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="support.html">Support</a>
-            </li>
+        <ul class="navbar-nav" id="css_navbar">
         </ul>
     </div>
 </nav>
+<div class="jumbotron container-fluid mt-5">
+    <p>Attendance Tracker is an all-encompassing attendance tracking, event organizing, CRM system geared towards
+        community organized events. There are plenty of applications for managing tickets for concerts, sporting events,
+        and the like. However, club events, school field trips, and locally hosted small events are still using
+        spreadsheets with manual check in's on clipboards and paper. Our solution to this problem is a web app where
+        anyone can create an account, organize events, and keep track of attendants. This empowers higher attendance
+        rates, less management for waitlists, and more active attendants.</p>
+</div>
 <div class="container">
     <div class="embed-responsive embed-responsive-16by9 mt-5">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ran_Ylug7AE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div class="jumbotron mt-5">
-        <p>Attendance Tracker is an all-encompassing attendance tracking, event organizing, CRM system geared towards community organized events. There are plenty of applications for managing tickets for concerts, sporting events, and the like. However, club events, school field trips, and locally hosted small events are still using spreadsheets with manual check in's on clipboards and paper. Our solution to this problem is a web app where anyone can create an account, organize events, and keep track of attendants. This empowers higher attendance rates, less management for waitlists, and more active attendants.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ran_Ylug7AE" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
     </div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
+<script>
+    $(document).ready(function () {
+        let date = new Date();
+        console.log(date);
+        if (date < new Date("5/9/2020")) { //Before Date
+            $("#css_navbar").append("            <li class=\"nav-item active\">\n" +
+                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"documentation.html\">Documentation</a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"download.html\">Download</a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"support.html\">Support</a>\n" +
+                "            </li>\n");
+        } else {
+            $("#css_navbar").append("            <li class=\"nav-item active\">\n" +
+                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"download.html\">Download</a>\n" +
+                "            </li>\n" +
+                "            <li class=\"nav-item\">\n" +
+                "                <a class=\"nav-link\" href=\"support.html\">Support</a>\n" +
+                "            </li>\n"); //After and During Date
+        }
+    });
+</script>
 </html>
