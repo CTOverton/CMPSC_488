@@ -6,7 +6,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import * as firebase from "firebase";
 import QRCode from "qrcode.react";
 import AttendeesAdd from "./AttendeesAdd";
 

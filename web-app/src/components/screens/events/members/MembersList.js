@@ -61,6 +61,7 @@ const MembersList = ({eventID, listID, filter, tagFilter}) => {
                 }
 
                 if (searchText.includes(filterText) && tagFilter.every(tag => member.tags.includes(tag))) return item;
+                return null;
             })}
         </List>
     );

@@ -1,6 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
 import List from "@material-ui/core/List";
-import EventsListItem from "../EventsListItem";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";

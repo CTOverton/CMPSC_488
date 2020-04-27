@@ -43,10 +43,6 @@ function AttendeeStatusPage() {
     console.log(now);
     console.log(date);
 
-    const event ={
-        timestamp: date
-    }
-
     const classes = useStyles();
 
     const { eventID, attendeeID } = useParams();

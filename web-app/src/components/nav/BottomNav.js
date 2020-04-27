@@ -5,14 +5,15 @@ import EventIcon from '@material-ui/icons/Event';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
         width: "100%",
         position: 'fixed',
         bottom: 0,
-        borderTop: '0.5px solid rgba(0, 0, 0, 0.2)'
+        borderTop: '0.5px solid rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.15)'
     },
 });
 
@@ -40,6 +41,8 @@ const BottomNav = ({history, location, match}) => {
                         break;
                     case "profile":
                         history.push("/profile");
+                        break;
+                    default:
                         break;
                 }
             }}

@@ -63,6 +63,8 @@ const EventsDetailPage = ({history, match}) => {
                 case 'storage/unknown':
                     // Unknown error occurred, inspect the server response
                     break;
+                default:
+                    break;
         }
     });
 

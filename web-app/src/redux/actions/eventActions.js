@@ -25,7 +25,7 @@ export const createEvent = (event, lists, tags, img) => {
             .add({...signature, ...event, tags: tags})
             .then(docRef => {
                 lists.map((list) => {
-                    firestore
+                    return firestore
                         .collection('events')
                         .doc(docRef.id)
                         .collection('lists')

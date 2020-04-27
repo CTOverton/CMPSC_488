@@ -8,9 +8,9 @@ const buttonRef = React.createRef()
 
 class CSV extends Component {
     //EVENTID
-    constructor(props) {
+/*    constructor(props) {
         super(props);
-    }
+    }*/
 
     handleOnFileLoad = (data) => {
         console.log(this.props);

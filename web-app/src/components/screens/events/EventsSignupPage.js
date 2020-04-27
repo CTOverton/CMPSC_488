@@ -1,6 +1,6 @@
 import React from "react";
 import {Container} from "@material-ui/core";
-import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
+import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import {connect, useSelector} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import TextField from "@material-ui/core/TextField";

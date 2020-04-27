@@ -32,9 +32,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import AddIcon from "@material-ui/icons/Add";
-import ListItem from "@material-ui/core/ListItem";
 import {addMembers} from "../../../redux/actions/memberActions";
 
 const useStyles = makeStyles((theme) => ({

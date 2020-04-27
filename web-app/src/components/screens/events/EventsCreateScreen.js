@@ -10,16 +10,13 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AppBarHeader from "../../nav/AppBarHeader";
 import ListsList from "./lists/ListsList";
 import uniqid from 'uniqid';
-import Chip from "@material-ui/core/Chip";
 import TagBoard from "./tags/TagBoard";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import AddIcon from "@material-ui/icons/Add";
 import ListItem from "@material-ui/core/ListItem";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {isLoaded} from "react-redux-firebase";
 import Button from "@material-ui/core/Button";
-import {DropzoneArea, DropzoneDialog} from "material-ui-dropzone";
+import {DropzoneDialog} from "material-ui-dropzone";
 import defaultImg from "../../../assets/Default Image.png";
 
 const useStyles = makeStyles(theme => ({

@@ -1,6 +1,5 @@
 import * as React from "react";
 import Chip from "@material-ui/core/Chip";
-import {connect} from "react-redux";
 
 class TheButton extends React.Component {
     constructor(props) {

@@ -21,7 +21,7 @@ export const addMembers = (eventID, listID, members) => {
         const promises = [];
 
         members.map(member => {
-            promises.push(
+            return promises.push(
                 firestore
                     .collection('events')
                     .doc(eventID)
@@ -56,7 +56,7 @@ export const updateMembers = (eventID, listID, members) => {
         const promises = [];
 
         members.map(member => {
-            promises.push(
+            return promises.push(
                 firestore
                     .collection('events')
                     .doc(eventID)
@@ -91,7 +91,7 @@ export const deleteMembers = (eventID, listID, memberIDs) => {
         const promises = [];
 
         memberIDs.map(memberID => {
-            promises.push(
+            return promises.push(
                 firestore
                     .collection('events')
                     .doc(eventID)
