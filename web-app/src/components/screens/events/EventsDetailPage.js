@@ -49,7 +49,8 @@ const EventsDetailPage = ({history, match}) => {
     img.getDownloadURL()
         .then(url => {
             setEventImg(url);
-        }).catch(function(error) {
+        })
+        .catch(function(error) {
             switch (error.code) {
                 case 'storage/object-not-found':
                     // File doesn't exist
