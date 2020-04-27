@@ -33,6 +33,7 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import {addMembers} from "../../../redux/actions/memberActions";
+import ToolTip from "@material-ui/core/ToolTip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -124,7 +125,9 @@ const EventManageScreen = ({history, match, addMembers}) => {
     // console.log(useSelector(state => state))
     const event = useSelector(({firestore: {data}}) => data.events && data.events[eventID]);
     const lists = useSelector(({firestore: {ordered}}) => ordered.lists);
-    if (!isLoaded(event) || !isLoaded(lists)) {return null}
+    if (!isLoaded(event) || !isLoaded(lists)) {
+        return null
+    }
 
     console.log(event, lists);
     const {tags} = event;
@@ -147,7 +150,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
 
     const handleAddMemberChange = prop => event => {
         const value = event.target.value;
-        if (value !== '') setMemberInfo({ ...memberInfo, [prop]: value })
+        if (value !== '') setMemberInfo({...memberInfo, [prop]: value})
     };
 
     const handleAddMember = () => {
@@ -175,7 +178,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                         color="inherit"
                         aria-label="back"
                     >
-                        <ArrowBackIosIcon />
+                        <ArrowBackIosIcon/>
                     </IconButton>
                 }
                 title="Manage Event"
@@ -188,7 +191,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                         color="inherit"
                         aria-label="settings"
                     >
-                        <SettingsIcon />
+                        <SettingsIcon/>
                     </IconButton>
                 }
             />
@@ -196,7 +199,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
             {/* Search */}
             <div className={classes.search}>
                 <IconButton className={classes.searchIcon}>
-                    <SearchIcon />
+                    <SearchIcon/>
                 </IconButton>
                 <InputBase
                     placeholder="Search…"
@@ -204,11 +207,11 @@ const EventManageScreen = ({history, match, addMembers}) => {
                         root: classes.inputRoot,
                         input: classes.inputInput,
                     }}
-                    inputProps={{ 'aria-label': 'search' }}
+                    inputProps={{'aria-label': 'search'}}
                     onChange={handleSearch}
                 />
                 <IconButton className={classes.searchDrop}>
-                    <ArrowDropDownIcon />
+                    <ArrowDropDownIcon/>
                 </IconButton>
             </div>
 
@@ -235,14 +238,19 @@ const EventManageScreen = ({history, match, addMembers}) => {
 
             {/* Toolbar */}
             <Grid container alignItems="center" className={classes.root}>
-                <Checkbox />
-                <IconButton className={classes.arrowDropDown}>
-                    <ArrowDropDownIcon />
-                </IconButton>
-                <Divider orientation="vertical" flexItem />
-                <IconButton aria-controls="add-menu" aria-haspopup="true" aria-label="Add" onClick={AddMenu_handleClick}>
-                    <PersonAddIcon />
-                </IconButton>
+                <ToolTip title={"Select All"}><Checkbox/></ToolTip>
+                <ToolTip title="Fix Me">
+                    <IconButton className={classes.arrowDropDown}>
+                        <ArrowDropDownIcon/>
+                    </IconButton>
+                </ToolTip>
+                <Divider orientation="vertical" flexItem/>
+                <ToolTip title={"Add"}>
+                    <IconButton aria-controls="add-menu" aria-haspopup="true" aria-label="Add"
+                                onClick={AddMenu_handleClick}>
+                        <PersonAddIcon/>
+                    </IconButton>
+                </ToolTip>
                 <Menu
                     id="add-menu"
                     anchorEl={AddMenu_anchorEl}
@@ -311,20 +319,27 @@ const EventManageScreen = ({history, match, addMembers}) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
-                <IconButton aria-label="Scan QR Code">
-                    <CropFreeIcon />
-                </IconButton>
-                <IconButton aria-label="Remove">
-                    <DeleteIcon />
-                </IconButton>
-                <Divider orientation="vertical" flexItem />
-                <IconButton aria-label="Tag">
-                    <LabelIcon />
-                </IconButton>
-                <IconButton aria-label="List">
-                    <FormatListBulletedIcon />
-                </IconButton>
+                <ToolTip title={"Scan QR"}>
+                    <IconButton aria-label="Scan QR Code">
+                        <CropFreeIcon/>
+                    </IconButton>
+                </ToolTip>
+                <ToolTip title={"Remove"}>
+                    <IconButton aria-label="Remove">
+                        <DeleteIcon/>
+                    </IconButton>
+                </ToolTip>
+                <Divider orientation="vertical" flexItem/>
+                <ToolTip title={"Tag"}>
+                    <IconButton aria-label="Tag">
+                        <LabelIcon/>
+                    </IconButton>
+                </ToolTip>
+                <ToolTip title={"List"}>
+                    <IconButton aria-label="List">
+                        <FormatListBulletedIcon/>
+                    </IconButton>
+                </ToolTip>
             </Grid>
 
             {/* List Tabs */}
@@ -337,7 +352,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                     aria-label="lists"
                 >
                     {lists.map(list => {
-                        return <Tab key={list.id} label={list.name} />
+                        return <Tab key={list.id} label={list.name}/>
                     })}
                 </Tabs>
             </Paper>
