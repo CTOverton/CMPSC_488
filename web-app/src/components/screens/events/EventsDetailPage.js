@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppBarHeader from "../../nav/AppBarHeader";
+import {storage} from "firebase";
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 const EventsDetailPage = ({history, match}) => {
     const classes = useStyles();
     const eventID = match.params.eventID;
+    const [eventImg, setEventImg] = React.useState(null);
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
@@ -41,6 +43,28 @@ const EventsDetailPage = ({history, match}) => {
     const event = useSelector(({firestore: {data}}) => data.events && data.events[eventID]);
 
     if (!isLoaded(event)) {return null}
+
+    let img = storage().ref(`eventImages/${eventID}`);
+
+    img.getDownloadURL()
+        .then(url => {
+            setEventImg(url);
+        }).catch(function(error) {
+            switch (error.code) {
+                case 'storage/object-not-found':
+                    // File doesn't exist
+                    break;
+                case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+                case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+                case 'storage/unknown':
+                    // Unknown error occurred, inspect the server response
+                    break;
+        }
+    });
 
     return (
         <div>
@@ -74,7 +98,7 @@ const EventsDetailPage = ({history, match}) => {
                 }
             />
             <Container>
-                <img className={classes.image} src={defaultImg} alt=""/>
+                <img className={classes.image} src={eventImg ? eventImg : defaultImg} alt=""/>
                 <h2 className={classes.title}>{event.title}</h2>
                 <Typography className={classes.subtitle} variant="subtitle1">{event.description}</Typography>
                 <Button className={classes.button} variant="contained" disableElevation color="primary">Signup</Button>

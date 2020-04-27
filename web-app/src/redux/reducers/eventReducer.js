@@ -12,7 +12,6 @@ export const eventReducer = (state = initState, action) => {
                 eventError: null
             }
         case 'CREATE_EVENT_ERROR':
-            console.error(action.err)
             return {
                 ...state,
                 eventError: action.err.message
