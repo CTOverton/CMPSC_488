@@ -18,6 +18,9 @@ import ListItem from "@material-ui/core/ListItem";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {isLoaded} from "react-redux-firebase";
+import Button from "@material-ui/core/Button";
+import {DropzoneArea, DropzoneDialog} from "material-ui-dropzone";
+import defaultImg from "../../../assets/Default Image.png";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -35,7 +38,12 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         width: '100%',
         maxWidth: 300
-    }
+    },
+    image: {
+        margin: 20,
+        width: 200,
+        height: 200
+    },
 }));
 
 const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => {
@@ -45,6 +53,8 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
         description: '',
         newTag: '',
     });
+    const [eventImg, setEventImg] = React.useState(null);
+    const [uploadOpen, setUploadOpen] = React.useState(false);
 
     const [loading, setLoading] = React.useState(false)
 
@@ -78,12 +88,17 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
         e.preventDefault();
 
         setLoading(true);
+        console.log(eventImg)
         createEvent({
-            title: inputs.title,
-            description: inputs.description,
-        }, lists, tags.map((tag) => {
-            return tag.label
-        }));
+                title: inputs.title,
+                description: inputs.description,
+            },
+            lists,
+            tags.map((tag) => {
+                return tag.label
+            }),
+            eventImg
+        );
     };
 
     const handleTagAdd = (e) => {
@@ -92,6 +107,15 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
             setTags([...tags, {key: uniqid(), label: inputs.newTag}]);
             setInputs({...inputs, newTag: ''})
         }
+    };
+
+    const handleUploadDialog = (openState) => {
+        setUploadOpen(openState);
+    };
+
+    const handleFileChange = uploads => {
+        handleUploadDialog(false);
+        setEventImg(uploads[0]);
     };
 
     return (
@@ -127,6 +151,26 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
             />
             {/*<LinearProgress />*/}
             <Container maxWidth="md">
+                <h2>Event Image</h2>
+                <div>
+                    <img className={classes.image} src={eventImg ? URL.createObjectURL(eventImg) : defaultImg} alt=""/>
+                </div>
+
+                <Button className={classes.button} variant="contained" disableElevation color="primary" onClick={() => handleUploadDialog(true)}>Upload Image</Button>
+                <Button className={classes.button} variant="contained" disableElevation onClick={() => setEventImg(null)}>Remove Image</Button>
+
+                <DropzoneDialog
+                    open={uploadOpen}
+                    onSave={handleFileChange}
+                    filesLimit={1}
+                    acceptedFiles={['image/jpeg', 'image/png']}
+                    dropzoneText={"Upload Event Image"}
+                    showPreviews={true}
+                    maxFileSize={5000000}
+                    onClose={() => handleUploadDialog(false)}
+                    submitButtonText={'Upload'}
+                />
+
                 <h2>Event Details</h2>
                 <form className={classes.form} noValidate autoComplete="off" onSubmit={handleSubmit}>
                     <div className={classes.inputs}>

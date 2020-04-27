@@ -1,7 +1,7 @@
 import {isEmpty, isLoaded} from "react-redux-firebase";
 
 /* EVENTS */
-export const createEvent = (event, lists, tags) => {
+export const createEvent = (event, lists, tags, img) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
@@ -31,7 +31,15 @@ export const createEvent = (event, lists, tags) => {
                         .collection('lists')
                         .add({name: list.label})
                 });
-                dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
+
+                console.log(img)
+                firebase.uploadFile('eventImages', img, undefined, {name: docRef.id})
+                    .then(snapshot => {
+                        dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
+                    })
+                    .catch(err => {
+                        dispatch({type: 'CREATE_EVENT_ERROR', err})
+                    });
             })
             .catch(err => {
                 dispatch({type: 'CREATE_EVENT_ERROR', err})
