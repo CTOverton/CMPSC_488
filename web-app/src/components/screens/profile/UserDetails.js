@@ -3,6 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import {Container} from "@material-ui/core";
 
 function UserDetails ({user}) {
+    console.log(user)
 
     return (
         <Container style={{textAlign: "center", marginTop: "10px"}}>

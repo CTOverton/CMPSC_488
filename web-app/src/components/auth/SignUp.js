@@ -42,7 +42,8 @@ const SignUp = ({auth, createUser, history}) => {
         email: null,
         password: null,
         passwordConfirm: null,
-        username: null
+        username: null,
+        displayName: null
     });
 
     const handleChange = prop => e => {
@@ -61,7 +62,8 @@ const SignUp = ({auth, createUser, history}) => {
 
         const profile = {
             email: inputs.email,
-            username: inputs.username
+            username: inputs.username,
+            displayName: inputs.displayName
         };
 
         if(inputs.password===inputs.passwordConfirm){
@@ -108,10 +110,17 @@ const SignUp = ({auth, createUser, history}) => {
                         />
                         <TextField
                             id="username-input"
+                            label="Username"
+                            variant="filled"
+                            onChange={handleChange('username')}
+                            required
+                        />
+                        <TextField
+                            id="displayName-input"
                             label="What should we call you?"
                             autoComplete="name"
                             variant="filled"
-                            onChange={handleChange('username')}
+                            onChange={handleChange('displayName')}
                             required
                         />
                         {passwordMismatch &&

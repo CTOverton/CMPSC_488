@@ -15,7 +15,10 @@ export const createEvent = (event, lists, tags, img) => {
         const signature = {
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdBy: auth.uid,
-            author: profile.displayName
+            author: {
+                username: profile.username,
+                displayName: profile.displayName
+            }
         };
 
         // Todo: validate event input

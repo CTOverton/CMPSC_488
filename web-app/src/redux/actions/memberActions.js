@@ -14,7 +14,10 @@ export const addMembers = (eventID, listID, members) => {
         const signature = {
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdBy: auth.uid,
-            author: profile.displayName
+            author: {
+                username: profile.username,
+                displayName: profile.displayName
+            }
         };
 
         // Todo: validate member input

@@ -3,7 +3,10 @@ const dbSchema = {
         eventID: { // Doc
             createdAt: "Timestamp", // Field
             createdBy: "userID", // Field
-            author: "username", // Field
+            author: {
+                username: "templateuser",
+                displayName: "Full Name"
+            },
             description: "Event Description", // Field
             title: "Event Title", // Field
             tags: ["Tag 1", "Tag 2"], // Field
@@ -36,6 +39,7 @@ const dbSchema = {
     users: { // Collection
         userID: { // Doc
             email: "example@domain.com", // Field
+            username: "templateuser",
             displayName: "Full Name",
             details: { // Field
                 fName: "", // Value
