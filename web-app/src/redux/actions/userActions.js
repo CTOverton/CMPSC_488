@@ -4,7 +4,7 @@ export const updateProfileDetails = (details) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         const firestore = getFirestore();
         const state = getState();
-        const {auth, profile} = state.firebase;
+        const {auth} = state.firebase;
 
         if (isLoaded(auth) && isEmpty(auth)) {
             return dispatch({type: 'UPDATE_PROFILE_ERROR', err: {message: 'User Not Logged In'}})

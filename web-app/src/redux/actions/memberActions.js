@@ -24,7 +24,7 @@ export const addMembers = (eventID, listID, members) => {
         const promises = [];
 
         members.map(member => {
-            promises.push(
+            return promises.push(
                 firestore
                     .collection("users")
                     .where("email", "==", member.email)

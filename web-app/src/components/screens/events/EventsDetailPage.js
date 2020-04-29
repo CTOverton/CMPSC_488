@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -35,6 +35,7 @@ const EventsDetailPage = ({history, match}) => {
     const classes = useStyles();
     const eventID = match.params.eventID;
     const [eventImg, setEventImg] = React.useState(null);
+    const [hasFetched, setHasFetched] = React.useState(false);
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
@@ -42,32 +43,38 @@ const EventsDetailPage = ({history, match}) => {
 
     const event = useSelector(({firestore: {data}}) => data.events && data.events[eventID]);
 
-    if (!isLoaded(event)) {return null}
+    useEffect(() => {
+        if (eventImg === null && hasFetched === false && isLoaded(event)) {
+            let img = storage().ref(`eventImages/${eventID}`);
 
-    let img = storage().ref(`eventImages/${eventID}`);
-
-    img.getDownloadURL()
-        .then(url => {
-            setEventImg(url);
-        })
-        .catch(function(error) {
-            switch (error.code) {
-                case 'storage/object-not-found':
-                    // File doesn't exist
-                    break;
-                case 'storage/unauthorized':
-                    // User doesn't have permission to access the object
-                    break;
-                case 'storage/canceled':
-                    // User canceled the upload
-                    break;
-                case 'storage/unknown':
-                    // Unknown error occurred, inspect the server response
-                    break;
-                default:
-                    break;
+            img.getDownloadURL()
+                .then(url => {
+                    setHasFetched(true);
+                    setEventImg(url);
+                })
+                .catch(function(error) {
+                    setHasFetched(true);
+                    switch (error.code) {
+                        case 'storage/object-not-found':
+                            // File doesn't exist
+                            break;
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect the server response
+                            break;
+                        default:
+                            break;
+                    }
+                });
         }
     });
+
+    if (!isLoaded(event)) {return null}
 
     return (
         <div>

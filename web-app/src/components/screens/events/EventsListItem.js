@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {withRouter} from "react-router-dom";
@@ -19,29 +19,37 @@ const useStyles = makeStyles(theme => ({
 const EventsListItem = ({event, history}) => {
     const classes = useStyles();
     const [eventImg, setEventImg] = React.useState(null);
+    const [hasFetched, setHasFetched] = React.useState(false);
 
-    let img = storage().ref(`eventImages/${event.id}`);
+    useEffect(() => {
+        if (eventImg === null && hasFetched === false) {
+            let img = storage().ref(`eventImages/${event.id}`);
 
-    img.getDownloadURL()
-        .then(url => {
-            setEventImg(url);
-        })
-        .catch(function(error) {
-        switch (error.code) {
-            case 'storage/object-not-found':
-                // File doesn't exist
-                break;
-            case 'storage/unauthorized':
-                // User doesn't have permission to access the object
-                break;
-            case 'storage/canceled':
-                // User canceled the upload
-                break;
-            case 'storage/unknown':
-                // Unknown error occurred, inspect the server response
-                break;
-            default:
-                break;
+            img
+                .getDownloadURL()
+                .then(url => {
+                    setHasFetched(true);
+                    setEventImg(url);
+                })
+                .catch(error => {
+                    setHasFetched(true);
+                    switch (error.code) {
+                        case 'storage/object-not-found':
+                            // File doesn't exist
+                            break;
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect the server response
+                            break;
+                        default:
+                            break;
+                    }
+                });
         }
     });
 

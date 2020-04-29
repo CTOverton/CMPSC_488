@@ -1,5 +1,4 @@
-import React from "react";
-import UserDetails from "./UserDetails";
+import React, {useEffect} from "react";
 import {connect, useSelector} from "react-redux";
 import {isEmpty, isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import IconButton from "@material-ui/core/IconButton";
@@ -56,6 +55,7 @@ const ProfilePage = ({logout, history}) => {
         right: false,
     });
     const [avatarImg, setAvatarImg] = React.useState(null);
+    const [hasFetched, setHasFetched] = React.useState(false);
 
     // TODO: Change Query to get relevant events for given user
     useFirestoreConnect(() => [{
@@ -68,6 +68,37 @@ const ProfilePage = ({logout, history}) => {
     const auth = useSelector(state => state.firebase.auth);
     const events = useSelector(({ firestore: { ordered } }) => ordered.events);
 
+    useEffect(() => {
+        if (avatarImg === null && hasFetched === false && isLoaded(auth)) {
+            let img = storage().ref(`userAvatarImages/${auth.uid}`);
+
+            img.getDownloadURL()
+                .then(url => {
+                    setHasFetched(true);
+                    setAvatarImg(url);
+                })
+                .catch(function(error) {
+                    setHasFetched(true);
+                    switch (error.code) {
+                        case 'storage/object-not-found':
+                            // File doesn't exist
+                            break;
+                        case 'storage/unauthorized':
+                            // User doesn't have permission to access the object
+                            break;
+                        case 'storage/canceled':
+                            // User canceled the upload
+                            break;
+                        case 'storage/unknown':
+                            // Unknown error occurred, inspect the server response
+                            break;
+                        default:
+                            break;
+                    }
+                });
+        }
+    });
+
     if(!isLoaded(profile) || !isLoaded(auth)){
         return null
     }
@@ -76,30 +107,6 @@ const ProfilePage = ({logout, history}) => {
         return <h1>Not logged in</h1>
     }
 
-    let img = storage().ref(`userAvatarImages/${auth.uid}`);
-
-    img.getDownloadURL()
-        .then(url => {
-            setAvatarImg(url);
-        })
-        .catch(function(error) {
-            switch (error.code) {
-                case 'storage/object-not-found':
-                    // File doesn't exist
-                    break;
-                case 'storage/unauthorized':
-                    // User doesn't have permission to access the object
-                    break;
-                case 'storage/canceled':
-                    // User canceled the upload
-                    break;
-                case 'storage/unknown':
-                    // Unknown error occurred, inspect the server response
-                    break;
-                default:
-                    break;
-            }
-        });
 
     if (!isLoaded(events)) {
         return null
