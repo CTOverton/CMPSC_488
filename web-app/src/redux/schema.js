@@ -3,9 +3,9 @@ const dbSchema = {
         eventID: { // Doc
             createdAt: "Timestamp", // Field
             createdBy: "userID", // Field
-            author: {
-                username: "templateuser",
-                displayName: "Full Name"
+            author: { // Field
+                username: "templateuser", // Value
+                displayName: "Full Name" // Value
             },
             description: "Event Description", // Field
             title: "Event Title", // Field
@@ -15,7 +15,14 @@ const dbSchema = {
                     name: "List Name", //Field
                     members: { // Collection
                         memberID: { // Doc
+                            createdAt: "Timestamp", // Field
+                            createdBy: "userID", // Field
+                            author: { // Field
+                                username: "templateuser", // Value
+                                displayName: "Full Name" // Value
+                            },
                             email: "example@domain.com", // Field
+                            displayName: "Full Name",
                             uid: null, // Field
                             details: { // Field
                                 fName: "",

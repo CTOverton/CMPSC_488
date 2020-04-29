@@ -16,7 +16,10 @@ import clsx from "clsx";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {withRouter} from "react-router-dom";
 import {logoutUser} from "../../../redux/actions/authActions";
-import EventsList from "../events/EventsList";
+import defaultImg from "../../../assets/Default Image.png";
+import {storage} from "firebase";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -28,6 +31,23 @@ const useStyles = makeStyles(theme => ({
     fullList: {
         width: 'auto',
     },
+    title: {
+      marginTop: 0
+    },
+    subtitle: {
+      color: 'rgba(0, 0, 0, 0.54)'
+    },
+    image: {
+        margin: 20,
+        width: 100,
+        height: 100,
+        objectFit: 'cover',
+        borderRadius: '50%'
+    },
+    button: {
+        margin: '24px 0px',
+        width: 300
+    }
 }));
 
 const ProfilePage = ({logout, history}) => {
@@ -35,6 +55,7 @@ const ProfilePage = ({logout, history}) => {
     const [state, setState] = React.useState({
         right: false,
     });
+    const [avatarImg, setAvatarImg] = React.useState(null);
 
     // TODO: Change Query to get relevant events for given user
     useFirestoreConnect(() => [{
@@ -44,17 +65,41 @@ const ProfilePage = ({logout, history}) => {
     }]);
 
     const profile = useSelector(state => state.firebase.profile);
+    const auth = useSelector(state => state.firebase.auth);
     const events = useSelector(({ firestore: { ordered } }) => ordered.events);
 
-    console.log(profile);
-
-    if(!isLoaded(profile)){
+    if(!isLoaded(profile) || !isLoaded(auth)){
         return null
     }
 
     if(isEmpty(profile)){
         return <h1>Not logged in</h1>
     }
+
+    let img = storage().ref(`userAvatarImages/${auth.uid}`);
+
+    img.getDownloadURL()
+        .then(url => {
+            setAvatarImg(url);
+        })
+        .catch(function(error) {
+            switch (error.code) {
+                case 'storage/object-not-found':
+                    // File doesn't exist
+                    break;
+                case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+                case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+                case 'storage/unknown':
+                    // Unknown error occurred, inspect the server response
+                    break;
+                default:
+                    break;
+            }
+        });
 
     if (!isLoaded(events)) {
         return null
@@ -125,8 +170,14 @@ const ProfilePage = ({logout, history}) => {
               {list('right')}
           </SwipeableDrawer>
 
-          <UserDetails user={profile}/>
-          <EventsList events={events}/>
+          <img className={classes.image} src={avatarImg ? avatarImg : defaultImg} alt=""/>
+          <h2 className={classes.title}>{profile.displayName}</h2>
+          <Typography variant="subtitle1" className={classes.subtitle}>{profile.email}</Typography>
+
+          <Button className={classes.button} variant="contained" disableElevation onClick={() => history.push('/profile/edit')}>Edit Profile</Button>
+
+          {/*<UserDetails user={profile}/>*/}
+          {/*<EventsList events={events}/>*/}
       </div>
     );
 };

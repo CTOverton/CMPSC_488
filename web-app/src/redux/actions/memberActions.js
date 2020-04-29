@@ -24,15 +24,34 @@ export const addMembers = (eventID, listID, members) => {
         const promises = [];
 
         members.map(member => {
-            return promises.push(
+            promises.push(
                 firestore
-                    .collection('events')
-                    .doc(eventID)
-                    .collection('lists')
-                    .doc(listID)
-                    .collection('members')
-                    .add({...signature, ...member})
-            )
+                    .collection("users")
+                    .where("email", "==", member.email)
+                    .get()
+                    .then(snapShot => {
+                        snapShot.forEach(doc => {
+                            const user = doc.data();
+
+                            member = {
+                                ...member,
+                                uid: doc.id,
+                                displayName: user.displayName,
+                                username: user.username,
+                            };
+                        });
+
+                        return promises.push(
+                            firestore
+                                .collection('events')
+                                .doc(eventID)
+                                .collection('lists')
+                                .doc(listID)
+                                .collection('members')
+                                .add({...signature, ...member})
+                        )
+                    })
+            );
         });
 
         Promise.all(promises)

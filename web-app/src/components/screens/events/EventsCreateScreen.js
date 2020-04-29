@@ -39,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     image: {
         margin: 20,
         width: 200,
-        height: 200
+        height: 200,
+        objectFit: 'cover'
     },
 }));
 
@@ -53,7 +54,7 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
     const [eventImg, setEventImg] = React.useState(null);
     const [uploadOpen, setUploadOpen] = React.useState(false);
 
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(false);
 
     const [lists, setList] = React.useState([
         // Defaults
@@ -125,8 +126,7 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
                             history.goBack()
                         }}
                         color="inherit"
-                        aria-label="add"
-                        className={classes.menuButton}
+                        aria-label="back"
                     >
                         <ArrowBackIosIcon />
                     </IconButton>

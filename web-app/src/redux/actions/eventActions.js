@@ -35,7 +35,6 @@ export const createEvent = (event, lists, tags, img) => {
                         .add({name: list.label})
                 });
 
-                console.log(img)
                 firebase.uploadFile('eventImages', img, undefined, {name: docRef.id})
                     .then(snapshot => {
                         dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
