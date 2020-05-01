@@ -128,7 +128,7 @@ function isApprovedAttendee(attendee) {
 }
 
 //assumption: Header Row
-export const createAttendees = (attendees, eventID) => {
+export const createAttendees = (attendees, eventID, listID) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         // creates an array of JSON objects with field names from the header row
         //TODO: Validate Header Row Options

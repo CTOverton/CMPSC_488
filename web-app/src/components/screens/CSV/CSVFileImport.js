@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
 import Button from "@material-ui/core/Button";
-import {createAttendees} from "../../../redux/actions/eventActions";
+//import {createAttendees} from "../../../redux/actions/eventActions";
 import {connect} from "react-redux";
 
 const buttonRef = React.createRef()
@@ -13,8 +13,9 @@ class CSV extends Component {
     }*/
 
     handleOnFileLoad = (data) => {
-        console.log(this.props);
-        this.props.dispatch(createAttendees(data, this.props.eventID));
+        console.log(data);
+        this.props.changeAttendees(data);
+        //this.props.dispatch(createAttendees(data, this.props.eventID, this.props.listID));
     }
 
     handleOnError = (err, file, inputElem, reason) => {
@@ -30,14 +31,15 @@ class CSV extends Component {
 
     render() {
         return (
-            <CSVReader
-                ref={buttonRef}
-                onFileLoad={this.handleOnFileLoad}
-                onError={this.handleOnError}
-                noClick
-                noDrag
-            >
-                {({file}) => (
+            <>
+                <CSVReader
+                    ref={buttonRef}
+                    onFileLoad={this.handleOnFileLoad}
+                    onError={this.handleOnError}
+                    noClick
+                    noDrag
+                >
+                    {({file}) => (
                         <Button
                             type="button"
                             variant="contained"
@@ -46,8 +48,9 @@ class CSV extends Component {
                         >
                             Import
                         </Button>
-                )}
-            </CSVReader>
+                    )}
+                </CSVReader>
+            </>
         )
     }
 }

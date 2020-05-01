@@ -262,7 +262,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                         handleClickOpen();
                         AddMenu_handleClose();
                     }}>Add Member</MenuItem>
-                    <MenuItem onClick={AddMenu_handleClose}>Import List</MenuItem>
+                    <MenuItem onClick={() => {history.push(`/events/${eventID}/list/${lists[tab].id}/import`)}}>Import List</MenuItem>
                 </Menu>
 
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

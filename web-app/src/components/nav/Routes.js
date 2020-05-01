@@ -18,6 +18,7 @@ import EventsSettingsPage from "../screens/events/EventsSettingsPage";
 import EventsSignupPage from "../screens/events/EventsSignupPage";
 import EventsSignupThanks from "../screens/events/EventsSignupThanks";
 import EventManageScreen from "../screens/events/EventManageScreen";
+import CSV_Import from "../screens/CSV/CSV_Import";
 import ProfileEdit from "../screens/profile/ProfileEdit";
 
 function PrivateRoute({ children, ...rest }) {
@@ -54,6 +55,7 @@ function Routes() {
             <Route exact path='/events/create' component={EventsCreateScreen} />
             <Route exact path='/events/:eventID' component={EventsDetailPage} />
             <Route exact path='/events/:eventID/manage' component={EventManageScreen} />
+            <Route exact path='/events/:eventID/list/:listID/import' component={CSV_Import} />
 
             <Route exact path='/events/:eventID/settings' component={EventsSettingsPage} />
             <Route exact path='/events/:eventID/signup' component={EventsSignupPage} />
