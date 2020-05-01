@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <title>Team CSS</title>
 </head>
 <body>
@@ -23,28 +22,82 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="embed-responsive embed-responsive-16by9 mt-5">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ran_Ylug7AE" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-        </iframe>
+<!--Section: Contact v.2-->
+<section class="mb-4">
+
+    <!--Section heading-->
+    <h2 class="h1-responsive font-weight-bold text-center my-4">Contact us</h2>
+    <!--Section description-->
+    <div class="container">
+
+        <!--Grid column-->
+        <div class="mb-md-0 mb-5">
+            <form id="contact-form" name="contact-form" action="mail.php" method="POST">
+
+                <!--Grid row-->
+                <div class="row">
+
+                    <!--Grid column-->
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <input type="text" id="name" name="name" class="form-control">
+                            <label for="name" class="">Your name</label>
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <input type="text" id="email" name="email" class="form-control">
+                            <label for="email" class="">Your email</label>
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!--Grid row-->
+
+                <!--Grid row-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form mb-0">
+                            <input type="text" id="subject" name="subject" class="form-control">
+                            <label for="subject" class="">Subject</label>
+                        </div>
+                    </div>
+                </div>
+                <!--Grid row-->
+
+                <!--Grid row-->
+                <div class="row">
+
+                    <!--Grid column-->
+                    <div class="col-md-12">
+
+                        <div class="md-form">
+                            <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
+                            <label for="message">Your message</label>
+                        </div>
+
+                    </div>
+                </div>
+                <!--Grid row-->
+
+            </form>
+
+            <div class="text-center text-md-left">
+                <a class="btn btn-primary" onclick="validateForm();">Send</a>
+            </div>
+            <div class="status"></div>
+        </div>
+        <!--Grid column-->
+
     </div>
-</div>
 
-
-<section class="jumbotron container-fluid mb-0 mt-5">
-    <h1 class="text-center">Questions?</h1>
-    <hr class="my-4">
-    <p class="text-center">Please contact us if you have any other questions.</p>
-    <span>
-        <center>
-        <p><b>Christian:</b>christianOverton@CTOverton.com</p>
-        <p><b>Sean:</b> seanmcnally@outlook.com</p>
-        <p><b>Samuel:</b> samuel.qtown@gmail.com</p>
-        </center>
-    </span>
 </section>
+<!--Section: Contact v.2-->
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -56,9 +109,9 @@
     $(document).ready(function () {
         let date = new Date();
         console.log(date);
-        if (date < new Date("5/9/2020")) { //Before Date
+        if (date < new Date("5/21/2020")) { //Before Date
             $("#css_navbar").append("            <li class=\"nav-item\">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
@@ -74,7 +127,7 @@
                 "            </li>\n");
         } else {
             $("#css_navbar").append("            <li class=\"nav-item \">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
@@ -85,6 +138,35 @@
                 "            <li class=\"nav-item active\">\n" +
                 "                <a class=\"nav-link\" href=\"support.html\">Support</a>\n" +
                 "            </li>\n"); //After and During Date
+        }
+        function validateForm() {
+            var name =  document.getElementById('name').value;
+            if (name == "") {
+                document.querySelector('.status').innerHTML = "Name cannot be empty";
+                return false;
+            }
+            var email =  document.getElementById('email').value;
+            if (email == "") {
+                document.querySelector('.status').innerHTML = "Email cannot be empty";
+                return false;
+            } else {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if(!re.test(email)){
+                    document.querySelector('.status').innerHTML = "Email format invalid";
+                    return false;
+                }
+            }
+            var subject =  document.getElementById('subject').value;
+            if (subject == "") {
+                document.querySelector('.status').innerHTML = "Subject cannot be empty";
+                return false;
+            }
+            var message =  document.getElementById('message').value;
+            if (message == "") {
+                document.querySelector('.status').innerHTML = "Message cannot be empty";
+                return false;
+            }
+            document.querySelector('.status').innerHTML = "Sending...";
         }
     });
 </script>
