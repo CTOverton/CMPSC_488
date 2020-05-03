@@ -12,16 +12,21 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         marginLeft: theme.spacing(2),
     },
+    systembar: {
+        height: 24,
+        width: '100%'
+    }
 }));
 
 const AppBarHeader = ({start, title, end}) => {
     const classes = useStyles();
-
     const centeredValue = false;
+    const screenShot = false;
 
     return(
         <div className={classes.root}>
             <AppBar position="fixed">
+                {screenShot && <div className={classes.systembar}/>}
                 <Toolbar>
                     {start}
                     {centeredValue === true ?
@@ -30,6 +35,7 @@ const AppBarHeader = ({start, title, end}) => {
                     {end}
                 </Toolbar>
             </AppBar>
+            {screenShot && <div className={classes.systembar}/>}
             <Toolbar />
         </div>
     )
