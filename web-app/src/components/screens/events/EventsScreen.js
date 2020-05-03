@@ -27,7 +27,7 @@ const EventsScreen = ({history}) => {
                     <IconButton
                         edge="end"
                         onClick={() => {
-                            history.push("/events/create")
+                            history.push("/event/create")
                         }}
                         color="inherit"
                         aria-label="add"

@@ -108,6 +108,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
         email: '',
         displayName: ''
     });
+    const [selectAll, setSelectAll] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -168,6 +169,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
 
     return (
         <div>
+            {/* region Header*/}
             <AppBarHeader
                 start={
                     <IconButton
@@ -186,7 +188,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                     <IconButton
                         edge="end"
                         onClick={() => {
-                            history.push(`/events/${eventID}/settings`);
+                            history.push(`/event/${eventID}/settings`);
                         }}
                         color="inherit"
                         aria-label="settings"
@@ -195,6 +197,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
                     </IconButton>
                 }
             />
+            {/* endregion */}
 
             {/* Search */}
             <div className={classes.search}>
@@ -238,7 +241,12 @@ const EventManageScreen = ({history, match, addMembers}) => {
 
             {/* Toolbar */}
             <Grid container alignItems="center" className={classes.root}>
-                <ToolTip title={"Select All"}><Checkbox/></ToolTip>
+                <ToolTip title={"Select All"}>
+                    <Checkbox
+                        checked={selectAll}
+                        onChange={() => setSelectAll(!selectAll)}
+                    />
+                </ToolTip>
                 <ToolTip title="Fix Me">
                     <IconButton className={classes.arrowDropDown}>
                         <ArrowDropDownIcon/>
@@ -358,7 +366,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
             </Paper>
 
             {/* List of members */}
-            <MembersList eventID={eventID} listID={lists[tab].id} filter={search} tagFilter={tagFilter}/>
+            <MembersList eventID={eventID} listID={lists[tab].id} filter={search} tagFilter={tagFilter} toggleSelectAll={selectAll}/>
         </div>
     );
 };

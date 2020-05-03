@@ -98,7 +98,7 @@ const EventsDetailPage = ({history, match}) => {
                     <IconButton
                         edge="end"
                         onClick={() => {
-                            history.push('/events/'+ eventID +'/manage')
+                            history.push('/event/'+ eventID +'/manage')
                         }}
                         color="inherit"
                         aria-label="manage"

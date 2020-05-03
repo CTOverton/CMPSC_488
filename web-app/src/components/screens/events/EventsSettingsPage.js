@@ -5,6 +5,10 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {deleteEvent, updateEvent} from "../../../redux/actions/eventActions";
+import AppBarHeader from "../../nav/AppBarHeader";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -12,13 +16,31 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const EventsSettingsPage = ({eventID, updateEvent, deleteEvent, history}) => {
+const EventsSettingsPage = ({updateEvent, deleteEvent, history, match}) => {
     const classes = useStyles();
+    const eventID = match.params.eventID;
 
     return (
-        <Container maxWidth="md">
-            <h1>Event Settings</h1>
-{/*            <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <div>
+            {/* region Header*/}
+            <AppBarHeader
+                start={
+                    <IconButton
+                        edge="end"
+                        onClick={() => {
+                            history.goBack()
+                        }}
+                        color="inherit"
+                        aria-label="back"
+                    >
+                        <ArrowBackIosIcon/>
+                    </IconButton>
+                }
+                title="Event Settings"
+            />
+            {/* endregion */}
+            <Container maxWidth="md">
+                {/*            <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <div>
                     <TextField
                         id="title-input"
@@ -36,22 +58,17 @@ const EventsSettingsPage = ({eventID, updateEvent, deleteEvent, history}) => {
 
                 <Button className={classes.margin} variant="contained" disableElevation color="primary" type="submit">Create Event</Button>
             </form>*/}
-            <Link to={"/events/" + eventID + "/signup"} style={{textDecoration: "none"}}><Button className={classes.margin} variant="contained" color="primary" disableElevation>View Signup Page</Button></Link>
-            <Button onClick={() => {
-                deleteEvent(eventID)
-                history.push("/events")
-            }} className={classes.margin} variant="contained" color="secondary" disableElevation>Delete Event</Button>
-        </Container>
-    )
-}
+                <Link to={"/event/" + eventID + "/signup"} style={{textDecoration: "none"}}><Button className={classes.margin} variant="contained" color="primary" disableElevation>View Signup Page</Button></Link>
+                <Button onClick={() => {
+                    deleteEvent(eventID)
+                    history.push("/events")
+                }} className={classes.margin} variant="contained" color="secondary" disableElevation>Delete Event</Button>
+            </Container>
+        </div>
 
-const mapState = (state, ownProps) => {
-    const id = ownProps.match.params.id;
-    return {
-        eventID: id
-    }
+    )
 }
 
 const mapDispatch = {updateEvent: updateEvent, deleteEvent: deleteEvent}
 
-export default connect(mapState, mapDispatch)(withRouter(EventsSettingsPage))
+export default connect(undefined, mapDispatch)(withRouter(EventsSettingsPage))

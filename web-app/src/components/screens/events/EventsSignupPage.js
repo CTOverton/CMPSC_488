@@ -54,7 +54,7 @@ const EventsSignupPage = ({eventID, signup, history}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         signup(eventID, inputs, signedupCount >= event.attendeeLimit ? 'waitlist':'signups')
-        history.push("/events/" + eventID + "/signup/thanks")
+        history.push("/event/" + eventID + "/signup/thanks")
     }
 
     return (

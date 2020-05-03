@@ -45,37 +45,21 @@ function Routes() {
     return(
         <Switch>
             {/* TODO: Fix private routes messing up history push*/}
-            <PrivateRoute exact path='/'><EventsScreen /></PrivateRoute>
+            {/*<PrivateRoute exact path='/'><EventsScreen /></PrivateRoute>*/}
+            <Route exact path='/' component={EventsScreen} />
 
             <Route path='/signup' component={SignUp} />
             <Route path='/login' component={Login} />
 
             <Route exact path='/events' component={EventsScreen} />
-            <Route exact path='/events/create' component={EventsCreateScreen} />
-            <Route exact path='/events/:eventID' component={EventsDetailPage} />
-            <Route exact path='/events/:eventID/manage' component={EventManageScreen} />
+            <Route exact path='/event/create' component={EventsCreateScreen} />
+            <Route exact path='/event/:eventID' component={EventsDetailPage} />
+            <Route exact path='/event/:eventID/manage' component={EventManageScreen} />
+            <Route exact path='/event/:eventID/settings' component={EventsSettingsPage} />
 
-            <Route exact path='/events/:eventID/settings' component={EventsSettingsPage} />
-            <Route exact path='/events/:eventID/signup' component={EventsSignupPage} />
-            <Route exact path='/events/:eventID/signup/thanks' component={EventsSignupThanks} />
-
-            <Route exact path='/events/:eventID/attendee/add' component={AttendeesAdd} />
-            <Route exact path='/events/:eventID/attendee/:attendeeID' component={AttendeesDetails} />
-            <Route exact path='/events/:eventID/attendee/:attendeeID/update' component={AttendeeStatusPage} />
-
-            {/*<PrivateRoute exact path='/profile'><ProfilePage /></PrivateRoute>*/}
             <Route exact path='/profile' component={ProfilePage} />
             <Route exact path='/profile/edit' component={ProfileEdit} />
             <Route exact path='/profile/settings' component={ProfileSettings} />
-
-            <Route path='/playground/sam' component={SamPlayground} />
-            <Route path='/playground/sean' component={SeanTemplateComponent} />
-            {/*<Route path='/project/:id' component={ProjectDetails} />
-                <Route exact path='/program/:id' component={ProgramDetails} />
-                <Route exact path='/program/:id/apply' component={Apply} />*/}
-
-            {/*<Route path='/signin' component={SignIn} />
-                <Route path='/signup' component={SignUp} />*/}
         </Switch>
     )
 }

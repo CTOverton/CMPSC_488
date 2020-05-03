@@ -54,7 +54,7 @@ const EventsListItem = ({event, history}) => {
     });
 
     return(
-        <ListItem button onClick={() => {return history.push('/events/' + event.id)}}>
+        <ListItem button onClick={() => {return history.push('/event/' + event.id)}}>
             <img className={classes.image} src={eventImg ? eventImg : defaultImg} alt=""/>
             <ListItemText primary={event.title} secondary={moment(event.createdAt.toDate()).calendar()} />
         </ListItem>
