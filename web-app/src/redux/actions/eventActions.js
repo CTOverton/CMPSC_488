@@ -68,14 +68,18 @@ export const updateEvent = (eventID, event) => {
 };
 
 export const deleteEvent = (eventID) => {
-    return (dispatch, getState, {getFirestore}) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
         const firestore = getFirestore();
 
-        firestore.collection('events')
+        firestore
+            .collection('events')
             .doc(eventID)
             .delete()
             .then(() => {
-                dispatch({type: 'DELETE_EVENT_SUCCESS'})
+                firebase.deleteFile(`eventImages/${eventID}`)
+                    .then(r => dispatch({type: 'DELETE_EVENT_SUCCESS'}))
+                    .catch(err => dispatch({type: 'DELETE_EVENT_ERROR', err}))
             })
             .catch((err) => {
                 dispatch({type: 'DELETE_EVENT_ERROR', err})
