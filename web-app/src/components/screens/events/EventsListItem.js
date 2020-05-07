@@ -64,7 +64,7 @@ const EventsListItem = ({event, history}) => {
         }
     });
 
-    if (!eventImg) {
+    if (!eventImg && hasFetched === false) {
         return (
             <ListItem>
                 <div className={classes.container}>

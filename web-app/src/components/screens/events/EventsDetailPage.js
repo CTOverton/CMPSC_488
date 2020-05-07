@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     image: {
         margin: 20,
         width: 200,
-        height: 200
+        height: 200,
+        objectFit: 'cover',
     },
     button: {
         margin: '24px 0px',

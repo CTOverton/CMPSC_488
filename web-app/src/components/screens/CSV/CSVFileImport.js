@@ -1,21 +1,16 @@
 import React, { Component } from 'react'
 import { CSVReader } from 'react-papaparse'
 import Button from "@material-ui/core/Button";
-//import {createAttendees} from "../../../redux/actions/eventActions";
-import {connect} from "react-redux";
 
-const buttonRef = React.createRef()
+class CSVFileImport extends Component {
 
-class CSV extends Component {
-    //EVENTID
-/*    constructor(props) {
+    constructor(props) {
         super(props);
-    }*/
+        this.buttonRef = React.createRef();
+    }
 
     handleOnFileLoad = (data) => {
-        console.log(data);
-        this.props.changeAttendees(data);
-        //this.props.dispatch(createAttendees(data, this.props.eventID, this.props.listID));
+        this.props.onFileLoad(data);
     }
 
     handleOnError = (err, file, inputElem, reason) => {
@@ -23,36 +18,35 @@ class CSV extends Component {
     }
 
     handleOpenDialog = (e) => {
-        // Note that the ref is set async, so it might be null at some point
-        if (buttonRef.current) {
-            buttonRef.current.open(e)
-        }
+        this.buttonRef.current.open(e)
     }
 
     render() {
         return (
-            <>
+            <div>
                 <CSVReader
-                    ref={buttonRef}
+                    ref={this.buttonRef}
                     onFileLoad={this.handleOnFileLoad}
                     onError={this.handleOnError}
+                    config={this.props.parseOptions}
                     noClick
                     noDrag
                 >
-                    {({file}) => (
+                    {() => (
                         <Button
                             type="button"
                             variant="contained"
-                            disableElevation={true}
+                            disableElevation
                             onClick={this.handleOpenDialog}
+                            color="primary"
                         >
-                            Import
+                            Upload CSV
                         </Button>
                     )}
                 </CSVReader>
-            </>
+            </div>
         )
     }
 }
 
-export default connect()(CSV)
+export default CSVFileImport

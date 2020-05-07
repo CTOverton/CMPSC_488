@@ -72,7 +72,7 @@ const EventsCreateScreen = ({eventState, createEvent, clearDocRef, history}) => 
 
     useEffect(() => {
         if (docRef !== null) {
-            history.push(`/events/${docRef.id}`);
+            history.push(`/event/${docRef.id}`);
             clearDocRef()
         }
     });
