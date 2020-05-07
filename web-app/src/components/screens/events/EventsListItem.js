@@ -6,6 +6,7 @@ import moment from "moment";
 import defaultImg from "../../../assets/Default Image.png";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {storage} from "firebase";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles(theme => ({
     image: {
@@ -13,6 +14,16 @@ const useStyles = makeStyles(theme => ({
         width: 200,
         height: 200,
         objectFit: 'cover'
+    },
+    container: {
+        width: "100%",
+    },
+    box1: {
+        float: 'left',
+    },
+    box2: {
+        paddingLeft: 16,
+        overflow: 'auto',
     },
 }));
 
@@ -52,6 +63,20 @@ const EventsListItem = ({event, history}) => {
                 });
         }
     });
+
+    if (!eventImg) {
+        return (
+            <ListItem>
+                <div className={classes.container}>
+                    <Skeleton className={classes.box1} variant="rect" animation="wave" width={200} height={200} />
+                    <div className={classes.box2}>
+                        <Skeleton animation="wave" width="100%" style={{ marginBottom: 6 }}/>
+                        <Skeleton animation="wave" width="100%"/>
+                    </div>
+                </div>
+            </ListItem>
+        )
+    }
 
     return(
         <ListItem button onClick={() => {return history.push('/event/' + event.id)}}>

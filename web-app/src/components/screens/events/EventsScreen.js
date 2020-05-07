@@ -16,9 +16,6 @@ const EventsScreen = ({history}) => {
 
     const events = useSelector(({ firestore: { ordered } }) => ordered.events);
 
-    if (!isLoaded(events)) {return null}
-    if (isEmpty(events)) {return 'Events list is empty'}
-
     return (
         <div>
             <AppBarHeader

@@ -19,6 +19,7 @@ import defaultImg from "../../../assets/Default Image.png";
 import {storage} from "firebase";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -46,6 +47,9 @@ const useStyles = makeStyles(theme => ({
     button: {
         margin: '24px 0px',
         width: 300
+    },
+    skeleton: {
+        margin: "20px auto",
     }
 }));
 
@@ -177,7 +181,12 @@ const ProfilePage = ({logout, history}) => {
               {list('right')}
           </SwipeableDrawer>
 
-          <img className={classes.image} src={avatarImg ? avatarImg : defaultImg} alt=""/>
+          {!avatarImg ?
+              <Skeleton className={classes.skeleton} animation="wave" variant="circle" width={100} height={100} />
+              :
+              <img className={classes.image} src={avatarImg ? avatarImg : defaultImg} alt=""/>
+          }
+
           <h2 className={classes.title}>{profile.displayName}</h2>
           <Typography variant="subtitle1" className={classes.subtitle}>{profile.email}</Typography>
 
