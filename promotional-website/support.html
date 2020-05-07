@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <title>Team CSS</title>
 </head>
 <body>
@@ -23,28 +22,14 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="embed-responsive embed-responsive-16by9 mt-5">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ran_Ylug7AE" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-        </iframe>
-    </div>
+<div class="jumbotron mt-5" style="background-color: lightgrey">
+    <h1>Questions?</h1>
+    <hr class="my-4">
+    <p><b>Christian:</b> christianoverton@ctoverton.com</p>
+    <p><b>Sean:</b> Seanmediamac@gmail.com</p>
+    <p><b>Samuel:</b> samuel.qtown@gmail.com</p>
 </div>
 
-
-<section class="jumbotron container-fluid mb-0 mt-5">
-    <h1 class="text-center">Questions?</h1>
-    <hr class="my-4">
-    <p class="text-center">Please contact us if you have any other questions.</p>
-    <span>
-        <center>
-        <p><b>Christian:</b>christianOverton@CTOverton.com</p>
-        <p><b>Sean:</b> seanmcnally@outlook.com</p>
-        <p><b>Samuel:</b> samuel.qtown@gmail.com</p>
-        </center>
-    </span>
-</section>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -56,9 +41,9 @@
     $(document).ready(function () {
         let date = new Date();
         console.log(date);
-        if (date < new Date("5/9/2020")) { //Before Date
+        if (date < new Date("5/21/2020")) { //Before Date
             $("#css_navbar").append("            <li class=\"nav-item\">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
@@ -74,7 +59,7 @@
                 "            </li>\n");
         } else {
             $("#css_navbar").append("            <li class=\"nav-item \">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +

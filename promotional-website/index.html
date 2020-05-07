@@ -11,7 +11,7 @@
 
     <title>Team CSS!</title>
 </head>
-<body>
+<body style="background-color: floralwhite">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand">Team CSS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -23,24 +23,35 @@
         </ul>
     </div>
 </nav>
-<section class="jumbotron container-fluid">
+<section class="jumbotron container-fluid" style="background-color: lightgrey">
     <h1 class="text-center">Attendance Tracker</h1>
     <hr class="my-4">
     <p class="container"><b>Attendance Tracker</b> is an all-encompassing attendee tracking and event management system geared towards community organized events.</p>
 </section>
-<!--There are plenty of applications for managing tickets for concerts, sporting events,
-        and the like. However, club events, school field trips, and locally hosted small events are still using
-        spreadsheets with manual check in's on clipboards and paper. Our solution to this problem is a web app where
-        anyone can create an account, organize events, and keep track of attendants. This empowers higher attendance
-        rates, less management for waitlists, and more active attendants.-->
-<div class="container">
+<section class="jumbotron container-fluid mt-5" style="background-color: lightgrey">
+    <h3 class="text-center">About our Project</h3>
+    <hr class="my-4">
+    <p class="container">
+        The goal of our project is to create a simple way for smaller clubs and organizations to manage attendance at events. We give users two tools to help accomplish this,
+        by giving lists to put attendees into, and the ability to tag those attendees to keep track.
+    </p>
+    <p class="container">
+        We also allow attendees to interact with this management tool without needing an account, by using email to send messages and confirmation notices.
+    </p>
+</section>
+<section class="jumbotron container-fluid mt-5" style="background-color: lightgrey">
+    <h3 class="text-center">Getting Started</h3>
+    <hr class="my-4">
+    <button class="btn btn-primary" onclick="window.location.href = 'https://cmpsc-488.web.app/';">To Application</button>
+</section>
+<!--<div class="container">
     <div class="embed-responsive embed-responsive-16by9 mt-5">
         <iframe width="560" height="315" src="https://www.youtube.com/embed/ran_Ylug7AE" frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
         </iframe>
     </div>
-</div>
+</div>-->
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -57,9 +68,9 @@
     $(document).ready(function () {
         let date = new Date();
         console.log(date);
-        if (date < new Date("5/9/2020")) { //Before Date
+        if (date < new Date("5/21/2020")) { //Before Date
             $("#css_navbar").append("            <li class=\"nav-item active\">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
@@ -75,7 +86,7 @@
                 "            </li>\n");
         } else {
             $("#css_navbar").append("            <li class=\"nav-item active\">\n" +
-                "                <a class=\"nav-link\" href=\"default.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
+                "                <a class=\"nav-link\" href=\"index.html\">Home<span class=\"sr-only\">(current)</span></a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item\">\n" +
                 "                <a class=\"nav-link\" href=\"about.html\">About</a>\n" +
