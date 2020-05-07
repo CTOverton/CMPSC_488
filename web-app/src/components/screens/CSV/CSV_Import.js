@@ -5,12 +5,13 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import Select from "@material-ui/core/Select";
 import CSVFileImport from "./CSVFileImport";
 import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import MenuItem from "@material-ui/core/MenuItem";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FormControl from "@material-ui/core/FormControl";
+import {addMembers} from "../../../redux/actions/memberActions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CSV_Import = ({match, history}) => {
+const CSV_Import = ({match, history, addMembers}) => {
     const classes = useStyles();
     const {eventID, listID} = match.params;
     const [list, setList] = React.useState(listID);
-    const [header, setHeader] = React.useState(false);
+    const [header, setHeader] = React.useState(true);
     const [attendees, changeAttendees] = React.useState(null);
 
     useFirestoreConnect(() => [
@@ -66,15 +67,25 @@ const CSV_Import = ({match, history}) => {
     }
 
     const handleCSVLoad = (data) => {
-        console.log(header)
-        console.log(data)
-        data.map(row => {
-
-        })
+        addMembers(
+            eventID,
+            listID,
+            data.map(row => {
+                if (row.meta.fields) {
+                    const {email, displayname, phone, tags} = row.data;
+                    return {
+                        email: email,
+                        displayName: displayname,
+                        phone: phone,
+                        tags: tags.split(",")
+                    }
+                }
+            })
+        )
     }
 
     const parseOptions = {
-        header: !header,
+        header: header,
         dynamicTyping: true,
         skipEmptyLines: true,
         transformHeader: header =>
@@ -119,12 +130,13 @@ const CSV_Import = ({match, history}) => {
             <FormControlLabel
                 control={
                     <Checkbox
+                        defaultChecked
                         color="primary"
                         value={header}
                         onChange={handleClick}
                         inputProps={{'aria-label': 'secondary checkbox'}}/>
                 }
-                label={"No Header Row"}
+                label={"Header Row"}
             />
 
             <CSVFileImport onFileLoad={handleCSVLoad} parseOptions={parseOptions}/>
@@ -139,4 +151,6 @@ const CSV_Import = ({match, history}) => {
     );
 };
 
-export default CSV_Import
+const mapDispatch = {addMembers: addMembers}
+
+export default connect(undefined, mapDispatch)(CSV_Import)
