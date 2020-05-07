@@ -134,3 +134,81 @@ export const deleteMembers = (eventID, listID, memberIDs) => {
             });
     }
 };
+
+export const tagMembers = (eventID, listID, memberIDs, tags) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const state = getState();
+        const {auth} = state.firebase;
+
+        if (isLoaded(auth) && isEmpty(auth)) {
+            return dispatch({type: 'TAG_MEMBER_ERROR', err: {message: 'User Not Logged In'}})
+        }
+
+        const promises = [];
+
+        memberIDs.map(id => {
+            return promises.push(
+                firestore
+                    .collection('events')
+                    .doc(eventID)
+                    .collection('lists')
+                    .doc(listID)
+                    .collection('members')
+                    .doc(id)
+                    .update({
+                        tags: firebase.firestore.FieldValue.arrayUnion(tags),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+            )
+        });
+
+        Promise.all(promises)
+            .then(values => {
+                dispatch({type: 'TAG_MEMBERS_SUCCESS', values})
+            })
+            .catch(err => {
+                dispatch({type: 'TAG_MEMBERS_ERROR', err})
+            });
+    }
+};
+
+export const unTagMembers = (eventID, listID, memberIDs, tags) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const state = getState();
+        const {auth} = state.firebase;
+
+        if (isLoaded(auth) && isEmpty(auth)) {
+            return dispatch({type: 'UNTAG_MEMBER_ERROR', err: {message: 'User Not Logged In'}})
+        }
+
+        const promises = [];
+
+        memberIDs.map(id => {
+            return promises.push(
+                firestore
+                    .collection('events')
+                    .doc(eventID)
+                    .collection('lists')
+                    .doc(listID)
+                    .collection('members')
+                    .doc(id)
+                    .update({
+                        tags: firebase.firestore.FieldValue.arrayRemove(tags),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+            )
+        });
+
+        Promise.all(promises)
+            .then(values => {
+                dispatch({type: 'UNTAG_MEMBERS_SUCCESS', values})
+            })
+            .catch(err => {
+                dispatch({type: 'UNTAG_MEMBER_ERROR', err})
+            });
+    }
+};

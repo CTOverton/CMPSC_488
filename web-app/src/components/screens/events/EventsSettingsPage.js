@@ -11,9 +11,14 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles(theme => ({
-    margin: {
-        margin: theme.spacing(1),
+    root: {
+        marginTop: theme.spacing(2),
     },
+    button: {
+        margin: theme.spacing(1),
+        width: '100%',
+        maxWidth: 300
+    }
 }))
 
 const EventsSettingsPage = ({updateEvent, deleteEvent, history, match}) => {
@@ -39,30 +44,11 @@ const EventsSettingsPage = ({updateEvent, deleteEvent, history, match}) => {
                 title="Event Settings"
             />
             {/* endregion */}
-            <Container maxWidth="md">
-                {/*            <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-                <div>
-                    <TextField
-                        id="title-input"
-                        label="Title"
-                        variant="filled"
-                        onChange={handleChange('title')}
-                    />
-                    <TextField
-                        id="description-input"
-                        label="Description"
-                        variant="filled"
-                        onChange={handleChange('description')}
-                    />
-                </div>
-
-                <Button className={classes.margin} variant="contained" disableElevation color="primary" type="submit">Create Event</Button>
-            </form>*/}
-                <Link to={"/event/" + eventID + "/signup"} style={{textDecoration: "none"}}><Button className={classes.margin} variant="contained" color="primary" disableElevation>View Signup Page</Button></Link>
+            <Container maxWidth="md" className={classes.root}>
                 <Button onClick={() => {
                     deleteEvent(eventID)
                     history.push("/events")
-                }} className={classes.margin} variant="contained" color="secondary" disableElevation>Delete Event</Button>
+                }} className={classes.button} variant="contained" disableElevation>Delete Event</Button>
             </Container>
         </div>
 

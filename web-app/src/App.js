@@ -16,6 +16,9 @@ import Routes from "./components/nav/Routes";
 import BottomNav from "./components/nav/BottomNav";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
+
 firebase.initializeApp(firebaseConfig)
 firebase.firestore()
 
@@ -32,6 +35,14 @@ const store = configureStore({
 })
 */
 
+const theme = createMuiTheme({
+    palette: {
+        secondary: {
+            main: blue[500],
+        },
+    },
+});
+
 function App() {
     return (
         <Provider store={store}>
@@ -41,12 +52,14 @@ function App() {
                 dispatch={store.dispatch}
                 createFirestoreInstance={createFirestoreInstance}>
                 <BrowserRouter>
-                    <div className="App">
-                        {/*<AppBarHeader />*/}
-                        <Routes />
-                        <BottomNavigation />
-                        <BottomNav />
-                    </div>
+                    <ThemeProvider theme={theme}>
+                        <div className="App">
+                            {/*<AppBarHeader />*/}
+                            <Routes />
+                            <BottomNavigation />
+                            <BottomNav />
+                        </div>
+                    </ThemeProvider>
                 </BrowserRouter>
             </ReactReduxFirebaseProvider>
         </Provider>

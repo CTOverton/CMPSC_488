@@ -9,31 +9,14 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
 import MembersList from "./members/MembersList";
-import Checkbox from "@material-ui/core/Checkbox";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Divider from "@material-ui/core/Divider";
-import DeleteIcon from '@material-ui/icons/Delete';
-import Grid from "@material-ui/core/Grid";
-import LabelIcon from '@material-ui/icons/Label';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from "@material-ui/core/InputBase";
 import {fade} from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import Chip from "@material-ui/core/Chip";
-import CropFreeIcon from '@material-ui/icons/CropFree';
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
 import {addMembers} from "../../../redux/actions/memberActions";
-import ToolTip from "@material-ui/core/ToolTip";
+import Toolbar from "./Toolbar";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -99,73 +82,90 @@ const EventManageScreen = ({history, match, addMembers}) => {
     const classes = useStyles();
     const eventID = match.params.eventID;
     const [tab, setTab] = React.useState(0);
-    const [AddMenu_anchorEl, AddMenu_setAnchorEl] = React.useState(null);
     const [search, setSearch] = React.useState('');
     const [tagFilter, setTagFilter] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
-    const [memberTags, setMemberTags] = React.useState([]);
-    const [memberInfo, setMemberInfo] = React.useState({
-        email: '',
-        displayName: ''
-    });
-    const [selectAll, setSelectAll] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [selected, setSelected] = React.useState([]);
+    const [selectAll, setSelectAll] = React.useState(0);
 
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID},
         {collection: 'events', doc: eventID, subcollections: [{collection: 'lists'}], storeAs: "lists"},
     ]);
 
-    // console.log(useSelector(state => state))
     const event = useSelector(({firestore: {data}}) => data.events && data.events[eventID]);
     const lists = useSelector(({firestore: {ordered}}) => ordered.lists);
+    const members = useSelector(({firestore: {ordered}}) => ordered.members);
+
     if (!isLoaded(event) || !isLoaded(lists)) {
         return null
     }
 
-    console.log(event, lists);
+    const list = lists[tab];
+    const listID = list.id;
+
     const {tags} = event;
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
 
-    const AddMenu_handleClick = (event) => {
-        AddMenu_setAnchorEl(event.currentTarget);
-    };
-
-    const AddMenu_handleClose = () => {
-        AddMenu_setAnchorEl(null);
-    };
-
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const handleAddMemberChange = prop => event => {
-        const value = event.target.value;
-        if (value !== '') setMemberInfo({...memberInfo, [prop]: value})
+    const handleTagSelect = (tag) => {
+        if (tagFilter.includes(tag)) {
+            setTagFilter(tagFilter.filter(oldTag => oldTag !== tag))
+        } else {
+            setTagFilter([...tagFilter, tag])
+        }
     };
 
-    const handleAddMember = () => {
-        const member = {
-            ...memberInfo,
-            tags: memberTags
-        };
-        addMembers(eventID, lists[tab].id, [member]);
-        setMemberInfo({
-            email: '',
-            displayName: ''
-        });
-        setMemberTags([]);
-    };
+    const handleSelected = memberID => {
+        if (selected.includes(memberID)) {
+            setSelected(selected.filter(member => member !== memberID));
+        } else {
+            setSelected([...selected, memberID]);
+        }
+    }
+
+    const handleSelectAll = () => {
+        if (isLoaded(members)) {
+            switch(selectAll) {
+                case 0:
+                    setSelected(members.map(member => member.id));
+                    setSelectAll(2);
+                    break;
+                case 1:
+                    setSelected(members.map(member => member.id));
+                    setSelectAll(2);
+                    break;
+                case 2:
+                    setSelected([]);
+                    setSelectAll(0);
+                    break;
+            }
+        }
+    }
+
+    /*
+    *     useEffect(() => {
+        if (isLoaded(members)) {
+            let status = 0;
+            if (selected.length === 0) {
+                status = 0;
+            }
+            if (selected.length > 0) {
+                status = 1;
+            }
+            if (selected.length === members.length) {
+                status = 2;
+            }
+
+            if (selectAll !== status) {setSelectAll(status);}
+        }
+    })
+    * */
 
     return (
         <div>
@@ -199,7 +199,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
             />
             {/* endregion */}
 
-            {/* Search */}
+            {/* region Search */}
             <div className={classes.search}>
                 <IconButton className={classes.searchIcon}>
                     <SearchIcon/>
@@ -217,140 +217,19 @@ const EventManageScreen = ({history, match, addMembers}) => {
                     <ArrowDropDownIcon/>
                 </IconButton>
             </div>
+            {/* endregion */}
 
-            {/* Tags */}
-            <div className={classes.chips}>
-                {tags.map((tag, index) =>
-                    <Chip
-                        key={index}
-                        label={tag}
-                        index={index}
-                        // onDelete={() => handleDelete(tag.key)}
-                        className={classes.chip}
-                        color={tagFilter.includes(tag) ? "primary" : "default"}
-                        onClick={() => {
-                            if (tagFilter.includes(tag)) {
-                                setTagFilter(tagFilter.filter(oldTag => oldTag !== tag))
-                            } else {
-                                setTagFilter([...tagFilter, tag])
-                            }
-                        }}
-                    />
-                )}
-            </div>
+            {/* region Tags */}
+            <TagBoard tags={tags}
+                      tagFilter={tagFilter}
+                      onSelect={handleTagSelect} />
+            {/* endregion */}
 
-            {/* Toolbar */}
-            <Grid container alignItems="center" className={classes.root}>
-                <ToolTip title={"Select All"}>
-                    <Checkbox
-                        checked={selectAll}
-                        onChange={() => setSelectAll(!selectAll)}
-                    />
-                </ToolTip>
-                <ToolTip title="Fix Me">
-                    <IconButton className={classes.arrowDropDown}>
-                        <ArrowDropDownIcon/>
-                    </IconButton>
-                </ToolTip>
-                <Divider orientation="vertical" flexItem/>
-                <ToolTip title={"Add"}>
-                    <IconButton aria-controls="add-menu" aria-haspopup="true" aria-label="Add"
-                                onClick={AddMenu_handleClick}>
-                        <PersonAddIcon/>
-                    </IconButton>
-                </ToolTip>
-                <Menu
-                    id="add-menu"
-                    anchorEl={AddMenu_anchorEl}
-                    keepMounted
-                    open={Boolean(AddMenu_anchorEl)}
-                    onClose={AddMenu_handleClose}
-                >
-                    <MenuItem onClick={() => {
-                        handleClickOpen();
-                        AddMenu_handleClose();
-                    }}>Add Member</MenuItem>
-                    <MenuItem onClick={AddMenu_handleClose}>Import List</MenuItem>
-                </Menu>
+            {/* region Toolbar */}
+            <Toolbar eventID={eventID} list={list} tags={tags} selected={selected} setSelected={setSelected} selectAll={selectAll} onSelectAll={handleSelectAll}/>
+            {/* endregion */}
 
-                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Subscribe to {lists[tab].name}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Enter member info and select tags to subscribe them to this list.
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="email"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                            required
-                            value={memberInfo.email}
-                            onChange={handleAddMemberChange('email')}
-                        />
-                        <TextField
-                            margin="dense"
-                            id="displayName"
-                            label="Full Name"
-                            type="name"
-                            fullWidth
-                            value={memberInfo.displayName}
-                            onChange={handleAddMemberChange('displayName')}
-                        />
-                        <div className={classes.chips}>
-                            {tags.map((tag, index) =>
-                                <Chip
-                                    key={index}
-                                    label={tag}
-                                    index={index}
-                                    className={classes.chip}
-                                    color={memberTags.includes(tag) ? "primary" : "default"}
-                                    onClick={() => {
-                                        if (memberTags.includes(tag)) {
-                                            setMemberTags(memberTags.filter(oldTag => oldTag !== tag))
-                                        } else {
-                                            setMemberTags([...memberTags, tag])
-                                        }
-                                    }}
-                                />
-                            )}
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleAddMember} color="primary">
-                            Add Member
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <ToolTip title={"Scan QR"}>
-                    <IconButton aria-label="Scan QR Code">
-                        <CropFreeIcon/>
-                    </IconButton>
-                </ToolTip>
-                <ToolTip title={"Remove"}>
-                    <IconButton aria-label="Remove">
-                        <DeleteIcon/>
-                    </IconButton>
-                </ToolTip>
-                <Divider orientation="vertical" flexItem/>
-                <ToolTip title={"Tag"}>
-                    <IconButton aria-label="Tag">
-                        <LabelIcon/>
-                    </IconButton>
-                </ToolTip>
-                <ToolTip title={"List"}>
-                    <IconButton aria-label="List">
-                        <FormatListBulletedIcon/>
-                    </IconButton>
-                </ToolTip>
-            </Grid>
-
-            {/* List Tabs */}
+            {/* region List Tabs */}
             <Paper square>
                 <Tabs
                     value={tab}
@@ -364,12 +243,34 @@ const EventManageScreen = ({history, match, addMembers}) => {
                     })}
                 </Tabs>
             </Paper>
+            {/* endregion */}
 
-            {/* List of members */}
-            <MembersList eventID={eventID} listID={lists[tab].id} filter={search} tagFilter={tagFilter} toggleSelectAll={selectAll}/>
+            {/* region List of members */}
+            <MembersList eventID={eventID} listID={listID} filter={search} tagFilter={tagFilter} onSelect={handleSelected} selected={selected}/>
+            {/* endregion */}
         </div>
     );
 };
+
+const TagBoard = ({tags, tagFilter, onSelect}) => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.chips}>
+            {tags.map((tag, index) =>
+                <Chip
+                    key={index}
+                    label={tag}
+                    index={index}
+                    // onDelete={() => handleDelete(tag.key)}
+                    className={classes.chip}
+                    color={tagFilter.includes(tag) ? "primary" : "default"}
+                    onClick={() => {onSelect(tag)}}
+                />
+            )}
+        </div>
+    )
+}
 
 const mapDispatch = {addMembers: addMembers};
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {isLoaded, useFirestoreConnect} from "react-redux-firebase";
 import {useSelector} from "react-redux";
 import List from "@material-ui/core/List";
@@ -11,7 +11,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import defaultIMG from "../../../../assets/Default Image.png"
-import {scryRenderedComponentsWithType} from "react-dom/test-utils";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles(theme => ({
     item: {
@@ -33,10 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MembersList = ({eventID, listID, filter, tagFilter, toggleSelectAll}) => {
-    const [selected, setSelected] = React.useState([]);
-    const [selectAll, setSelectAll] = React.useState(0);
-
+const MembersList = ({eventID, listID, filter, tagFilter, onSelect, selected}) => {
     useFirestoreConnect(() => [
         {collection: 'events', doc: eventID, subcollections: [{collection: 'lists', doc: listID, subcollections: [{collection: 'members'}]}], storeAs: "members"}
     ]);
@@ -45,47 +42,10 @@ const MembersList = ({eventID, listID, filter, tagFilter, toggleSelectAll}) => {
 
     if (!isLoaded(members)) {return null}
 
-    const handleSelected = id => {
-        if (selected.includes(id)) {
-            setSelected(selected.filter(member => member !== id));
-        } else {
-            setSelected([...selected, id]);
-        }
-    }
-
-    const updateSelectedStatus = () => {
-        // Nothing
-        if (selected.length === 0) {
-            setSelectAll(0);
-        }
-        // More than one
-        if (selected.length > 0 && selected.length !== members.length) {
-            setSelectAll(1);
-        }
-        // Everything
-        if (selected.length === members.length) {
-            setSelectAll(2);
-        }
-    }
-
-    const handleSelectAll = () => {
-        switch(selectAll) {
-            case 0:
-                setSelected(members.filter(member => member.id));
-                break;
-            case 1:
-                setSelected([]);
-                break;
-            case 2:
-                setSelected([]);
-                break;
-        }
-    }
-
     return (
         <List>
             {members.map(member => {
-                const item = <MembersListItem key={member.id} member={member} selected={selected.includes(member.id)} onChecked={() => handleSelected(member.id)}/>
+                const item = <MembersListItem key={member.id} member={member} selected={selected.includes(member.id)} onChecked={() => onSelect(member.id)}/>
                 if (filter === '' && tagFilter.length === 0) return item;
 
                 if (filter === '' && tagFilter.length > 0) {
@@ -121,12 +81,7 @@ const MembersListItem = ({member, selected, onChecked}) => {
                 </ListItemAvatar>
                 <ListItemText primary={displayName} secondary={email}/>
                 <ListItemSecondaryAction>
-                    <Checkbox
-                        edge="end"
-                        onChange={onChecked}
-                        checked={selected}
-                        // inputProps={{ 'aria-labelledby': labelId }}
-                    />
+                    <Checkbox edge="end" onChange={onChecked} checked={selected} />
                 </ListItemSecondaryAction>
             </ListItem>
             <div className={classes.chips}>
