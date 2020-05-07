@@ -172,8 +172,10 @@ const Toolbar = ({history, eventID, list, tags, selected, setSelected, selectAll
             members.map(member => {
                 if(member.id === memberID) {
                     if (member.tags.includes(tag)) {
+                        console.log("untagging: ", member.displayName)
                         unTagMembers(eventID, list.id, selected, [tag]);
                     } else {
+                        console.log("Tagging: ", member.displayName)
                         tagMembers(eventID, list.id, selected, [tag]);
                     }
                 }

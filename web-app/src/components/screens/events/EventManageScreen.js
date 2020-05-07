@@ -100,10 +100,35 @@ const EventManageScreen = ({history, match, addMembers}) => {
         return null
     }
 
+    console.log(selected)
+
     const list = lists[tab];
     const listID = list.id;
 
     const {tags} = event;
+
+    const dataTags = [];
+    tags.map(tag => {
+        dataTags.push({
+            label: tag,
+            count: 0
+        })
+    })
+
+    if (members) {
+        members.map(member => {
+            member.tags.map(tag => {
+                dataTags.map((t, index) => {
+                    if (t.label === tag) {
+                        dataTags[index] = {
+                            ...t,
+                            count: t.count + 1
+                        }
+                    }
+                })
+            })
+        })
+    }
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
@@ -131,21 +156,38 @@ const EventManageScreen = ({history, match, addMembers}) => {
 
     const handleSelectAll = () => {
         if (isLoaded(members)) {
-            switch(selectAll) {
-                case 0:
-                    setSelected(members.map(member => member.id));
-                    setSelectAll(2);
-                    break;
-                case 1:
-                    setSelected(members.map(member => member.id));
-                    setSelectAll(2);
-                    break;
-                case 2:
-                    setSelected([]);
-                    setSelectAll(0);
-                    break;
+            console.log(withFilter())
+            if (selected.length === withFilter().length) {
+                setSelected([]);
+                setSelectAll(0);
+            } else if (selected.length >= 0) {
+                setSelected(withFilter());
+                setSelectAll(2);
             }
         }
+    }
+
+    const withFilter = () => {
+        const mems = [];
+
+        members.map(member => {
+            if (search === '' && tagFilter.length === 0) return mems.push(member.id);
+
+            if (search === '' && tagFilter.length > 0) {
+                if (tagFilter.every(tag => member.tags.includes(tag))) return mems.push(member.id);
+            }
+
+            const searchText = (member.displayName + member.email).toUpperCase().replace(/\s/g, '');
+            const filterText = search.toUpperCase().replace(/\s/g, '');
+
+            if (search !== '' && tagFilter.length === 0) {
+                if (searchText.includes(filterText)) return mems.push(member.id);
+            }
+
+            if (searchText.includes(filterText) && tagFilter.every(tag => member.tags.includes(tag))) return mems.push(member.id);
+        });
+
+        return mems;
     }
 
     /*
@@ -220,7 +262,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
             {/* endregion */}
 
             {/* region Tags */}
-            <TagBoard tags={tags}
+            <TagBoard tags={dataTags}
                       tagFilter={tagFilter}
                       onSelect={handleTagSelect} />
             {/* endregion */}
@@ -260,12 +302,12 @@ const TagBoard = ({tags, tagFilter, onSelect}) => {
             {tags.map((tag, index) =>
                 <Chip
                     key={index}
-                    label={tag}
+                    label={tag.count + " | " + tag.label}
                     index={index}
                     // onDelete={() => handleDelete(tag.key)}
                     className={classes.chip}
-                    color={tagFilter.includes(tag) ? "primary" : "default"}
-                    onClick={() => {onSelect(tag)}}
+                    color={tagFilter.includes(tag.label) ? "primary" : "default"}
+                    onClick={() => {onSelect(tag.label)}}
                 />
             )}
         </div>

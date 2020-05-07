@@ -146,6 +146,7 @@ export const tagMembers = (eventID, listID, memberIDs, tags) => {
             return dispatch({type: 'TAG_MEMBER_ERROR', err: {message: 'User Not Logged In'}})
         }
 
+        console.log("Stop")
         const promises = [];
 
         memberIDs.map(id => {
@@ -185,6 +186,7 @@ export const unTagMembers = (eventID, listID, memberIDs, tags) => {
             return dispatch({type: 'UNTAG_MEMBER_ERROR', err: {message: 'User Not Logged In'}})
         }
 
+        console.log("Stop")
         const promises = [];
 
         memberIDs.map(id => {
