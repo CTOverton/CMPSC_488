@@ -24,6 +24,7 @@ import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import {connect} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {fade} from "@material-ui/core";
+import {addTags} from "../../../redux/actions/eventActions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,14 +86,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelectAll, addMembers, removeMembers, tagMembers, unTagMembers}) => {
+const Toolbar = ({history, eventID, list, tags, selected, setSelected, selectAll, onSelectAll, addMembers, removeMembers, tagMembers, unTagMembers, members, addTags}) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [tagDialogOpen, setTagDialogOpen] = React.useState(false);
     const [AddMenu_anchorEl, AddMenu_setAnchorEl] = React.useState(null);
+    const [TagMenu_anchorEl, TagMenu_setAnchorEl] = React.useState(null);
     const [memberTags, setMemberTags] = React.useState([]);
     const [memberInfo, setMemberInfo] = React.useState({
         email: '',
         displayName: ''
+    });
+
+    const [tagInfo, setTagInfo] = React.useState({
+        tag: '',
     });
 
     const handleClickOpen = () => {
@@ -103,6 +110,14 @@ const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelec
         setOpen(false);
     };
 
+    const handleDialogClickOpen = () => {
+        setTagDialogOpen(true);
+    };
+
+    const handleTagDialogClose = () => {
+        setTagDialogOpen(false);
+    };
+
     const AddMenu_handleClick = (event) => {
         AddMenu_setAnchorEl(event.currentTarget);
     };
@@ -111,9 +126,26 @@ const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelec
         AddMenu_setAnchorEl(null);
     };
 
+    const TagMenu_handleClick = (event) => {
+        TagMenu_setAnchorEl(event.currentTarget);
+    };
+
+    const TagMenu_handleClose = () => {
+        TagMenu_setAnchorEl(null);
+    };
+
     const handleAddMemberChange = prop => event => {
         const value = event.target.value;
         if (value !== '') setMemberInfo({...memberInfo, [prop]: value})
+    };
+
+    const handleAddTagChange = prop => event => {
+        const value = event.target.value;
+        if (value !== '') setTagInfo({...tagInfo, [prop]: value})
+    };
+
+    const handleAddTag = () => {
+        addTags(eventID, [tagInfo.tag])
     };
 
     const handleAddMember = () => {
@@ -133,6 +165,21 @@ const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelec
         removeMembers(eventID, list.id, selected);
         setSelected([]);
     };
+
+    const handleTagMember = (tag) => {
+        // Todo: multiple tags
+        selected.map(memberID => {
+            members.map(member => {
+                if(member.id === memberID) {
+                    if (member.tags.includes(tag)) {
+                        unTagMembers(eventID, list.id, selected, [tag]);
+                    } else {
+                        tagMembers(eventID, list.id, selected, [tag]);
+                    }
+                }
+            })
+        })
+    }
 
     return (
         <Grid container alignItems="center" className={classes.root}>
@@ -167,7 +214,7 @@ const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelec
                     handleClickOpen();
                     AddMenu_handleClose();
                 }}>Add Member</MenuItem>
-                <MenuItem onClick={AddMenu_handleClose}>Import List</MenuItem>
+                <MenuItem onClick={() => {history.push(`/event/${eventID}/list/${list.id}/import`)}}>Import List</MenuItem>
             </Menu>
 
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -236,10 +283,63 @@ const Toolbar = ({eventID, list, tags, selected, setSelected, selectAll, onSelec
             </ToolTip>
             <Divider orientation="vertical" flexItem/>
             <ToolTip title={"Tag"}>
-                <IconButton aria-label="Tag">
+                <IconButton aria-label="Tag" onClick={TagMenu_handleClick}>
                     <LabelIcon/>
                 </IconButton>
             </ToolTip>
+
+            <Menu
+                id="tag-menu"
+                anchorEl={TagMenu_anchorEl}
+                keepMounted
+                open={Boolean(TagMenu_anchorEl)}
+                onClose={TagMenu_handleClose}
+            >
+                {tags && tags.map((tag, index) =>
+                    <MenuItem key={index} onClick={() => handleTagMember(tag)}>{tag}</MenuItem>
+                )}
+                <Divider />
+                <MenuItem onClick={() => {
+                    handleDialogClickOpen();
+                    TagMenu_handleClose();
+                }}>Create new</MenuItem>
+                <MenuItem>Manage Tags</MenuItem>
+            </Menu>
+
+            <Dialog open={tagDialogOpen} onClose={handleTagDialogClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Create new tag</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="tag-input"
+                        label="Add new tag"
+                        fullWidth
+                        required
+                        value={tagInfo.tag}
+                        onChange={handleAddTagChange('tag')}
+                    />
+                    <div className={classes.chips}>
+                        {tags.map((tag, index) =>
+                            <Chip
+                                key={index}
+                                label={tag}
+                                index={index}
+                                className={classes.chip}
+                            />
+                        )}
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleTagDialogClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleAddTag} color="primary">
+                        Create Tag
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <ToolTip title={"List"}>
                 <IconButton aria-label="List">
                     <FormatListBulletedIcon/>
@@ -253,7 +353,8 @@ const mapDispatch = {
     addMembers: addMembers,
     removeMembers: deleteMembers,
     tagMembers: tagMembers,
-    unTagMembers: unTagMembers
+    unTagMembers: unTagMembers,
+    addTags: addTags
 };
 
 export default connect(undefined, mapDispatch)(Toolbar)

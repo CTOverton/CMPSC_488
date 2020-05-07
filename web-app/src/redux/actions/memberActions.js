@@ -158,7 +158,7 @@ export const tagMembers = (eventID, listID, memberIDs, tags) => {
                     .collection('members')
                     .doc(id)
                     .update({
-                        tags: firebase.firestore.FieldValue.arrayUnion(tags),
+                        tags: firebase.firestore.FieldValue.arrayUnion(...tags),
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
             )
@@ -197,7 +197,7 @@ export const unTagMembers = (eventID, listID, memberIDs, tags) => {
                     .collection('members')
                     .doc(id)
                     .update({
-                        tags: firebase.firestore.FieldValue.arrayRemove(tags),
+                        tags: firebase.firestore.FieldValue.arrayRemove(...tags),
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
             )

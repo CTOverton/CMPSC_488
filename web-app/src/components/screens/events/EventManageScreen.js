@@ -226,7 +226,7 @@ const EventManageScreen = ({history, match, addMembers}) => {
             {/* endregion */}
 
             {/* region Toolbar */}
-            <Toolbar eventID={eventID} list={list} tags={tags} selected={selected} setSelected={setSelected} selectAll={selectAll} onSelectAll={handleSelectAll}/>
+            <Toolbar history={history} eventID={eventID} list={list} tags={tags} selected={selected} setSelected={setSelected} selectAll={selectAll} onSelectAll={handleSelectAll} members={members}/>
             {/* endregion */}
 
             {/* region List Tabs */}

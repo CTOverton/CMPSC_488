@@ -93,7 +93,43 @@ export const clearDocRef = () => {
     }
 };
 
+export const addTags = (eventID, tags) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
 
+        firestore.collection('events')
+            .doc(eventID)
+            .update({
+                tags: firebase.firestore.FieldValue.arrayUnion(...tags),
+            })
+            .then(() => {
+                dispatch({type: 'UPDATE_EVENT_SUCCESS'})
+            })
+            .catch((err) => {
+                dispatch({type: 'UPDATE_EVENT_ERROR', err})
+            })
+    }
+};
+
+export const removeTags = (eventID, tags) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+
+        firestore.collection('events')
+            .doc(eventID)
+            .update({
+                tags: firebase.firestore.FieldValue.arrayRemove(...tags),
+            })
+            .then(() => {
+                dispatch({type: 'UPDATE_EVENT_SUCCESS'})
+            })
+            .catch((err) => {
+                dispatch({type: 'UPDATE_EVENT_ERROR', err})
+            })
+    }
+};
 
 export const signupForEvent = (eventID, attendee, type) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
@@ -200,29 +236,5 @@ export const createAttendees = (attendees, eventID, listID) => {
             //TODO: Notify Admin of Failed Imports
         }
         //TODO: Notify User of successful Import!
-    }
-};
-
-export const removeTags = (eventID, tag, updatedTags) => {
-    return (dispatch, getState, {getFirestore}) => {
-        const firestore = getFirestore();
-        console.log(tag);
-        firestore.collection('tags')
-            .doc(tag.id)
-            .get()
-            .then(
-                firestore
-                    .collection('eventTags')
-                    .doc(eventID)
-                    .set({
-                        tags : updatedTags
-                    })
-            )
-            .then(() => {
-                dispatch({type: 'DELETE_TAGS_SUCCESS'})
-            })
-            .catch((err) => {
-                dispatch('DELETE_TAGS_ERROR', err)
-            })
     }
 };
