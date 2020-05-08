@@ -20,6 +20,7 @@ import EventsSignupThanks from "../screens/events/EventsSignupThanks";
 import EventManageScreen from "../screens/events/EventManageScreen";
 import CSV_Import from "../screens/CSV/CSV_Import";
 import ProfileEdit from "../screens/profile/ProfileEdit";
+import Browse from "../screens/browse/Browse";
 
 function PrivateRoute({ children, ...rest }) {
     const auth = useSelector(state => state.firebase.auth);
@@ -58,6 +59,8 @@ function Routes() {
             <Route exact path='/event/:eventID/manage' component={EventManageScreen} />
             <Route exact path='/event/:eventID/settings' component={EventsSettingsPage} />
             <Route exact path='/event/:eventID/list/:listID/import' component={CSV_Import} />
+
+            <Route exact path='/browse' component={Browse} />
 
             <Route exact path='/profile' component={ProfilePage} />
             <Route exact path='/profile/edit' component={ProfileEdit} />

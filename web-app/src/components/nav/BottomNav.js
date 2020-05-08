@@ -37,7 +37,7 @@ const BottomNav = ({history, location, match}) => {
                         history.push("/events");
                         break;
                     case "search":
-                        history.push("/search");
+                        history.push("/browse");
                         break;
                     case "profile":
                         history.push("/profile");
