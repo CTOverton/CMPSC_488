@@ -1,39 +1,48 @@
 import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
-import {Redirect, withRouter} from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import AppBarHeader from "./nav/AppBarHeader";
 
-class TestQR extends Component {
-    state = {
-        result: 'No result'
-    }
+const TestQR = ({history, match}) => {
+    const [result, setResult] = React.useState(null);
 
-    handleScan = result => {
+    const handleScan = result => {
         if (result) {
-            this.setState({
-                result: result
-            })
-
-            let data = JSON.parse(result)
-
-            this.props.history.push("/events/" + data.eventID + "/attendee/" + data.attendeeID)
+            setResult(JSON.parse(result))
         }
     }
-    handleError = err => {
+    const handleError = err => {
         console.error(err)
     }
-    render() {
-        return (
-            <div>
-                <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '100%' }}
-                />
-                <p>{this.state.result}</p>
-            </div>
-        )
-    }
+
+    return (
+        <div>
+            <AppBarHeader
+                start={
+                    <IconButton
+                        edge="end"
+                        onClick={() => {
+                            history.goBack()
+                        }}
+                        color="inherit"
+                        aria-label="back"
+                    >
+                        <ArrowBackIosIcon />
+                    </IconButton>
+                }
+                title="Scan QR Code"
+            />
+            <QrReader
+                delay={300}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: '100%' }}
+            />
+            <p>{result && result.uid}</p>
+        </div>
+    )
 }
 
-export default withRouter(TestQR)
+export default TestQR

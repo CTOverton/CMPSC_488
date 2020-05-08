@@ -21,6 +21,7 @@ import EventManageScreen from "../screens/events/EventManageScreen";
 import CSV_Import from "../screens/CSV/CSV_Import";
 import ProfileEdit from "../screens/profile/ProfileEdit";
 import Browse from "../screens/browse/Browse";
+import TestQR from "../TestQR";
 
 function PrivateRoute({ children, ...rest }) {
     const auth = useSelector(state => state.firebase.auth);
@@ -59,6 +60,7 @@ function Routes() {
             <Route exact path='/event/:eventID/manage' component={EventManageScreen} />
             <Route exact path='/event/:eventID/settings' component={EventsSettingsPage} />
             <Route exact path='/event/:eventID/list/:listID/import' component={CSV_Import} />
+            <Route exact path='/event/:eventID/list/:listID/scan' component={TestQR} />
 
             <Route exact path='/browse' component={Browse} />
 

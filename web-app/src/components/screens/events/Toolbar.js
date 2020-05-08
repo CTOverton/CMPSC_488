@@ -274,7 +274,7 @@ const Toolbar = ({history, eventID, list, tags, selected, setSelected, selectAll
                 </DialogActions>
             </Dialog>
             <ToolTip title={"Scan QR"}>
-                <IconButton aria-label="Scan QR Code">
+                <IconButton aria-label="Scan QR Code" onClick={() => {history.push(`/event/${eventID}/list/${list.id}/scan`)}}>
                     <CropFreeIcon/>
                 </IconButton>
             </ToolTip>

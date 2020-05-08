@@ -20,6 +20,7 @@ import {storage} from "firebase";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Skeleton from "@material-ui/lab/Skeleton";
+import QRCode from "qrcode.react";
 
 const useStyles = makeStyles(theme => ({
     margin: {
@@ -50,6 +51,9 @@ const useStyles = makeStyles(theme => ({
     },
     skeleton: {
         margin: "20px auto",
+    },
+    qr: {
+        marginTop: 40
     }
 }));
 
@@ -191,6 +195,10 @@ const ProfilePage = ({logout, history}) => {
           <Typography variant="subtitle1" className={classes.subtitle}>{profile.email}</Typography>
 
           <Button className={classes.button} variant="contained" disableElevation onClick={() => history.push('/profile/edit')}>Edit Profile</Button>
+
+          <QRCode className={classes.qr} size={200} value={JSON.stringify({
+              uid: auth.uid
+          })}/>
 
           {/*<UserDetails user={profile}/>*/}
           {/*<EventsList events={events}/>*/}
