@@ -214,3 +214,72 @@ export const unTagMembers = (eventID, listID, memberIDs, tags) => {
             });
     }
 };
+
+export const signupMembers = (eventID, listID, members) => {
+    return (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const state = getState();
+        const {auth, profile} = state.firebase;
+
+        if (isLoaded(auth) && !isEmpty(auth)) {
+            firestore
+                .collection("users")
+                .doc(auth.uid)
+                .update({
+                    attending: firebase.firestore.FieldValue.arrayUnion(eventID),
+                })
+        }
+
+        const signature = {
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: isLoaded(auth) && !isEmpty(auth) ? auth.uid : "system", // Todo
+            author: isLoaded(profile) && !isEmpty(profile) ? {
+                username: profile.username,
+                displayName: profile.displayName
+            } : {username: "system", displayName: "system"}
+        };
+
+        // Todo: validate member input
+        const promises = [];
+
+        members.map(member => {
+            return promises.push(
+                firestore
+                    .collection("users")
+                    .where("email", "==", member.email)
+                    .get()
+                    .then(snapShot => {
+                        snapShot.forEach(doc => {
+                            const user = doc.data();
+
+                            member = {
+                                ...member,
+                                uid: doc.id,
+                                displayName: user.displayName,
+                                username: user.username,
+                            };
+                        });
+
+                        return promises.push(
+                            firestore
+                                .collection('events')
+                                .doc(eventID)
+                                .collection('lists')
+                                .doc(listID)
+                                .collection('members')
+                                .add({...signature, ...member})
+                        )
+                    })
+            );
+        });
+
+        Promise.all(promises)
+            .then(values => {
+                dispatch({type: 'ADD_MEMBERS_SUCCESS', docRefs: values})
+            })
+            .catch(err => {
+                dispatch({type: 'ADD_MEMBERS_ERROR', err})
+            });
+    }
+};

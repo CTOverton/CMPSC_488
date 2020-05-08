@@ -35,6 +35,15 @@ export const createEvent = (event, lists, tags, img) => {
                         .add({name: list.label})
                 });
 
+                // TODO: Remove, temporary
+                firestore
+                    .collection('events')
+                    .doc(docRef.id)
+                    .collection('lists')
+                    .doc("Automated")
+                    .set({name: "Automated"})
+                // --------------------
+
                 firebase.uploadFile('eventImages', img, undefined, {name: docRef.id})
                     .then(snapshot => {
                         dispatch({type: 'CREATE_EVENT_SUCCESS', docRef})
